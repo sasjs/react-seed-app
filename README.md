@@ -1,68 +1,52 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Overview
 
-## Available Scripts
+This seed app provides a wrapper for `@sasjs/adapter`, a lightning fast adapter for talking to both SAS 9 and Viya.
 
-In the project directory, you can run:
+## Backend Services
 
-### `npm start`
+Creating services in Viya can be done entirely in SASStudioV using the code below.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```
+filename mc url "https://raw.githubusercontent.com/sasjs/core/master/mc_all.sas";
+filename ft15f001 temp;
+parmcards4;
+    proc sql;
+    create table areas as select distinct area from sashelp.springs;
+    %webout(OPEN)
+    %webout(OBJ,areas)
+    %webout(CLOSE)
+;;;;
+%mv_createwebservice(path=/Public/myapp/common, name=appInit, code=ft15f001,replace=YES)
+parmcards4;
+    %webout(FETCH)
+    proc sql;
+    create table springs as select * from sashelp.springs
+      where area in (select area from areas);
+    %webout(OPEN)
+    %webout(OBJ,springs)
+    %webout(CLOSE)
+;;;;
+%mv_createwebservice(path=/Public/myapp/common, name=getData, code=ft15f001,replace=YES)
+```
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Frontend Web
 
-### `npm test`
+If you are running locally you will either need to whitelist `localhost` on the server, or enable CORS using one of the following commands:
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+|  OS   | Browser |                                    Launch Command                                     |
+| :---: | :-----: | :-----------------------------------------------------------------------------------: |
+|  Mac  | Chrome  | `open -n -a Google\ Chrome --args --disable-web-security --user-data-dir=/tmp/chrome` |
+| Linux | Chrome  |         `google-chrome --disable-web-security --user-data-dir="/tmp/chrome"`          |
 
-### `npm run build`
+## Supported Versions of SAS
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+This app will work on SAS Viya, and will also work on SAS 9 with a few tweaks (just set the `serverType` to SAS9 and use the `mm_createwebservice()` macro to define services).
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+It will not work on SAS University edition, or local instances of SAS. A web server, and application server (STP or Compute) is required
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Code Style
 
-### `npm run eject`
+This project uses Prettier to format code.
+Please install the 'Prettier - Code formatter' extension for VS Code.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Files you are editing will automatically be formatted on save.
