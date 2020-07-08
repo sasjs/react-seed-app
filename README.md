@@ -7,7 +7,7 @@ This seed app provides a wrapper for `@sasjs/adapter`, a lightning fast adapter 
 Creating services in Viya can be done entirely in SASStudioV using the code below.
 
 ```
-filename mc url "https://raw.githubusercontent.com/sasjs/core/master/mc_all.sas";
+filename mc url "https://raw.githubusercontent.com/sasjs/core/main/all.sas";
 filename ft15f001 temp;
 parmcards4;
     proc sql;
@@ -16,7 +16,7 @@ parmcards4;
     %webout(OBJ,areas)
     %webout(CLOSE)
 ;;;;
-%mv_createwebservice(path=/Public/myapp/common, name=appInit, code=ft15f001,replace=YES)
+%mv_createwebservice(path=/Public/myapp/common, name=appInit)
 parmcards4;
     %webout(FETCH)
     proc sql;
@@ -26,7 +26,7 @@ parmcards4;
     %webout(OBJ,springs)
     %webout(CLOSE)
 ;;;;
-%mv_createwebservice(path=/Public/myapp/common, name=getData, code=ft15f001,replace=YES)
+%mv_createwebservice(path=/Public/myapp/common, name=getData)
 ```
 
 ## Frontend Web
