@@ -4,7 +4,7 @@ This seed app provides a wrapper for `@sasjs/adapter`, a lightning fast adapter 
 
 ## Backend Services
 
-Creating services in Viya can be done entirely in SASStudioV using the code below.
+Creating services in Viya can be done entirely in SAS Studio using the code below.
 
 ```
 filename mc url "https://raw.githubusercontent.com/sasjs/core/main/all.sas";
@@ -16,7 +16,7 @@ parmcards4;
     %webout(OBJ,areas)
     %webout(CLOSE)
 ;;;;
-%mv_createwebservice(path=/Public/myapp/common, name=appInit)
+%mp_createwebservice(path=/Public/myapp/common, name=appInit)
 parmcards4;
     %webout(FETCH)
     proc sql;
@@ -26,7 +26,7 @@ parmcards4;
     %webout(OBJ,springs)
     %webout(CLOSE)
 ;;;;
-%mv_createwebservice(path=/Public/myapp/common, name=getData)
+%mp_createwebservice(path=/Public/myapp/common, name=getData)
 ```
 
 ## Frontend Web
@@ -37,10 +37,11 @@ If you are running locally you will either need to whitelist `localhost` on the 
 | :---: | :-----: | :-----------------------------------------------------------------------------------: |
 |  Mac  | Chrome  | `open -n -a Google\ Chrome --args --disable-web-security --user-data-dir=/tmp/chrome` |
 | Linux | Chrome  |         `google-chrome --disable-web-security --user-data-dir="/tmp/chrome"`          |
+|Windows|Chrome|`"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --disable-web-security --disable-gpu --user-data-dir=C:\Temp`|
 
 ## Supported Versions of SAS
 
-This app will work on SAS Viya, and will also work on SAS 9 with a few tweaks (just set the `serverType` to SAS9 and use the `mm_createwebservice()` macro to define services).
+This app will work on SAS Viya, and will also work on SAS 9 with one tweak (just set the `serverType` to SAS9 in `sasContext.tsx`)
 
 It will not work on SAS University edition, or local instances of SAS. A web server, and application server (STP or Compute) is required
 
