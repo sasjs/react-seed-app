@@ -23,10 +23,8 @@ interface SASContextProps {
 
 const sasService = new SASjs({
   serverUrl: "",
-  pathSAS9: "/SASStoredProcess/do",
-  pathSASViya: "/SASJobExecution",
   appLoc: "/Public/app",
-  serverType: "SAS9",
+  serverType: "SASVIYA",
   debug: false,
 } as SASjsConfig);
 
