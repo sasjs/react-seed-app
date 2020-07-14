@@ -4,7 +4,7 @@ This seed app provides a wrapper for `@sasjs/adapter`, a lightning fast adapter 
 
 ## Backend Services
 
-Creating services in Viya can be done entirely in SAS Studio using the code below.
+Creating web services in SAS 9 or Viya can be done entirely in SAS Studio using the code below.
 
 ```
 filename mc url "https://raw.githubusercontent.com/sasjs/core/main/all.sas";
@@ -31,7 +31,9 @@ parmcards4;
 
 ## Frontend Web
 
-If you are running locally you will either need to whitelist `localhost` on the server, or enable CORS using one of the following commands:
+If you are running on SAS 9 you need to set `serverType` to SAS9 in `sasContext.tsx`.
+
+If you are running locally you will also need to whitelist `localhost` on the server, or enable CORS using one of the following commands:
 
 |  OS   | Browser |                                    Launch Command                                     |
 | :---: | :-----: | :-----------------------------------------------------------------------------------: |
@@ -41,9 +43,9 @@ If you are running locally you will either need to whitelist `localhost` on the 
 
 ## Supported Versions of SAS
 
-This app will work on SAS Viya, and will also work on SAS 9 with one tweak (just set the `serverType` to SAS9 in `sasContext.tsx`)
+This app will work on all versions of SAS Viya, and in SAS 9 EBI from 9.3 and above.
 
-It will not work on SAS University edition, or local instances of SAS. A web server, and application server (STP or Compute) is required
+It will not work on SAS University edition, or local (base only) instances of SAS. A web server, and application server (STP or Compute) is required
 
 ### Code Style
 
