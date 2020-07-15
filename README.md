@@ -8,6 +8,7 @@ Creating web services in SAS 9 or Viya can be done entirely in SAS Studio using 
 
 ```
 filename mc url "https://raw.githubusercontent.com/sasjs/core/main/all.sas";
+%inc mc;
 filename ft15f001 temp;
 parmcards4;
     proc sql;
@@ -33,13 +34,19 @@ parmcards4;
 
 If you are running on SAS 9 you need to set `serverType` to SAS9 in `sasContext.tsx`.
 
-If you are running locally you will also need to whitelist `localhost` on the server, or enable CORS using one of the following commands:
+1 - clone the repo and change into the directory
+2 - run `npm install` 
+3 - run `npm run build` to create a production build in the `build` folder.  This can be deployed to the SAS web server [here](https://sasjs.io/frontend/deployment/).
+
+If you are running locally you will also need to whitelist `localhost` on the server, or enable CORS in your browser by using one of the following commands:
 
 |  OS   | Browser |                                    Launch Command                                     |
 | :---: | :-----: | :-----------------------------------------------------------------------------------: |
 |  Mac  | Chrome  | `open -n -a Google\ Chrome --args --disable-web-security --user-data-dir=/tmp/chrome` |
 | Linux | Chrome  |         `google-chrome --disable-web-security --user-data-dir="/tmp/chrome"`          |
 |Windows|Chrome|`"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --disable-web-security --disable-gpu --user-data-dir=C:\Temp`|
+
+
 
 ## Supported Versions of SAS
 
