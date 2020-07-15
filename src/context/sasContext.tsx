@@ -48,7 +48,7 @@ const SASProvider = (props: { children: ReactNode }) => {
   const [startupData, setStartupData] = useState(null);
 
   const fetchStartupData = useCallback(() => {
-    sasService.request("common/appInit", null).then((response: any) => {
+    sasService.request("common/appinit", null).then((response: any) => {
       setStartupData(response);
     });
   }, []);
