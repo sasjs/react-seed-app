@@ -34,18 +34,11 @@ parmcards4;
 
 If you are running on SAS 9 you need to set `serverType` to SAS9 in `sasContext.tsx`.
 
-1 - clone the repo and change into the directory
-2 - run `npm install` 
-3 - run `npm run build` to create a production build in the `build` folder.  This can be deployed to the SAS web server [here](https://sasjs.io/frontend/deployment/).
+1. clone the repo and change into the directory
+2. run `npm install` 
+3. run `npm run build` to create a production build in the `build` folder.  This can be deployed to the SAS web server [here](https://sasjs.io/frontend/deployment/).
 
-If you are running locally you will also need to whitelist `localhost` on the server, or enable CORS in your browser by using one of the following commands:
-
-|  OS   | Browser |                                    Launch Command                                     |
-| :---: | :-----: | :-----------------------------------------------------------------------------------: |
-|  Mac  | Chrome  | `open -n -a Google\ Chrome --args --disable-web-security --user-data-dir=/tmp/chrome` |
-| Linux | Chrome  |         `google-chrome --disable-web-security --user-data-dir="/tmp/chrome"`          |
-|Windows|Chrome|`"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --disable-web-security --disable-gpu --user-data-dir=C:\Temp`|
-
+If you are running locally you will also need to whitelist `localhost` on the server, or enable CORS in your browser as described [here](https://sasjs.io/frontend/cors/)
 
 
 ## Supported Versions of SAS
