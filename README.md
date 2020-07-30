@@ -7,6 +7,7 @@ This seed app provides a wrapper for `@sasjs/adapter`, a lightning fast adapter 
 Creating web services in SAS 9 or Viya can be done entirely in SAS Studio using the code below.
 
 ```
+%let appLoc=/Public/app/react; /* SAS Folders App Location */
 filename mc url "https://raw.githubusercontent.com/sasjs/core/main/all.sas";
 %inc mc;
 filename ft15f001 temp;
@@ -17,7 +18,7 @@ parmcards4;
     %webout(OBJ,areas)
     %webout(CLOSE)
 ;;;;
-%mp_createwebservice(path=/Public/myapp/common, name=appInit)
+%mp_createwebservice(path=&appLoc/common, name=appinit)
 parmcards4;
     %webout(FETCH)
     proc sql;
@@ -27,7 +28,7 @@ parmcards4;
     %webout(OBJ,springs)
     %webout(CLOSE)
 ;;;;
-%mp_createwebservice(path=/Public/myapp/common, name=getData)
+%mp_createwebservice(path=&appLoc/common, name=getdata)
 ```
 
 ## Frontend Web

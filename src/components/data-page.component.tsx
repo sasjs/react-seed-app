@@ -83,7 +83,7 @@ const DataPageComponent = () => {
   const submitArea = () => {
     if (sasContext.isUserLoggedIn) {
       const request = {
-        url: "/common/getData",
+        url: "/common/getdata",
         data: {
           areas: [{ area: selectedArea }],
         },
