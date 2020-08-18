@@ -1,45 +1,18 @@
 {
-  "cmnBuildInit": "build/buildinit.sas",
-  "cmnBuildTerm": "build/buildterm.sas",
-  "cmnBuildVars": {
-    "name": "value",
-    "numvar": "42"
-  },
-  "cmnDeployScript": "build/deployscript.sh",
   "cmnMacros": ["macros"],
-  "cmnServices": ["services/common", "services/admin"],
-  "cmnServiceInit": "build/serviceinit.sas",
-  "cmnServiceTerm": "build/serviceterm.sas",
-  "cmnServiceVars": {
-    "name": "value",
-    "numvar": "42"
-  },
-  "useMacroCore": true,
+  "cmnServices": ["services/common"],
   "targets": [
     {
       "name": "viya",
       "serverType": "SASVIYA",
-      "serverUrl": "http://sas.analytium.co.uk",
+      "serverUrl": "YOURSASVIYASERVER",
       "appLoc": "/Public/app",
       "buildOutputFileName": "myviyadeploy.sas",
       "deployServicePack": true,
-      "tgtBuildInit": "build/buildinitviya.sas",
-      "tgtBuildTerm": "targets/viya/viyabuildterm.sas",
-      "tgtBuildVars": {
-        "name": "viyavalue",
-        "extravar": "this too"
-      },
       "tgtDeployScripts": ["sasjsbuild/myviyadeploy.sas"],
       "tgtDeployVars": {
         "access_token": "AT0K3N",
         "contextName": "SharedCompute"
-      },
-      "tgtMacros": ["targets/viya/macros"],
-      "tgtServices": ["targets/viya/services/admin"],
-      "tgtServiceInit": "build/serviceinit.sas",
-      "tgtServiceVars": {
-        "name": "viyavalue",
-        "extravar": "this too"
       },
       "assetPaths": [],
       "streamWeb": false,
@@ -49,19 +22,13 @@
     {
       "name": "sas9",
       "serverType": "SAS9",
-      "serverUrl": "http://sas.analytium.co.uk:7980",
+      "serverUrl": "YOURSAS9SERVER",
       "appLoc": "/User Folders/&sysuserid/My Folder",
       "buildOutputFileName": "mysas9deploy.sas",
-      "tgtBuildInit": false,
-      "tgtDeployScripts": ["build/deploysas9.sh"],
       "tgtDeployVars": {
         "serverName": "SASApp",
         "repositoryName": "Foundation"
       },
-      "tgtMacros": ["targets/sas9/macros"],
-      "tgtServices": ["targets/sas9/services/admin"],
-      "tgtServiceInit": "",
-      "tgtServiceTerm": "build/servicetermother.sas",
       "assetPaths": [],
       "streamWeb": false,
       "streamWebFolder": "web9",
