@@ -1,19 +1,22 @@
 {
-  "cmnMacros": ["macros"],
-  "cmnServices": ["services/common"],
+  "cmnMacros": [
+    "macros"
+  ],
+  "cmnServices": [
+    "services/common"
+  ],
+  "useMacroCore": true,
   "targets": [
     {
       "name": "viya",
       "serverType": "SASVIYA",
       "serverUrl": "YOURSASVIYASERVER",
-      "appLoc": "/Public/app",
+      "appLoc": "/Public/app/react-seed-app",
       "buildOutputFileName": "myviyadeploy.sas",
       "deployServicePack": true,
-      "tgtDeployScripts": ["sasjsbuild/myviyadeploy.sas"],
-      "tgtDeployVars": {
-        "access_token": "AT0K3N",
-        "contextName": "SharedCompute"
-      },
+      "tgtDeployScripts": [
+        "sasjsbuild/myviyadeploy.sas"
+      ],
       "assetPaths": [],
       "streamWeb": false,
       "streamWebFolder": "webv",
@@ -23,7 +26,7 @@
       "name": "sas9",
       "serverType": "SAS9",
       "serverUrl": "YOURSAS9SERVER",
-      "appLoc": "/User Folders/&sysuserid/My Folder",
+      "appLoc": "/User Folders/&sysuserid/My Folder/react-seed-app",
       "buildOutputFileName": "mysas9deploy.sas",
       "tgtDeployVars": {
         "serverName": "SASApp",
