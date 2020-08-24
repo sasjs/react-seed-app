@@ -7,7 +7,9 @@ This seed app provides a wrapper for `@sasjs/adapter`, a lightning fast adapter 
 Creating web services in SAS 9 or Viya can be done entirely in SAS Studio using the code below.
 
 ```
+%let appLoc=/Public/app/react; /* SAS Folders App Location */
 filename mc url "https://raw.githubusercontent.com/sasjs/core/main/all.sas";
+%inc mc;
 filename ft15f001 temp;
 parmcards4;
     proc sql;
@@ -16,7 +18,7 @@ parmcards4;
     %webout(OBJ,areas)
     %webout(CLOSE)
 ;;;;
-%mp_createwebservice(path=/Public/myapp/common, name=appInit)
+%mp_createwebservice(path=&appLoc/common, name=appinit)
 parmcards4;
     %webout(FETCH)
     proc sql;
@@ -26,20 +28,19 @@ parmcards4;
     %webout(OBJ,springs)
     %webout(CLOSE)
 ;;;;
-%mp_createwebservice(path=/Public/myapp/common, name=getData)
+%mp_createwebservice(path=&appLoc/common, name=getdata)
 ```
 
 ## Frontend Web
 
 If you are running on SAS 9 you need to set `serverType` to SAS9 in `sasContext.tsx`.
 
-If you are running locally you will also need to whitelist `localhost` on the server, or enable CORS using one of the following commands:
+1. clone the repo and change into the directory
+2. run `npm install` 
+3. run `npm run build` to create a production build in the `build` folder.  This can be deployed to the SAS web server [here](https://sasjs.io/frontend/deployment/).
 
-|  OS   | Browser |                                    Launch Command                                     |
-| :---: | :-----: | :-----------------------------------------------------------------------------------: |
-|  Mac  | Chrome  | `open -n -a Google\ Chrome --args --disable-web-security --user-data-dir=/tmp/chrome` |
-| Linux | Chrome  |         `google-chrome --disable-web-security --user-data-dir="/tmp/chrome"`          |
-|Windows|Chrome|`"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --disable-web-security --disable-gpu --user-data-dir=C:\Temp`|
+If you are running locally you will also need to whitelist `localhost` on the server, or enable CORS in your browser as described [here](https://sasjs.io/frontend/cors/)
+
 
 ## Supported Versions of SAS
 
