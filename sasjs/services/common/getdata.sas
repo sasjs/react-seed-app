@@ -7,6 +7,8 @@
 
 **/
 
+%webout(FETCH)
+
 proc sql;
 create table springs as select * from sashelp.springs
   where area in (select area from areas);
