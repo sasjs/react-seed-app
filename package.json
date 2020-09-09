@@ -2,7 +2,11 @@
   "name": "@sasjs/react-seed-app",
   "version": "1.0.0",
   "private": true,
-  "keywords": ["SAS","SASViya","SASjs"],
+  "keywords": [
+    "SAS",
+    "SASViya",
+    "SASjs"
+  ],
   "homepage": ".",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
