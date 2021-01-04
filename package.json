@@ -1,6 +1,6 @@
 {
   "name": "@sasjs/react-seed-app",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "keywords": [
     "SAS",
@@ -11,8 +11,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
-    "@sasjs/adapter": "^1.12.1",
-    "@sasjs/core": "^1.5.5",
+    "@sasjs/adapter": "^2.0.0",
     "@testing-library/jest-dom": "^5.11.2",
     "@testing-library/react": "^11.0.4",
     "@testing-library/user-event": "^12.1.6",
