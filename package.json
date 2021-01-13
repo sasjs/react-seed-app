@@ -11,7 +11,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
-    "@sasjs/adapter": "^1.12.1",
+    "@sasjs/adapter": "^2.0.3",
     "@sasjs/core": "^1.5.5",
     "@testing-library/jest-dom": "^5.11.2",
     "@testing-library/react": "^11.0.4",
