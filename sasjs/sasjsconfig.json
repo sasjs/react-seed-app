@@ -2,7 +2,7 @@
   "macroFolders": ["macros"],
   "programFolders": [],
   "serviceConfig": {
-    "serviceFolders": [],
+    "serviceFolders": ["services/common"],
     "initProgram": "",
     "termProgram": "",
     "macroVars": {}
@@ -22,22 +22,19 @@
   "targets": [
     {
       "name": "viya",
+      "serverUrl": "http://sas.analytium.co.uk",
       "serverType": "SASVIYA",
-      "serverUrl": "YOURSASVIYASERVER",
       "appLoc": "/Public/app/react-seed-app",
-      "contextName": "SAS Job Execution compute context",
+      "macroFolders": [],
+      "programFolders": [],
+      "authConfig": {
+        "access_token": "",
+        "refresh_token": "",
+        "client": "",
+        "secret": ""
+      },
       "buildConfig": {
         "buildOutputFileName": "myviyadeploy.sas",
-        "initProgram": "",
-        "termProgram": "",
-        "macroVars": {}
-      },
-      "deployConfig": {
-        "deployServicePack": true,
-        "deployScripts": ["sasjsbuild/myviyadeploy.sas"]
-      },
-      "serviceConfig": {
-        "serviceFolders": [],
         "initProgram": "",
         "termProgram": "",
         "macroVars": {}
@@ -48,18 +45,28 @@
         "termProgram": "",
         "macroVars": {}
       },
+      "serviceConfig": {
+        "serviceFolders": [],
+        "initProgram": "",
+        "termProgram": "",
+        "macroVars": {}
+      },
       "streamConfig": {
         "assetPaths": [],
         "streamWeb": false,
         "streamWebFolder": "webv",
         "webSourcePath": "dist"
+      },
+      "deployConfig": {
+        "deployServicePack": true,
+        "deployScripts": ["sasjsbuild/myviyadeploy.sas"]
       }
     },
     {
       "name": "sas9",
       "serverType": "SAS9",
       "serverUrl": "YOURSAS9SERVER",
-      "appLoc": "/User Folders/&sysuserid/My Folder/react-seed-app",
+      "appLoc": "/Public/app/react-seed-app",
       "buildConfig": {
         "buildOutputFileName": "mysas9deploy.sas"
       },
@@ -79,7 +86,6 @@
         "termProgram": "",
         "macroVars": {}
       },
-
       "serverName": "SASApp",
       "repositoryName": "Foundation",
       "streamConfig": {
