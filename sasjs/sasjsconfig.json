@@ -27,12 +27,6 @@
       "appLoc": "/Public/app/react-seed-app",
       "macroFolders": [],
       "programFolders": [],
-      "authConfig": {
-        "access_token": "",
-        "refresh_token": "",
-        "client": "",
-        "secret": ""
-      },
       "buildConfig": {
         "buildOutputFileName": "myviyadeploy.sas",
         "initProgram": "",
@@ -66,7 +60,7 @@
       "name": "sas9",
       "serverType": "SAS9",
       "serverUrl": "YOURSAS9SERVER",
-      "appLoc": "/Public/app/react-seed-app",
+      "appLoc": "/User Folders/&sysuserid/My Folder/react-seed-app",
       "buildConfig": {
         "buildOutputFileName": "mysas9deploy.sas"
       },
