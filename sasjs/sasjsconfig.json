@@ -1,41 +1,99 @@
 {
-  "cmnMacros": [
-    "macros"
-  ],
-  "cmnServices": [
-    "services/common"
-  ],
-  "useMacroCore": true,
+  "macroFolders": ["macros"],
+  "programFolders": [],
+  "serviceConfig": {
+    "serviceFolders": ["services/common"],
+    "initProgram": "",
+    "termProgram": "",
+    "macroVars": {}
+  },
+  "jobConfig": {
+    "jobFolders": [],
+    "initProgram": "",
+    "termProgram": "",
+    "macroVars": {}
+  },
+  "streamConfig": {
+    "assetPaths": [],
+    "streamWeb": false,
+    "streamWebFolder": "webv",
+    "webSourcePath": "dist"
+  },
   "targets": [
     {
       "name": "viya",
+      "serverUrl": "http://sas.analytium.co.uk",
       "serverType": "SASVIYA",
-      "serverUrl": "YOURSASVIYASERVER",
       "appLoc": "/Public/app/react-seed-app",
-      "buildOutputFileName": "myviyadeploy.sas",
-      "deployServicePack": true,
-      "tgtDeployScripts": [
-        "sasjsbuild/myviyadeploy.sas"
-      ],
-      "assetPaths": [],
-      "streamWeb": false,
-      "streamWebFolder": "webv",
-      "webSourcePath": "dist"
+      "macroFolders": [],
+      "programFolders": [],
+      "authConfig": {
+        "access_token": "",
+        "refresh_token": "",
+        "client": "",
+        "secret": ""
+      },
+      "buildConfig": {
+        "buildOutputFileName": "myviyadeploy.sas",
+        "initProgram": "",
+        "termProgram": "",
+        "macroVars": {}
+      },
+      "jobConfig": {
+        "jobFolders": [],
+        "initProgram": "",
+        "termProgram": "",
+        "macroVars": {}
+      },
+      "serviceConfig": {
+        "serviceFolders": [],
+        "initProgram": "",
+        "termProgram": "",
+        "macroVars": {}
+      },
+      "streamConfig": {
+        "assetPaths": [],
+        "streamWeb": false,
+        "streamWebFolder": "webv",
+        "webSourcePath": "dist"
+      },
+      "deployConfig": {
+        "deployServicePack": true,
+        "deployScripts": ["sasjsbuild/myviyadeploy.sas"]
+      }
     },
     {
       "name": "sas9",
       "serverType": "SAS9",
       "serverUrl": "YOURSAS9SERVER",
-      "appLoc": "/User Folders/&sysuserid/My Folder/react-seed-app",
-      "buildOutputFileName": "mysas9deploy.sas",
-      "tgtDeployVars": {
-        "serverName": "SASApp",
-        "repositoryName": "Foundation"
+      "appLoc": "/Public/app/react-seed-app",
+      "buildConfig": {
+        "buildOutputFileName": "mysas9deploy.sas"
       },
-      "assetPaths": [],
-      "streamWeb": false,
-      "streamWebFolder": "web9",
-      "webSourcePath": "build"
+      "deployConfig": {
+        "deployServicePack": true,
+        "deployScripts": ["sasjsbuild/myviyadeploy.sas"]
+      },
+      "serviceConfig": {
+        "serviceFolders": [],
+        "initProgram": "",
+        "termProgram": "",
+        "macroVars": {}
+      },
+      "jobConfig": {
+        "jobFolders": [],
+        "initProgram": "",
+        "termProgram": "",
+        "macroVars": {}
+      },
+      "serverName": "SASApp",
+      "repositoryName": "Foundation",
+      "streamConfig": {
+        "assetPaths": [],
+        "streamWeb": false,
+        "streamWebFolder": "web9",
+        "webSourcePath": "dist"
+      }
     }
   ]
 }

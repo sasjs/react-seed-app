@@ -23,7 +23,7 @@ interface SASContextProps {
 
 const sasService = new SASjs({
   serverUrl: "",
-  appLoc: "/Public/app",
+  appLoc: "/Public/app/react-seed-app",
   serverType: "SASVIYA",
   debug: false,
 } as SASjsConfig);
@@ -48,7 +48,7 @@ const SASProvider = (props: { children: ReactNode }) => {
   const [startupData, setStartupData] = useState(null);
 
   const fetchStartupData = useCallback(() => {
-    sasService.request("common/appinit", null).then((response: any) => {
+    sasService.request("services/common/appinit", null).then((response: any) => {
       setStartupData(response);
     });
   }, []);
