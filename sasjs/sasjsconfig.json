@@ -1,4 +1,5 @@
 {
+  "$schema": "https://cli.sasjs.io/sasjsconfig-schema.json",
   "macroFolders": ["macros"],
   "programFolders": [],
   "serviceConfig": {
