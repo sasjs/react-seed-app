@@ -1,9 +1,9 @@
 {
   "$schema": "https://cli.sasjs.io/sasjsconfig-schema.json",
-  "macroFolders": ["macros"],
+  "macroFolders": ["sasjs/macros"],
   "programFolders": [],
   "serviceConfig": {
-    "serviceFolders": ["services/common"],
+    "serviceFolders": ["sasjs/services/common"],
     "initProgram": "",
     "termProgram": "",
     "macroVars": {}
