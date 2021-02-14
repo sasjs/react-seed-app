@@ -23,7 +23,7 @@
   "targets": [
     {
       "name": "viya",
-      "serverUrl": "http://sas.analytium.co.uk",
+      "serverUrl": "https://sas.analytium.co.uk",
       "serverType": "SASVIYA",
       "appLoc": "/Public/app/react-seed-app",
       "macroFolders": [],
