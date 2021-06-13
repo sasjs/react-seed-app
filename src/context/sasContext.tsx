@@ -48,11 +48,9 @@ const SASProvider = (props: { children: ReactNode }) => {
   const [startupData, setStartupData] = useState(null)
 
   const fetchStartupData = useCallback(() => {
-    sasService
-      .request('services/common/appinit', null)
-      .then((response: any) => {
-        setStartupData(response)
-      })
+    sasService.request('services/common/appinit', {}).then((response: any) => {
+      setStartupData(response)
+    })
   }, [])
 
   const login = useCallback((userName, password) => {
