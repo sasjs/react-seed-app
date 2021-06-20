@@ -6,8 +6,8 @@ import React, {
   useEffect,
   useCallback,
   ReactNode,
-} from "react";
-import SASjs, { SASjsConfig } from "@sasjs/adapter";
+} from 'react';
+import SASjs, { SASjsConfig } from '@sasjs/adapter';
 
 interface SASContextProps {
   isUserLoggedIn: boolean;
@@ -22,16 +22,16 @@ interface SASContextProps {
 }
 
 const sasService = new SASjs({
-  serverUrl: "",
-  appLoc: "/Public/app/react-seed-app",
-  serverType: "SASVIYA",
+  serverUrl: '',
+  appLoc: '/Public/app/react-seed-app',
+  serverType: 'SASVIYA',
   debug: false,
 } as SASjsConfig);
 
 export const SASContext = createContext<SASContextProps>({
   isUserLoggedIn: false,
   checkingSession: false,
-  userName: "",
+  userName: '',
   sasService,
   setIsUserLoggedIn: null,
   login: null,
@@ -44,13 +44,18 @@ const SASProvider = (props: { children: ReactNode }) => {
   const { children } = props;
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [checkingSession, setCheckingSession] = useState(false);
-  const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState('');
   const [startupData, setStartupData] = useState(null);
 
   const fetchStartupData = useCallback(() => {
-    sasService.request("services/common/appinit", null).then((response: any) => {
-      setStartupData(response);
-    });
+    sasService
+      .request('services/common/appinit', null)
+      .then((response: any) => {
+        setStartupData(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   const login = useCallback((userName, password) => {
@@ -69,7 +74,7 @@ const SASProvider = (props: { children: ReactNode }) => {
       )
       .catch((e) => {
         if (e === 403) {
-          console.error("Invalid host");
+          console.error('Invalid host');
         }
         return false;
       });
@@ -82,7 +87,7 @@ const SASProvider = (props: { children: ReactNode }) => {
   }, []);
 
   const request = useCallback(({ url, data }) => {
-    return sasService.request(url, data, {}, () => setIsUserLoggedIn(false))
+    return sasService.request(url, data, {}, () => setIsUserLoggedIn(false));
   }, []);
 
   useEffect(() => {
