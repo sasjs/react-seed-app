@@ -5,7 +5,7 @@ import React, {
   SetStateAction,
   useEffect,
   useCallback,
-  ReactNode,
+  ReactNode
 } from 'react'
 import SASjs, { SASjsConfig } from '@sasjs/adapter'
 
@@ -25,7 +25,7 @@ const sasService = new SASjs({
   serverUrl: '',
   appLoc: '/Public/app/react-seed-app',
   serverType: 'SASVIYA',
-  debug: false,
+  debug: false
 } as SASjsConfig)
 
 export const SASContext = createContext<SASContextProps>({
@@ -37,7 +37,7 @@ export const SASContext = createContext<SASContextProps>({
   login: null,
   logout: null,
   request: null,
-  startupData: null,
+  startupData: null
 })
 
 const SASProvider = (props: { children: ReactNode }) => {
@@ -48,9 +48,14 @@ const SASProvider = (props: { children: ReactNode }) => {
   const [startupData, setStartupData] = useState(null)
 
   const fetchStartupData = useCallback(() => {
-    sasService.request('services/common/appinit', {}).then((response: any) => {
-      setStartupData(response)
-    })
+    sasService
+      .request('services/common/appinit', null)
+      .then((response: any) => {
+        setStartupData(response)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }, [])
 
   const login = useCallback((userName, password) => {
@@ -113,7 +118,7 @@ const SASProvider = (props: { children: ReactNode }) => {
         login,
         logout,
         request,
-        startupData,
+        startupData
       }}
     >
       {children}

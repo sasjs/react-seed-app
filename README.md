@@ -7,7 +7,7 @@ This seed app provides a wrapper for `@sasjs/adapter`, a lightning fast adapter 
 Creating web services in SAS 9 or Viya can be done entirely in SAS Studio using the code below.
 
 ```
-%let appLoc=/Public/app/react; /* SAS Folders App Location */
+%let appLoc=/Public/app/react-seed-app; /* SAS Folders App Location */
 filename mc url "https://raw.githubusercontent.com/sasjs/core/main/all.sas";
 %inc mc;
 filename ft15f001 temp;
@@ -18,7 +18,7 @@ parmcards4;
     %webout(OBJ,areas)
     %webout(CLOSE)
 ;;;;
-%mp_createwebservice(path=&appLoc/common, name=appinit)
+%mp_createwebservice(path=&appLoc/services/common, name=appinit)
 parmcards4;
     %webout(FETCH)
     proc sql;
@@ -28,7 +28,7 @@ parmcards4;
     %webout(OBJ,springs)
     %webout(CLOSE)
 ;;;;
-%mp_createwebservice(path=&appLoc/common, name=getdata)
+%mp_createwebservice(path=&appLoc/services/common, name=getdata)
 ```
 
 ## Frontend Web
@@ -36,11 +36,10 @@ parmcards4;
 If you are running on SAS 9 you need to set `serverType` to SAS9 in `sasContext.tsx`.
 
 1. clone the repo and change into the directory
-2. run `npm install` 
-3. run `npm run build` to create a production build in the `build` folder.  This can be deployed to the SAS web server [here](https://sasjs.io/frontend/deployment/).
+2. run `npm install`
+3. run `npm run build` to create a production build in the `build` folder. This can be deployed to the SAS web server [here](https://sasjs.io/frontend-deployment/).
 
 If you are running locally you will also need to whitelist `localhost` on the server, or enable CORS in your browser as described [here](https://sasjs.io/frontend/cors/)
-
 
 ## Supported Versions of SAS
 

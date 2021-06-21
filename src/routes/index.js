@@ -1,12 +1,12 @@
-import React from "react";
-import { Route, HashRouter, Redirect } from "react-router-dom";
-import HomePageComponent from "../components/home-page.component";
-import DataPageComponent from "../components/data-page.component";
-import RouteWithLayout from "./routeHOC/RouteWithLayout";
-import MainLayout from "../layouts/Main";
-import ThemeProvider from "@material-ui/styles/ThemeProvider";
-import theme from "../theme";
-import SASProvider from "../context/sasContext";
+import React from 'react'
+import { Route, HashRouter, Redirect } from 'react-router-dom'
+import HomePageComponent from '../components/home-page.component'
+import DataPageComponent from '../components/data-page.component'
+import RouteWithLayout from './routeHOC/RouteWithLayout'
+import MainLayout from '../layouts/Main'
+import ThemeProvider from '@material-ui/styles/ThemeProvider'
+import theme from '../theme'
+import SASProvider from '../context/sasContext'
 
 export default (
   <ThemeProvider theme={theme}>
@@ -28,4 +28,4 @@ export default (
       </HashRouter>
     </SASProvider>
   </ThemeProvider>
-);
+)

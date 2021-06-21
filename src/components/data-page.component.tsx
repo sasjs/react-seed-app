@@ -3,62 +3,62 @@ import React, {
   useEffect,
   useRef,
   useContext,
-  useCallback,
-} from "react";
-import CircularProgress from "@material-ui/core/CircularProgress";
+  useCallback
+} from 'react'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
-import Button from "@material-ui/core/Button";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
-import { SASContext } from "../context/sasContext";
+import MenuItem from '@material-ui/core/MenuItem'
+import Select from '@material-ui/core/Select'
+import Button from '@material-ui/core/Button'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableContainer from '@material-ui/core/TableContainer'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+import Paper from '@material-ui/core/Paper'
+import { SASContext } from '../context/sasContext'
 
 function usePrevious(value: any) {
-  const ref = useRef();
+  const ref = useRef()
   useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
+    ref.current = value
+  })
+  return ref.current
 }
 
 const DataPageComponent = () => {
-  const sasContext = useContext(SASContext);
-  const prevLoggedIn = usePrevious(sasContext.isUserLoggedIn);
-  const [areas, setAreas] = useState([]);
-  const [selectedArea, setSelectedArea] = useState("");
-  const [springs, setSprings] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [currentRequest, setCurrentRequest] = useState(null as any);
+  const sasContext = useContext(SASContext)
+  const prevLoggedIn = usePrevious(sasContext.isUserLoggedIn)
+  const [areas, setAreas] = useState([])
+  const [selectedArea, setSelectedArea] = useState('')
+  const [springs, setSprings] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [currentRequest, setCurrentRequest] = useState(null as any)
 
   const executeRequest = useCallback(
     (request) => {
       if (request) {
-        setIsLoading(true);
+        setIsLoading(true)
         if (sasContext.request) {
           sasContext.request(request).then((res) => {
             if (res && res.springs) {
-              setSprings(res.springs);
+              setSprings(res.springs)
             }
-            setIsLoading(false);
-          });
+            setIsLoading(false)
+          })
         }
       }
     },
     [sasContext]
-  );
+  )
 
   useEffect(() => {
     if (sasContext.startupData) {
-      setAreas(sasContext.startupData.areas);
-      setSelectedArea(sasContext.startupData.areas[0]["AREA"]);
+      setAreas(sasContext.startupData.areas)
+      setSelectedArea(sasContext.startupData.areas[0]['AREA'])
     }
-  }, [sasContext.startupData]);
+  }, [sasContext.startupData])
 
   useEffect(() => {
     if (
@@ -67,36 +67,36 @@ const DataPageComponent = () => {
       currentRequest &&
       currentRequest.data
     ) {
-      executeRequest(currentRequest);
+      executeRequest(currentRequest)
     }
-  }, [sasContext.isUserLoggedIn, prevLoggedIn, currentRequest, executeRequest]);
+  }, [sasContext.isUserLoggedIn, prevLoggedIn, currentRequest, executeRequest])
 
   const areaOnChange = (
     event: React.ChangeEvent<{
-      name?: string | undefined;
-      value: unknown;
+      name?: string | undefined
+      value: unknown
     }>
   ) => {
-    setSelectedArea(event.target.value as string);
-  };
+    setSelectedArea(event.target.value as string)
+  }
 
   const submitArea = () => {
     if (sasContext.isUserLoggedIn) {
       const request = {
-        url: "services/common/getdata",
+        url: 'services/common/getdata',
         data: {
-          areas: [{ area: selectedArea }],
-        },
-      };
-      setCurrentRequest(request);
-      executeRequest(request);
+          areas: [{ area: selectedArea }]
+        }
+      }
+      setCurrentRequest(request)
+      executeRequest(request)
     }
-  };
+  }
 
   return (
     <div className="home-page">
       <div className="demo-table">
-        {areas && areas.length < 1 ? <CircularProgress /> : ""}
+        {areas && areas.length < 1 ? <CircularProgress /> : ''}
 
         {areas && areas.length > 0 ? (
           <div>
@@ -111,13 +111,13 @@ const DataPageComponent = () => {
                   <MenuItem key={area.AREA + index} value={area.AREA}>
                     {area.AREA}
                   </MenuItem>
-                );
+                )
               })}
             </Select>
 
             <Button
               onClick={submitArea}
-              style={{ marginLeft: "10px" }}
+              style={{ marginLeft: '10px' }}
               variant="contained"
               color="primary"
             >
@@ -125,12 +125,12 @@ const DataPageComponent = () => {
             </Button>
           </div>
         ) : (
-          ""
+          ''
         )}
 
         <hr />
 
-        {isLoading ? <CircularProgress /> : ""}
+        {isLoading ? <CircularProgress /> : ''}
 
         {springs && springs.length > 0 && !isLoading ? (
           <TableContainer component={Paper}>
@@ -162,11 +162,11 @@ const DataPageComponent = () => {
             </Table>
           </TableContainer>
         ) : (
-          ""
+          ''
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default DataPageComponent;
+export default DataPageComponent

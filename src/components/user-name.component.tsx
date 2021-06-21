@@ -1,7 +1,7 @@
-import React from "react";
-import IconButton from "@material-ui/core/IconButton";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import Typography from "@material-ui/core/Typography";
+import React from 'react'
+import IconButton from '@material-ui/core/IconButton'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import Typography from '@material-ui/core/Typography'
 
 const UserName = (props: any) => {
   return (
@@ -17,7 +17,7 @@ const UserName = (props: any) => {
         {props.userName}
       </Typography>
     </IconButton>
-  );
-};
+  )
+}
 
-export default UserName;
+export default UserName

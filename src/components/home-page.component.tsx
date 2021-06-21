@@ -1,27 +1,27 @@
-import React from "react";
+import React from 'react'
 
 const HomePageComponent = () => {
   const homePageStyle = {
-    padding: "16px",
-    color: "#1c1c1c",
-    display: "flex",
-    flexDirection: "column" as "column",
-    alignItems: "center",
-    justifyContent: "center"
-  };
+    padding: '16px',
+    color: '#1c1c1c',
+    display: 'flex',
+    flexDirection: 'column' as 'column',
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
   const codeStyle = {
-    fontFamily: "Monaco, Courier, monospace",
-    border: "1px solid #d9d9d9",
-    padding: "5px",
-    borderRadius: "3px",
-    backgroundColor: "#4a3f3f",
-    color: "#f79205"
-  };
+    fontFamily: 'Monaco, Courier, monospace',
+    border: '1px solid #d9d9d9',
+    padding: '5px',
+    borderRadius: '3px',
+    backgroundColor: '#4a3f3f',
+    color: '#f79205'
+  }
 
   return (
     <div style={homePageStyle}>
       <h1>
-        Hello!{" "}
+        Hello!{' '}
         <span role="img" aria-label="wave">
           👋
         </span>
@@ -30,7 +30,7 @@ const HomePageComponent = () => {
         Welcome to the React Seed App for <span style={codeStyle}>SASjs</span>.
       </h3>
       <div>
-        App Source Code:{" "}
+        App Source Code:{' '}
         <a
           target="_blank"
           rel="noopener noreferrer"
@@ -62,7 +62,7 @@ const HomePageComponent = () => {
         </a>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default HomePageComponent;
+export default HomePageComponent
