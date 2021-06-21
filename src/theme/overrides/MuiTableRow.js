@@ -1,14 +1,14 @@
-import palette from "../palette";
+import palette from '../palette'
 
 export default {
   root: {
-    "&$selected": {
+    '&$selected': {
       backgroundColor: palette.background.default
     },
-    "&$hover": {
-      "&:hover": {
+    '&$hover': {
+      '&:hover': {
         backgroundColor: palette.background.default
       }
     }
   }
-};
+}

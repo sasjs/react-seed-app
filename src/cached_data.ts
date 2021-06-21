@@ -1,3 +1,3 @@
 export default {
-    areas: null
+  areas: null
 }
