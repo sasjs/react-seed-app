@@ -15,7 +15,7 @@
     "macroVars": {}
   },
   "streamConfig": {
-    "assetPaths": [],
+    "assetPaths": [""],
     "streamWeb": false,
     "streamWebFolder": "webv",
     "webSourcePath": "build"
@@ -48,7 +48,7 @@
         "macroVars": {}
       },
       "streamConfig": {
-        "assetPaths": [],
+        "assetPaths": [""],
         "streamWeb": false,
         "streamWebFolder": "webv",
         "webSourcePath": "build"
