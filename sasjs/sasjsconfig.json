@@ -18,8 +18,9 @@
     "assetPaths": [],
     "streamWeb": false,
     "streamWebFolder": "webv",
-    "webSourcePath": "dist"
+    "webSourcePath": "build"
   },
+  "defaultTarget": "viya",
   "targets": [
     {
       "name": "viya",
@@ -50,7 +51,7 @@
         "assetPaths": [],
         "streamWeb": false,
         "streamWebFolder": "webv",
-        "webSourcePath": "dist"
+        "webSourcePath": "build"
       },
       "deployConfig": {
         "deployServicePack": true,
