@@ -8,12 +8,6 @@
     "termProgram": "",
     "macroVars": {}
   },
-  "jobConfig": {
-    "jobFolders": [],
-    "initProgram": "",
-    "termProgram": "",
-    "macroVars": {}
-  },
   "streamConfig": {
     "assetPaths": [""],
     "streamWeb": false,
@@ -27,69 +21,19 @@
       "serverUrl": "https://sas.analytium.co.uk",
       "serverType": "SASVIYA",
       "appLoc": "/Public/app/react-seed-app",
-      "macroFolders": [],
-      "programFolders": [],
-      "buildConfig": {
-        "buildOutputFileName": "myviyadeploy.sas",
-        "initProgram": "",
-        "termProgram": "",
-        "macroVars": {}
-      },
-      "jobConfig": {
-        "jobFolders": [],
-        "initProgram": "",
-        "termProgram": "",
-        "macroVars": {}
-      },
-      "serviceConfig": {
-        "serviceFolders": [],
-        "initProgram": "",
-        "termProgram": "",
-        "macroVars": {}
-      },
-      "streamConfig": {
-        "assetPaths": [""],
-        "streamWeb": false,
-        "streamWebFolder": "webv",
-        "webSourcePath": "build"
-      },
       "deployConfig": {
-        "deployServicePack": true,
-        "deployScripts": ["sasjsbuild/myviyadeploy.sas"]
+        "deployServicePack": true
       }
     },
     {
       "name": "sas9",
       "serverType": "SAS9",
-      "serverUrl": "YOURSAS9SERVER",
       "appLoc": "/User Folders/&sysuserid/My Folder/react-seed-app",
-      "buildConfig": {
-        "buildOutputFileName": "mysas9deploy.sas"
-      },
       "deployConfig": {
-        "deployServicePack": true,
-        "deployScripts": ["sasjsbuild/myviyadeploy.sas"]
-      },
-      "serviceConfig": {
-        "serviceFolders": [],
-        "initProgram": "",
-        "termProgram": "",
-        "macroVars": {}
-      },
-      "jobConfig": {
-        "jobFolders": [],
-        "initProgram": "",
-        "termProgram": "",
-        "macroVars": {}
+        "deployServicePack": true
       },
       "serverName": "SASApp",
-      "repositoryName": "Foundation",
-      "streamConfig": {
-        "assetPaths": [],
-        "streamWeb": false,
-        "streamWebFolder": "web9",
-        "webSourcePath": "dist"
-      }
+      "repositoryName": "Foundation"
     }
   ]
 }
