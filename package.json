@@ -9,14 +9,14 @@
   ],
   "homepage": ".",
   "dependencies": {
-    "@material-ui/core": "^4.11.0",
+    "@material-ui/core": "^4.12.1",
     "@material-ui/icons": "^4.11.2",
-    "@sasjs/adapter": "^2.8.1",
-    "@sasjs/core": "^2.35.0",
+    "@sasjs/adapter": "^2.8.13",
+    "@sasjs/core": "^2.35.4",
     "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^11.2.7",
+    "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.1.9",
-    "@types/react-dom": "^17.0.8",
+    "@types/react-dom": "^17.0.9",
     "moment": "^2.29.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -60,7 +60,7 @@
   },
   "devDependencies": {
     "node-sass": "^6.0.1",
-    "prettier": "^2.3.1",
-    "typescript": "^4.3.4"
+    "prettier": "^2.3.2",
+    "typescript": "^4.3.5"
   }
 }
