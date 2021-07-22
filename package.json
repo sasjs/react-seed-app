@@ -15,7 +15,7 @@
     "@sasjs/core": "^2.35.5",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
-    "@testing-library/user-event": "^13.1.9",
+    "@testing-library/user-event": "^13.2.0",
     "@types/react-dom": "^17.0.9",
     "moment": "^2.29.1",
     "react": "^17.0.2",
