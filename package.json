@@ -11,7 +11,7 @@
   "dependencies": {
     "@material-ui/core": "^4.12.2",
     "@material-ui/icons": "^4.11.2",
-    "@sasjs/adapter": "^2.9.4",
+    "@sasjs/adapter": "^2.10.0",
     "@sasjs/core": "^2.35.5",
     "@types/react-dom": "^17.0.9",
     "moment": "^2.29.1",
