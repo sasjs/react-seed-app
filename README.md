@@ -6,7 +6,7 @@ This seed app provides a wrapper for `@sasjs/adapter`, a lightning fast adapter 
 
 Creating web services in SAS 9 or Viya can be done entirely in SAS Studio using the code below.
 
-```
+```sas
 %let appLoc=/Public/app/react-seed-app; /* SAS Folders App Location */
 filename mc url "https://raw.githubusercontent.com/sasjs/core/main/all.sas";
 %inc mc;
@@ -39,7 +39,7 @@ If you are running on SAS 9 you need to set `serverType` to SAS9 in `sasContext.
 2. run `npm install`
 3. run `npm run build` to create a production build in the `build` folder. This can be deployed to the SAS web server [here](https://sasjs.io/frontend-deployment/).
 
-If you are running locally you will also need to whitelist `localhost` on the server, or enable CORS in your browser as described [here](https://sasjs.io/frontend/cors/)
+If you are running locally you will also need to whitelist `localhost` on the server, or enable CORS in your browser as described [here](https://sasjs.io/cors)
 
 ## Supported Versions of SAS
 
