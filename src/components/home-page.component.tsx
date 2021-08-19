@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '3px',
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.secondary.main
+  },
+  sasjsLink: {
+    marginLeft: '5px'
   }
 }))
 
@@ -38,6 +41,7 @@ const HomePageComponent = () => {
       <div>
         App Source Code:{' '}
         <a
+          className={classes.sasjsLink}
           target="_blank"
           rel="noopener noreferrer"
           href="https://github.com/macropeople/react-seed-app"
@@ -49,6 +53,7 @@ const HomePageComponent = () => {
       <div>
         <span className={classes.code}>SASjs</span> Source Code:
         <a
+          className={classes.sasjsLink}
           target="_blank"
           rel="noopener noreferrer"
           href="https://github.com/macropeople/sasjs"
@@ -60,6 +65,7 @@ const HomePageComponent = () => {
       <div>
         <span className={classes.code}>SASjs</span> on NPM:
         <a
+          className={classes.sasjsLink}
           target="_blank"
           rel="noopener noreferrer"
           href="https://www.npmjs.com/package/sasjs"
