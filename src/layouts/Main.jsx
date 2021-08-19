@@ -11,7 +11,9 @@ import Divider from '@material-ui/core/Divider'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Button from '@material-ui/core/Button'
 import Menu from '@material-ui/core/Menu'
-import { Link } from 'react-router-dom'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
+import { Link, useHistory, useLocation } from 'react-router-dom'
 import RequestModal from '../components/request-modal.component'
 import UserName from '../components/user-name.component'
 import { SASContext } from '../context/sasContext'
@@ -24,24 +26,32 @@ const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2)
   },
-  companyTitle: {
-    color: 'white',
-    textDecoration: 'none',
-    cursor: 'pointer'
-  },
   title: {
     color: 'white',
     padding: '0 8px'
+  },
+  tabs: {
+    '& .MuiTab-root': {
+      fontSize: '21px'
+    },
+    '& .Mui-selected': {
+      color: theme.palette.secondary.main
+    }
   }
 }))
 
 const Main = (props) => {
+  const history = useHistory()
   const sasContext = useContext(SASContext)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const [debug, setDebug] = useState(
     sasContext.sasService.getSasjsConfig().debug
   )
+
+  const { pathname } = useLocation()
+  const [tabValue, setTabValue] = useState(pathname)
+
   const classes = useStyles()
   const { children } = props
   const open = Boolean(anchorEl)
@@ -58,6 +68,11 @@ const Main = (props) => {
     setAnchorEl(null)
     setIsModalOpen(false)
   }
+
+  const handleTabChange = (event, value) => {
+    setTabValue(value)
+  }
+
   return (
     <>
       <div className={classes.root}>
@@ -69,16 +84,14 @@ const Main = (props) => {
               style={{ width: '2%', cursor: 'pointer' }}
               onClick={() => props.history.push('/home')}
             />
-            <Typography variant="h6" className={classes.title}>
-              <Link to="/home" className={classes.companyTitle}>
-                Home
-              </Link>
-            </Typography>
-            <Typography variant="h6" className={classes.title}>
-              <Link to="/demo" className={classes.companyTitle}>
-                Demo
-              </Link>
-            </Typography>
+            <Tabs
+              value={tabValue}
+              onChange={handleTabChange}
+              className={classes.tabs}
+            >
+              <Tab label="Home" value="/home" to="/home" component={Link} />
+              <Tab label="Demo" value="/demo" to="/demo" component={Link} />
+            </Tabs>
             <div
               style={{
                 display: 'flex',
