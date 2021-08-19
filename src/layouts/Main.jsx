@@ -81,8 +81,12 @@ const Main = (props) => {
             <img
               src="logo-white.png"
               alt="logo"
-              style={{ width: '2%', cursor: 'pointer' }}
-              onClick={() => props.history.push('/home')}
+              style={{
+                width: '50px',
+                cursor: 'pointer',
+                marginRight: '25px'
+              }}
+              onClick={() => history.push('/home')}
             />
             <Tabs
               value={tabValue}
