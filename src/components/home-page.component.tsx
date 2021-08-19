@@ -1,25 +1,30 @@
 import React from 'react'
+import { makeStyles } from '@material-ui/core/styles'
 
-const HomePageComponent = () => {
-  const homePageStyle = {
+const useStyles = makeStyles((theme) => ({
+  homePage: {
     padding: '16px',
     color: '#1c1c1c',
     display: 'flex',
     flexDirection: 'column' as 'column',
     alignItems: 'center',
     justifyContent: 'center'
-  }
-  const codeStyle = {
+  },
+  code: {
     fontFamily: 'Monaco, Courier, monospace',
     border: '1px solid #d9d9d9',
     padding: '5px',
     borderRadius: '3px',
-    backgroundColor: '#4a3f3f',
-    color: '#f79205'
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.secondary.main
   }
+}))
+
+const HomePageComponent = () => {
+  const classes = useStyles()
 
   return (
-    <div style={homePageStyle}>
+    <div className={classes.homePage}>
       <h1>
         Hello!{' '}
         <span role="img" aria-label="wave">
@@ -27,7 +32,8 @@ const HomePageComponent = () => {
         </span>
       </h1>
       <h3>
-        Welcome to the React Seed App for <span style={codeStyle}>SASjs</span>.
+        Welcome to the React Seed App for{' '}
+        <span className={classes.code}>SASjs</span>.
       </h3>
       <div>
         App Source Code:{' '}
@@ -41,7 +47,7 @@ const HomePageComponent = () => {
       </div>
       <br />
       <div>
-        <span style={codeStyle}>SASjs</span> Source Code:
+        <span className={classes.code}>SASjs</span> Source Code:
         <a
           target="_blank"
           rel="noopener noreferrer"
@@ -52,7 +58,7 @@ const HomePageComponent = () => {
       </div>
       <br />
       <div>
-        <span style={codeStyle}>SASjs</span> on NPM:
+        <span className={classes.code}>SASjs</span> on NPM:
         <a
           target="_blank"
           rel="noopener noreferrer"
