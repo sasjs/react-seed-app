@@ -111,7 +111,8 @@ const Main = (props) => {
               }}
             >
               <UserName
-                userName={sasContext.userName}
+                userName={sasContext.fullName}
+                avatarContent={sasContext.avatarContent}
                 onClickHandler={handleMenu}
                 className={classes.title}
               />

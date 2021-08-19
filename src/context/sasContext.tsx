@@ -8,11 +8,14 @@ import React, {
   ReactNode
 } from 'react'
 import SASjs, { SASjsConfig } from '@sasjs/adapter'
+import axios from 'axios'
 
 interface SASContextProps {
   isUserLoggedIn: boolean
   checkingSession: boolean
   userName: string
+  fullName: string
+  avatarContent: string
   sasService: SASjs
   setIsUserLoggedIn: null | Dispatch<SetStateAction<boolean>>
   login: ((userName: string, password: string) => Promise<boolean>) | null
@@ -21,17 +24,21 @@ interface SASContextProps {
   startupData: any
 }
 
-const sasService = new SASjs({
+const sasjsConfig = {
   serverUrl: '',
   appLoc: '/Public/app/react-seed-app',
-  serverType: 'SASVIYA',
+  serverType: 'SAS9',
   debug: false
-} as SASjsConfig)
+} as SASjsConfig
+
+const sasService = new SASjs(sasjsConfig)
 
 export const SASContext = createContext<SASContextProps>({
   isUserLoggedIn: false,
   checkingSession: false,
   userName: '',
+  fullName: '',
+  avatarContent: '',
   sasService,
   setIsUserLoggedIn: null,
   login: null,
@@ -45,6 +52,8 @@ const SASProvider = (props: { children: ReactNode }) => {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false)
   const [checkingSession, setCheckingSession] = useState(false)
   const [userName, setUserName] = useState('')
+  const [fullName, setFullName] = useState('')
+  const [avatarContent, setAvatarContent] = useState('')
   const [startupData, setStartupData] = useState(null)
 
   const fetchStartupData = useCallback(() => {
@@ -52,6 +61,24 @@ const SASProvider = (props: { children: ReactNode }) => {
       .request('services/common/appinit', null)
       .then((response: any) => {
         setStartupData(response)
+        if (sasjsConfig.serverType === 'SASVIYA') {
+          axios
+            .get('/identities/users/@currentUser')
+            .then((res) => {
+              if (res.data?.name) {
+                setFullName(res.data.name)
+                if (res.data?.links) {
+                  const { uri } = res.data.links.find((obj: any) => {
+                    return obj.rel === 'avatarContent'
+                  })
+                  setAvatarContent(uri)
+                }
+              }
+            })
+            .catch((err) => console.log(err))
+        } else {
+          setFullName(response.MF_GETUSER)
+        }
       })
       .catch((err) => {
         console.log(err)
@@ -113,6 +140,8 @@ const SASProvider = (props: { children: ReactNode }) => {
         isUserLoggedIn,
         checkingSession,
         userName,
+        fullName,
+        avatarContent,
         sasService,
         setIsUserLoggedIn,
         login,
