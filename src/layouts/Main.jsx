@@ -73,6 +73,11 @@ const Main = (props) => {
     setTabValue(value)
   }
 
+  const openInNewTab = (url) => {
+    const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
+    if (newWindow) newWindow.opener = null
+  }
+
   return (
     <>
       <div className={classes.root}>
@@ -145,7 +150,9 @@ const Main = (props) => {
                 <MenuItem onClick={() => setIsModalOpen(true)}>
                   Requests
                 </MenuItem>
-                <MenuItem>Documentation</MenuItem>
+                <MenuItem onClick={() => openInNewTab('https://sasjs.io/')}>
+                  Documentation
+                </MenuItem>
                 <Divider variant="middle" />
                 <MenuItem onClick={sasContext.logout}>
                   <Button variant="contained" color="secondary">
