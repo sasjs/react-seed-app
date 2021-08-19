@@ -44,7 +44,7 @@ const HomePageComponent = () => {
           className={classes.sasjsLink}
           target="_blank"
           rel="noopener noreferrer"
-          href="https://github.com/macropeople/react-seed-app"
+          href="https://github.com/sasjs/react-seed-app"
         >
           https://github.com/sasjs/react-seed-app
         </a>
@@ -56,7 +56,7 @@ const HomePageComponent = () => {
           className={classes.sasjsLink}
           target="_blank"
           rel="noopener noreferrer"
-          href="https://github.com/macropeople/sasjs"
+          href="https://github.com/sasjs"
         >
           https://github.com/sasjs
         </a>
