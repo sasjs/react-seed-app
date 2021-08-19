@@ -37,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
     '& .Mui-selected': {
       color: theme.palette.secondary.main
     }
+  },
+  logoutButton: {
+    justifyContent: 'center'
   }
 }))
 
@@ -154,8 +157,11 @@ const Main = (props) => {
                   Documentation
                 </MenuItem>
                 <Divider variant="middle" />
-                <MenuItem onClick={sasContext.logout}>
-                  <Button variant="contained" color="secondary">
+                <MenuItem
+                  onClick={sasContext.logout}
+                  className={classes.logoutButton}
+                >
+                  <Button variant="contained" color="primary">
                     Logout
                   </Button>
                 </MenuItem>
