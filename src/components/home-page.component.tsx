@@ -46,7 +46,7 @@ const HomePageComponent = () => {
           rel="noopener noreferrer"
           href="https://github.com/macropeople/react-seed-app"
         >
-          https://github.com/macropeople/react-seed-app
+          https://github.com/sasjs/react-seed-app
         </a>
       </div>
       <br />
@@ -58,7 +58,7 @@ const HomePageComponent = () => {
           rel="noopener noreferrer"
           href="https://github.com/macropeople/sasjs"
         >
-          https://github.com/macropeople/sasjs
+          https://github.com/sasjs
         </a>
       </div>
       <br />
