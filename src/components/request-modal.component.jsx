@@ -12,6 +12,8 @@ import Grid from '@material-ui/core/Grid'
 
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
 import Highlight from 'react-highlight.js'
 import './syntax-highlighting.css'
 
@@ -107,6 +109,12 @@ const useStyles = makeStyles((theme) => ({
   },
   programlogWrapper: {
     padding: '20px'
+  },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.icon
   }
 }))
 
@@ -146,6 +154,13 @@ const RequestModal = (props) => {
             Request History
           </Typography>
           {`App Location: ${sasjsConfig.appLoc}`}
+          <IconButton
+            aria-label="close"
+            className={classes.closeButton}
+            onClick={handleClose}
+          >
+            <CloseIcon />
+          </IconButton>
         </DialogTitle>
         <DialogContent>
           <div className={classes.root}>
