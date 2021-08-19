@@ -68,9 +68,9 @@ const HomePageComponent = () => {
           className={classes.sasjsLink}
           target="_blank"
           rel="noopener noreferrer"
-          href="https://www.npmjs.com/package/sasjs"
+          href="https://www.npmjs.com/package/@sasjs/adapter"
         >
-          https://www.npmjs.com/package/sasjs
+          https://www.npmjs.com/package/@sasjs/adapter
         </a>
       </div>
     </div>
