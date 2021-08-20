@@ -12,7 +12,15 @@ const UserName = (props: any) => {
       onClick={props.onClickHandler}
       color="inherit"
     >
-      <AccountCircle></AccountCircle>
+      {props.avatarContent ? (
+        <img
+          src={props.avatarContent}
+          alt="user-avatar"
+          style={{ width: '25px' }}
+        />
+      ) : (
+        <AccountCircle></AccountCircle>
+      )}
       <Typography variant="h6" className={props.className}>
         {props.userName}
       </Typography>

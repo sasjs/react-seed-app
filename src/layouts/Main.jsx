@@ -4,14 +4,15 @@ import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
 import MenuItem from '@material-ui/core/MenuItem'
 import Switch from '@material-ui/core/Switch'
 import Divider from '@material-ui/core/Divider'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Button from '@material-ui/core/Button'
 import Menu from '@material-ui/core/Menu'
-import { Link } from 'react-router-dom'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
+import { Link, useHistory, useLocation } from 'react-router-dom'
 import RequestModal from '../components/request-modal.component'
 import UserName from '../components/user-name.component'
 import { SASContext } from '../context/sasContext'
@@ -24,24 +25,40 @@ const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2)
   },
-  companyTitle: {
-    color: 'white',
-    textDecoration: 'none',
-    cursor: 'pointer'
-  },
   title: {
     color: 'white',
     padding: '0 8px'
+  },
+  tabs: {
+    '& .MuiTab-root': {
+      fontSize: '21px'
+    },
+    '& .Mui-selected': {
+      color: theme.palette.secondary.main
+    }
+  },
+  popOverMenu: {
+    '& .MuiList-padding': {
+      padding: 0
+    }
+  },
+  logoutButton: {
+    justifyContent: 'center'
   }
 }))
 
 const Main = (props) => {
+  const history = useHistory()
   const sasContext = useContext(SASContext)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const [debug, setDebug] = useState(
     sasContext.sasService.getSasjsConfig().debug
   )
+
+  const { pathname } = useLocation()
+  const [tabValue, setTabValue] = useState(pathname)
+
   const classes = useStyles()
   const { children } = props
   const open = Boolean(anchorEl)
@@ -58,6 +75,16 @@ const Main = (props) => {
     setAnchorEl(null)
     setIsModalOpen(false)
   }
+
+  const handleTabChange = (event, value) => {
+    setTabValue(value)
+  }
+
+  const openInNewTab = (url) => {
+    const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
+    if (newWindow) newWindow.opener = null
+  }
+
   return (
     <>
       <div className={classes.root}>
@@ -66,19 +93,21 @@ const Main = (props) => {
             <img
               src="logo-white.png"
               alt="logo"
-              style={{ width: '2%', cursor: 'pointer' }}
-              onClick={() => props.history.push('/home')}
+              style={{
+                width: '50px',
+                cursor: 'pointer',
+                marginRight: '25px'
+              }}
+              onClick={() => history.push('/home')}
             />
-            <Typography variant="h6" className={classes.title}>
-              <Link to="/home" className={classes.companyTitle}>
-                Home
-              </Link>
-            </Typography>
-            <Typography variant="h6" className={classes.title}>
-              <Link to="/demo" className={classes.companyTitle}>
-                Demo
-              </Link>
-            </Typography>
+            <Tabs
+              value={tabValue}
+              onChange={handleTabChange}
+              className={classes.tabs}
+            >
+              <Tab label="Home" value="/home" to="/home" component={Link} />
+              <Tab label="Demo" value="/demo" to="/demo" component={Link} />
+            </Tabs>
             <div
               style={{
                 display: 'flex',
@@ -87,21 +116,24 @@ const Main = (props) => {
               }}
             >
               <UserName
-                userName={sasContext.userName}
+                userName={sasContext.fullName}
+                avatarContent={sasContext.avatarContent}
                 onClickHandler={handleMenu}
                 className={classes.title}
               />
               <Menu
+                className={classes.popOverMenu}
                 id="menu-appbar"
                 anchorEl={anchorEl}
+                getContentAnchorEl={null}
                 anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right'
+                  vertical: 'bottom',
+                  horizontal: 'center'
                 }}
                 keepMounted
                 transformOrigin={{
                   vertical: 'top',
-                  horizontal: 'right'
+                  horizontal: 'center'
                 }}
                 open={open}
                 onClose={handleClose}
@@ -127,10 +159,15 @@ const Main = (props) => {
                 <MenuItem onClick={() => setIsModalOpen(true)}>
                   Requests
                 </MenuItem>
-                <MenuItem>Documentation</MenuItem>
+                <MenuItem onClick={() => openInNewTab('https://sasjs.io/')}>
+                  Documentation
+                </MenuItem>
                 <Divider variant="middle" />
-                <MenuItem onClick={sasContext.logout}>
-                  <Button variant="contained" color="secondary">
+                <MenuItem
+                  onClick={sasContext.logout}
+                  className={classes.logoutButton}
+                >
+                  <Button variant="contained" color="primary">
                     Logout
                   </Button>
                 </MenuItem>

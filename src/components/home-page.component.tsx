@@ -1,25 +1,34 @@
 import React from 'react'
+import { makeStyles } from '@material-ui/core/styles'
 
-const HomePageComponent = () => {
-  const homePageStyle = {
+const useStyles = makeStyles((theme) => ({
+  homePage: {
     padding: '16px',
     color: '#1c1c1c',
     display: 'flex',
     flexDirection: 'column' as 'column',
     alignItems: 'center',
     justifyContent: 'center'
-  }
-  const codeStyle = {
+  },
+  code: {
     fontFamily: 'Monaco, Courier, monospace',
     border: '1px solid #d9d9d9',
     padding: '5px',
     borderRadius: '3px',
-    backgroundColor: '#4a3f3f',
-    color: '#f79205'
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.secondary.main,
+    fontWeight: 'bold'
+  },
+  sasjsLink: {
+    marginLeft: '5px'
   }
+}))
+
+const HomePageComponent = () => {
+  const classes = useStyles()
 
   return (
-    <div style={homePageStyle}>
+    <div className={classes.homePage}>
       <h1>
         Hello!{' '}
         <span role="img" aria-label="wave">
@@ -27,38 +36,42 @@ const HomePageComponent = () => {
         </span>
       </h1>
       <h3>
-        Welcome to the React Seed App for <span style={codeStyle}>SASjs</span>.
+        Welcome to the React Seed App for{' '}
+        <span className={classes.code}>SASjs</span>.
       </h3>
       <div>
         App Source Code:{' '}
         <a
+          className={classes.sasjsLink}
           target="_blank"
           rel="noopener noreferrer"
-          href="https://github.com/macropeople/react-seed-app"
+          href="https://github.com/sasjs/react-seed-app"
         >
-          https://github.com/macropeople/react-seed-app
+          https://github.com/sasjs/react-seed-app
         </a>
       </div>
       <br />
       <div>
-        <span style={codeStyle}>SASjs</span> Source Code:
+        <span className={classes.code}>SASjs</span> Source Code:
         <a
+          className={classes.sasjsLink}
           target="_blank"
           rel="noopener noreferrer"
-          href="https://github.com/macropeople/sasjs"
+          href="https://github.com/sasjs"
         >
-          https://github.com/macropeople/sasjs
+          https://github.com/sasjs
         </a>
       </div>
       <br />
       <div>
-        <span style={codeStyle}>SASjs</span> on NPM:
+        <span className={classes.code}>SASjs</span> on NPM:
         <a
+          className={classes.sasjsLink}
           target="_blank"
           rel="noopener noreferrer"
-          href="https://www.npmjs.com/package/sasjs"
+          href="https://www.npmjs.com/package/@sasjs/adapter"
         >
-          https://www.npmjs.com/package/sasjs
+          https://www.npmjs.com/package/@sasjs/adapter
         </a>
       </div>
     </div>
