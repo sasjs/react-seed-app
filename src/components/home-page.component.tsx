@@ -16,7 +16,8 @@ const useStyles = makeStyles((theme) => ({
     padding: '5px',
     borderRadius: '3px',
     backgroundColor: theme.palette.primary.main,
-    color: theme.palette.secondary.main
+    color: theme.palette.secondary.main,
+    fontWeight: 'bold'
   },
   sasjsLink: {
     marginLeft: '5px'
