@@ -37,6 +37,11 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.secondary.main
     }
   },
+  popOverMenu: {
+    '& .MuiList-padding': {
+      padding: 0
+    }
+  },
   logoutButton: {
     justifyContent: 'center'
   }
@@ -117,6 +122,7 @@ const Main = (props) => {
                 className={classes.title}
               />
               <Menu
+                className={classes.popOverMenu}
                 id="menu-appbar"
                 anchorEl={anchorEl}
                 getContentAnchorEl={null}
