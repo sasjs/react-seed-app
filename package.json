@@ -28,7 +28,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "rsync -avhe ssh ./build/* --delete sabhas@sas.analytium.co.uk:/var/www/html/sabhas/react-seed-app",
+    "deploy": "rsync -avhe ssh ./build/* --delete $SSH_ACCOUNT:$DEPLOY_PATH",
     "bnd": "npm run build && npm run deploy",
     "lint:fix": "npx prettier --write \"src/**/*.{ts,tsx,js,jsx,html,css,sass,less,json,yml,md,graphql}\"",
     "lint": "npx prettier --check \"src/**/*.{ts,tsx,js,jsx,html,css,sass,less,json,yml,md,graphql}\""
