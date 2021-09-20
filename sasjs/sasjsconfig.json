@@ -1,15 +1,22 @@
 {
   "$schema": "https://cli.sasjs.io/sasjsconfig-schema.json",
-  "macroFolders": ["sasjs/macros"],
+  "macroFolders": [
+    "sasjs/macros"
+  ],
   "programFolders": [],
   "serviceConfig": {
-    "serviceFolders": ["sasjs/services/common"],
+    "serviceFolders": [
+      "sasjs/services/common",
+      "sasjs/services/files"
+    ],
     "initProgram": "",
     "termProgram": "",
     "macroVars": {}
   },
   "streamConfig": {
-    "assetPaths": [""],
+    "assetPaths": [
+      ""
+    ],
     "streamWeb": false,
     "streamWebFolder": "webv",
     "webSourcePath": "build"
