@@ -2,6 +2,7 @@ import React from 'react'
 import { Route, HashRouter, Redirect } from 'react-router-dom'
 import HomePageComponent from '../components/home-page.component'
 import DataPageComponent from '../components/data-page.component'
+import FileUploaderComponent from '../components/file-uploader.component'
 import RouteWithLayout from './routeHOC/RouteWithLayout'
 import MainLayout from '../layouts/Main'
 import ThemeProvider from '@material-ui/styles/ThemeProvider'
@@ -24,6 +25,12 @@ export default (
           path="/demo"
           layout={MainLayout}
           component={DataPageComponent}
+        />
+        <RouteWithLayout
+          exact
+          path="/file-uploader"
+          layout={MainLayout}
+          component={FileUploaderComponent}
         />
       </HashRouter>
     </SASProvider>
