@@ -107,6 +107,12 @@ const Main = (props) => {
             >
               <Tab label="Home" value="/home" to="/home" component={Link} />
               <Tab label="Demo" value="/demo" to="/demo" component={Link} />
+              <Tab
+                label="FileUploader"
+                value="/file-uploader"
+                to="/file-uploader"
+                component={Link}
+              />
             </Tabs>
             <div
               style={{
