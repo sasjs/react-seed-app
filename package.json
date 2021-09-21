@@ -1,5 +1,6 @@
 {
   "name": "@sasjs/react-seed-app",
+  "repository": "https://github.com/sasjs/react-seed-app",
   "version": "2.0.0",
   "private": true,
   "keywords": [
