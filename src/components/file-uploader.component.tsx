@@ -34,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
   },
   table: {
     marginTop: '20px'
+  },
+  errorTitle: {
+    color: theme.palette.error.main
   }
 }))
 
@@ -71,6 +74,8 @@ export default function FileUploaderComponent() {
           setFile(event.target.files[0])
         }
         break
+      default:
+        break
     }
   }
 
@@ -79,7 +84,6 @@ export default function FileUploaderComponent() {
     setIsUploading(true)
     setDirList([])
     setErrorMessage('')
-    console.log('upload button clicked')
     if (sasContext.isUserLoggedIn) {
       if (file) {
         await sasContext.sasService
@@ -165,7 +169,7 @@ export default function FileUploaderComponent() {
 
       {errorMessage ? (
         <div>
-          <h1 style={{ color: 'red' }}>Error Occurred</h1>
+          <h1 className={classes.errorTitle}>Error Occurred</h1>
           <p>{errorMessage}</p>
         </div>
       ) : null}
