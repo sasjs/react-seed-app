@@ -1,10 +1,30 @@
 # Overview
 
-This seed app provides a wrapper for `@sasjs/adapter`, a lightning fast adapter for talking to both SAS 9 and Viya.
+This React seed app provides a wrapper for `@sasjs/adapter`, a lightning fast adapter for talking to both SAS 9 and Viya.
+
+
+## Frontend Web
+
+If you are running on SAS 9 you need to set `serverType` to SAS9 in `sasContext.tsx`.
+
+1. clone the repo and change into the directory
+2. run `npm install`
+3. run `npm run build` to create a production build in the `build` folder. This can be deployed to the SAS web server [here](https://sasjs.io/frontend-deployment/).
+
+If you are running locally you will also need to whitelist `localhost` on the server, or enable CORS in your browser as described [here](https://sasjs.io/cors)
 
 ## Backend Services
 
-Creating web services in SAS 9 or Viya can be done entirely in SAS Studio using the code below.
+The best way to deploy SAS services is using the [SASjs CLI](https://cli.sasjs.io).  Simply [install](https://cli.sasjs.io/installation/), update the `defaultTarget` attribute in the [sasjsconfig.json](https://github.com/sasjs/react-seed-app/blob/main/sasjs/sasjsconfig.json) file, and run the following commands:
+
+```bash
+sasjs auth 
+sasjs cbd
+```
+
+This will first authenticate to your target (follow the prompts) and after that you can just run `sasjs cbd` to rebuild and deploy your services.  If you set `streamweb:true` in the sasjsconfig.json it will also deploy your frontend as a streaming app (no need for a web server).
+
+If you are just looking to build quickly and don't have time to install NPM then you can also create the web services on both SAS 9 and Viya by running the code below.
 
 ```sas
 %let appLoc=/Public/app/react-seed-app; /* SAS Folders App Location */
@@ -30,16 +50,6 @@ parmcards4;
 ;;;;
 %mp_createwebservice(path=&appLoc/services/common, name=getdata)
 ```
-
-## Frontend Web
-
-If you are running on SAS 9 you need to set `serverType` to SAS9 in `sasContext.tsx`.
-
-1. clone the repo and change into the directory
-2. run `npm install`
-3. run `npm run build` to create a production build in the `build` folder. This can be deployed to the SAS web server [here](https://sasjs.io/frontend-deployment/).
-
-If you are running locally you will also need to whitelist `localhost` on the server, or enable CORS in your browser as described [here](https://sasjs.io/cors)
 
 ## Supported Versions of SAS
 

@@ -25,7 +25,6 @@
   "targets": [
     {
       "name": "viya",
-      "serverUrl": "https://sas.analytium.co.uk",
       "serverType": "SASVIYA",
       "appLoc": "/Public/app/react-seed-app",
       "deployConfig": {
@@ -35,7 +34,7 @@
     {
       "name": "sas9",
       "serverType": "SAS9",
-      "appLoc": "/User Folders/&sysuserid/My Folder/react-seed-app",
+      "appLoc": "/Shared Data/sasjs/react-seed-app",
       "deployConfig": {
         "deployServicePack": true
       },
