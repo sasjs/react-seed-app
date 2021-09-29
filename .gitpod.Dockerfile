@@ -1,4 +1,3 @@
 RUN sudo apt-get update \
- && sudo apt-get install -y doxygen \
- && sudo rm -rf /var/lib/apt/lists/* 
+ && sudo apt-get install -y doxygen 
 
