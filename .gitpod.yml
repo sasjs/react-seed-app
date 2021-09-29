@@ -9,6 +9,7 @@ tasks:
 vscode:
   extensions:
     - sasjs.sasjs-for-vscode
+    - ritwickdey.liveserver
 
 github:
   prebuilds:
