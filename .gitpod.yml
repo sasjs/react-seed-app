@@ -5,6 +5,7 @@ image:
 tasks:
   - init: |
       npm i -g @sasjs/cli
+      clear
 
 
 vscode:
