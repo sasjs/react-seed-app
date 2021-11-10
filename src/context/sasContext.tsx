@@ -25,7 +25,7 @@ interface SASContextProps {
 }
 
 const sasjsConfig = {
-  serverUrl: 'https://sas.analytium.co.uk:5001/',
+  serverUrl: 'http://localhost:5001/',
   appLoc: '/react-seed-app',
   serverType: 'SASJS',
   pathSAS9: '/SASjsApi/stp/execute',
@@ -128,13 +128,13 @@ const SASProvider = (props: { children: ReactNode }) => {
     return sasService.request(url, data, {}, () => setIsUserLoggedIn(false))
   }, [])
 
-  useEffect(() => {
-    setCheckingSession(true)
-    sasService.checkSession().then((response) => {
-      setCheckingSession(false)
-      setIsUserLoggedIn(response.isLoggedIn)
-    })
-  }, [])
+  // useEffect(() => {
+  //   setCheckingSession(true)
+  //   sasService.checkSession().then((response) => {
+  //     setCheckingSession(false)
+  //     setIsUserLoggedIn(response.isLoggedIn)
+  //   })
+  // }, [])
 
   useEffect(() => {
     if (isUserLoggedIn) {
