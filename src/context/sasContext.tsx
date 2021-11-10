@@ -25,10 +25,11 @@ interface SASContextProps {
 }
 
 const sasjsConfig = {
-  serverUrl: '',
-  appLoc: '/Public/app/react-seed-app',
-  serverType: 'SAS9',
-  debug: false
+  serverUrl: 'https://sas.analytium.co.uk:5001/',
+  appLoc: '/react-seed-app',
+  serverType: 'SASJS',
+  pathSAS9: '/SASjsApi/stp/execute',
+  debug: true
 } as SASjsConfig
 
 const sasService = new SASjs(sasjsConfig)
@@ -85,26 +86,36 @@ const SASProvider = (props: { children: ReactNode }) => {
       })
   }, [])
 
-  const login = useCallback((userName, password) => {
-    return sasService
-      .logIn(userName, password)
-      .then(
-        (res: { isLoggedIn: boolean; userName: string }) => {
-          setIsUserLoggedIn(res.isLoggedIn)
-          return true
-        },
-        (err) => {
-          console.error(err)
-          setIsUserLoggedIn(false)
+  const login = useCallback(() => {
+    if (sasjsConfig.loginMechanism === 'Redirected') {
+      return sasService
+        .logIn()
+        .then(
+          (res: { isLoggedIn: boolean; userName: string }) => {
+            setIsUserLoggedIn(res.isLoggedIn)
+            return true
+          },
+          (err) => {
+            console.error(err)
+            setIsUserLoggedIn(false)
+            return false
+          }
+        )
+        .catch((e) => {
+          if (e === 403) {
+            console.error('Invalid host')
+          }
           return false
-        }
-      )
-      .catch((e) => {
-        if (e === 403) {
-          console.error('Invalid host')
-        }
-        return false
+        })
+    } else {
+      const promise = new Promise<void>((resolves, rejects) => {
+        resolves()
       })
+      return promise.then(() => {
+        setIsUserLoggedIn(true)
+        return true
+      })
+    }
   }, [])
 
   const logout = useCallback(() => {

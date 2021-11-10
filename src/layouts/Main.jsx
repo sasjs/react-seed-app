@@ -67,6 +67,12 @@ const Main = (props) => {
     sasContext.sasService.setDebugState(debug)
   }, [debug, sasContext.sasService])
 
+  useEffect(() => {
+    if (!(sasContext.isUserLoggedIn || sasContext.checkingSession)) {
+      sasContext.login()
+    }
+  }, [sasContext])
+
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget)
   }
