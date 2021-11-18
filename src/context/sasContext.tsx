@@ -25,11 +25,11 @@ interface SASContextProps {
 }
 
 const sasjsConfig = {
-  serverUrl: 'http://localhost:5001/',
+  serverUrl: 'http://localhost:5000/',
   appLoc: '/react-seed-app',
   serverType: 'SASJS',
   pathSAS9: '/SASjsApi/stp/execute',
-  debug: true
+  debug: false
 } as SASjsConfig
 
 const sasService = new SASjs(sasjsConfig)
