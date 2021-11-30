@@ -32,6 +32,14 @@
       }
     },
     {
+      "name": "server",
+      "serverType": "SASJS",
+      "appLoc": "/Public/app/react-seed-app",
+      "deployConfig": {
+        "deployServicePack": true
+      }
+    },
+    {
       "name": "sas9",
       "serverType": "SAS9",
       "appLoc": "/Shared Data/sasjs/react-seed-app",
