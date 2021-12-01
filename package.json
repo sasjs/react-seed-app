@@ -6,7 +6,8 @@
   "scripts": {
     "webpack": "webpack",
     "start": "webpack serve",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint:fix": "npx prettier --write \"src/**/*.{ts,tsx,js,jsx,html,css,sass,less,json,yml,md,graphql}\"",
+    "lint": "npx prettier --check \"src/**/*.{ts,tsx,js,jsx,html,css,sass,less,json,yml,md,graphql}\""
   },
   "keywords": [],
   "author": "Sabir Hassan",
@@ -33,6 +34,13 @@
     "webpack-dev-server": "4.5.0"
   },
   "dependencies": {
+    "@mui/icons-material": "^5.2.0",
+    "@mui/material": "^5.2.1",
+    "@sasjs/adapter": "^3.0.1",
+    "@sasjs/core": "^2.52.0",
+    "@sasjs/utils": "^2.33.1",
+    "axios": "^0.24.0",
+    "moment": "^2.29.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "typescript": "^4.5.2"
