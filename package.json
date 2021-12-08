@@ -4,8 +4,8 @@
   "description": "React app built from scratch with webpack and babel",
   "main": "index.tsx",
   "scripts": {
-    "webpack": "webpack",
-    "start": "webpack serve",
+    "start": "npx webpack-dev-server --mode development --open --hot",
+    "build": "npx webpack --mode production",
     "lint:fix": "npx prettier --write \"src/**/*.{ts,tsx,js,jsx,html,css,sass,less,json,yml,md,graphql}\"",
     "lint": "npx prettier --check \"src/**/*.{ts,tsx,js,jsx,html,css,sass,less,json,yml,md,graphql}\""
   },
@@ -43,6 +43,7 @@
     "moment": "^2.29.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-router-dom": "^6.0.2",
     "typescript": "^4.5.2"
   }
 }
