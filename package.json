@@ -13,7 +13,7 @@
   "dependencies": {
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
-    "@sasjs/adapter": "file:../adapter/build/sasjs-adapter-5.0.0.tgz",
+    "@sasjs/adapter": "^3.1.0",
     "@sasjs/core": "^2.54.4",
     "@sasjs/utils": "^2.34.1",
     "@types/react-dom": "^17.0.9",
