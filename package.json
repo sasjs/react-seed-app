@@ -6,8 +6,11 @@
   "scripts": {
     "start": "npx webpack-dev-server --mode development --open --hot",
     "build": "npx webpack --mode production",
+    "deploy": "rsync -avhe ssh ./build/* --delete $SSH_ACCOUNT:$DEPLOY_PATH",
+    "buildAndDeploy": "npm run build && npm run deploy",
     "lint:fix": "npx prettier --write \"src/**/*.{ts,tsx,js,jsx,html,css,sass,less,json,yml,md,graphql}\"",
-    "lint": "npx prettier --check \"src/**/*.{ts,tsx,js,jsx,html,css,sass,less,json,yml,md,graphql}\""
+    "lint": "npx prettier --check \"src/**/*.{ts,tsx,js,jsx,html,css,sass,less,json,yml,md,graphql}\"",
+    "prepare": "git rev-parse --git-dir && git config core.hooksPath ./.git-hooks || true"
   },
   "keywords": [],
   "author": "Sabir Hassan",
@@ -22,10 +25,13 @@
     "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.11",
     "babel-loader": "^8.2.3",
+    "copy-webpack-plugin": "^10.0.0",
     "css-loader": "^6.5.1",
+    "dotenv": "^10.0.0",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "5.5.0",
     "path": "0.12.7",
+    "sass": "^1.44.0",
     "sass-loader": "^12.3.0",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.2.6",

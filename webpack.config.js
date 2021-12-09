@@ -1,39 +1,75 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
+const webpack = require('webpack')
+const dotenv = require('dotenv')
+
+// this will update the process.env with environment variables in .env file
+dotenv.config()
 
 module.exports = {
   entry: path.join(__dirname, 'src', 'index.tsx'),
-  output: { path: path.join(__dirname, 'build'), filename: 'index.bundle.js' },
+  output: {
+    path: path.join(__dirname, 'build'),
+    filename: 'index.bundle.js',
+    publicPath: './'
+  },
   mode: process.env.NODE_ENV || 'development',
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: ['.tsx', '.ts', '.js', '.jsx']
   },
-  devServer: { static: path.join(__dirname, 'src') },
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'public')
+    },
+    port: 3000
+  },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: ['babel-loader'],
+        use: ['babel-loader']
       },
       {
         test: /\.(ts|tsx)$/,
         exclude: /node_modules/,
-        use: ['ts-loader'],
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              compilerOptions: {
+                noEmit: false
+              }
+            }
+          }
+        ]
       },
       {
-        test: /\.(css|scss)$/,
-        use: ['style-loader', 'css-loader'],
+        test: /\.css$/,
+        exclude: ['/node_modules/'],
+        use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.scss$/,
+        exclude: ['/node_modules/'],
+        use: ['style-loader', 'css-loader', 'sass-loader']
       },
       {
         test: /\.(jpg|jpeg|png|gif|mp3|svg)$/,
-        use: ['file-loader'],
-      },
-    ],
+        use: ['file-loader']
+      }
+    ]
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'src', 'index.html'),
+      template: path.join(__dirname, 'src', 'index.html')
     }),
-  ],
+    new CopyPlugin({
+      patterns: [{ from: 'public' }]
+    }),
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify(process.env)
+    })
+  ]
 }

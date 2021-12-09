@@ -1,0 +1,46 @@
+{
+  "$schema": "https://cli.sasjs.io/sasjsconfig-schema.json",
+  "macroFolders": ["sasjs/macros"],
+  "programFolders": [],
+  "serviceConfig": {
+    "serviceFolders": ["sasjs/services/common", "sasjs/services/files"],
+    "initProgram": "",
+    "termProgram": "",
+    "macroVars": {}
+  },
+  "streamConfig": {
+    "assetPaths": [""],
+    "streamWeb": false,
+    "streamWebFolder": "webv",
+    "webSourcePath": "build"
+  },
+  "defaultTarget": "viya",
+  "targets": [
+    {
+      "name": "viya",
+      "serverType": "SASVIYA",
+      "appLoc": "/Public/app/react-seed-app",
+      "deployConfig": {
+        "deployServicePack": true
+      }
+    },
+    {
+      "name": "server",
+      "serverType": "SASJS",
+      "appLoc": "/Public/app/react-seed-app",
+      "deployConfig": {
+        "deployServicePack": true
+      }
+    },
+    {
+      "name": "sas9",
+      "serverType": "SAS9",
+      "appLoc": "/Shared Data/sasjs/react-seed-app",
+      "deployConfig": {
+        "deployServicePack": true
+      },
+      "serverName": "SASApp",
+      "repositoryName": "Foundation"
+    }
+  ]
+}
