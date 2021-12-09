@@ -1,0 +1,106 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+}
+
+.App-header {
+  background-color: #acaaaa;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #09d3ac;
+}
+
+.demo-table {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 0 50px;
+
+  margin-top: 50px;
+
+  .MuiInput-root {
+    min-width: 200px;
+  }
+}
+
+.home-page {
+  .navbar {
+    width: 100%;
+    height: 60px;
+    box-sizing: border-box;
+
+    background: #1976d2;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 20px;
+
+    margin-bottom: 20px;
+
+    img {
+      width: 40px;
+    }
+  }
+
+  .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #4799e9;
+    color: white;
+
+    width: 150px;
+    height: 35px;
+
+    user-select: none;
+    cursor: pointer;
+  }
+}
+
+.login-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw !important;
+  max-width: unset !important;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: #000000a6;
+
+  .LoginComponent {
+    background: white;
+    padding: 30px 30px;
+    max-width: 400px;
+    border-radius: 3px;
+    margin: 120px auto;
+  }
+}
+
+.MuiExpansionPanelSummary-root.Mui-expanded {
+  background-color: #f5f5f5 !important;
+}
+
+.MuiExpansionPanelSummary-root {
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background-color: #f5f5f5 !important;
+  }
+}

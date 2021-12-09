@@ -1,8 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import './index.scss'
+import './App.scss'
 
-const HelloWorld = () => {
-  return <h1>Hello World</h1>
+import routes from './routes'
+
+const render = () => {
+  ReactDOM.render(<>{routes}</>, document.getElementById('root'))
 }
 
-ReactDOM.render(<HelloWorld />, document.getElementById('root'))
+render()
