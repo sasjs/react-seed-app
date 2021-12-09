@@ -10,6 +10,7 @@ import React, {
 import SASjs, { SASjsConfig } from '@sasjs/adapter'
 import axios from 'axios'
 import { ServerType } from '@sasjs/utils/types'
+import { LoginResult } from '@sasjs/adapter/types/Login'
 
 interface SASContextProps {
   isUserLoggedIn: boolean
@@ -28,7 +29,7 @@ interface SASContextProps {
 const sasjsConfig = {
   serverUrl: '',
   appLoc: '/Public/app/react-seed-app',
-  serverType: ServerType.Sasjs,
+  serverType: ServerType.Sas9,
   debug: false
 } as SASjsConfig
 
@@ -48,36 +49,6 @@ export const SASContext = createContext<SASContextProps>({
   startupData: null
 })
 
-const getTokens = () => {
-  const accessToken = localStorage.getItem('accessToken') ?? undefined
-  const refreshToken = localStorage.getItem('refreshToken') ?? undefined
-
-  return { accessToken, refreshToken }
-}
-const saveTokens = (accessToken: string, refreshToken: string) => {
-  localStorage.setItem('accessToken', accessToken)
-  localStorage.setItem('refreshToken', refreshToken)
-}
-
-const headers = {
-  Accept: 'application/json',
-  'Content-Type': 'application/json'
-}
-const getAuthCode = async (credentials: any) => {
-  return fetch(`${sasjsConfig.serverUrl}/SASjsApi/auth/authorize`, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify(credentials)
-  }).then((data) => data.json())
-}
-const getNewTokens = async (payload: any) => {
-  return fetch(`${sasjsConfig.serverUrl}/SASjsApi/auth/token`, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify(payload)
-  }).then((data) => data.json())
-}
-
 const SASProvider = (props: { children: ReactNode }) => {
   const { children } = props
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false)
@@ -86,22 +57,10 @@ const SASProvider = (props: { children: ReactNode }) => {
   const [fullName, setFullName] = useState('')
   const [avatarContent, setAvatarContent] = useState('')
   const [startupData, setStartupData] = useState(null)
-  const [accessToken, setAccessToken] = useState('')
-  const [refreshToken, setRefreshToken] = useState('')
 
   const fetchStartupData = useCallback(() => {
-    const { REACT_APP_CLIENT_ID: clientId } = process.env
-    const authConfig =
-      sasjsConfig.serverType === ServerType.Sasjs
-        ? {
-            access_token: accessToken,
-            refresh_token: refreshToken,
-            client: clientId as string,
-            secret: ''
-          }
-        : undefined
     sasService
-      .request('services/common/appinit', null, {}, undefined, authConfig)
+      .request('services/common/appinit', null)
       .then((response: any) => {
         setStartupData(response)
         if (sasjsConfig.serverType === 'SASVIYA') {
@@ -126,37 +85,17 @@ const SASProvider = (props: { children: ReactNode }) => {
       .catch((err) => {
         console.log(err)
       })
-  }, [accessToken, refreshToken])
+  }, [])
 
   const login = useCallback(async (username, password) => {
-    if (sasjsConfig.serverType === ServerType.Sasjs) {
-      const { REACT_APP_CLIENT_ID: clientId } = process.env
-
-      const { code } = await getAuthCode({
-        clientId,
-        username,
-        password
-      }).catch((_) => setIsUserLoggedIn(false))
-      if (!code) return false
-
-      const { accessToken, refreshToken } = await getNewTokens({
-        clientId,
-        code
-      }).catch((_) => setIsUserLoggedIn(false))
-      if (!accessToken || !refreshToken) return false
-
-      saveTokens(accessToken, refreshToken)
-      setAccessToken(accessToken)
-      setRefreshToken(refreshToken)
-
-      setIsUserLoggedIn(true)
-      return true
-    }
-
+    const clientId =
+      sasjsConfig.serverType === ServerType.Sasjs
+        ? process.env.REACT_APP_CLIENT_ID
+        : undefined
     return sasService
-      .logIn(username, password)
+      .logIn(username, password, clientId)
       .then(
-        (res: { isLoggedIn: boolean; userName: string }) => {
+        (res: LoginResult) => {
           setIsUserLoggedIn(res.isLoggedIn)
           return true
         },
@@ -175,48 +114,19 @@ const SASProvider = (props: { children: ReactNode }) => {
   }, [])
 
   const logout = useCallback(() => {
-    sasService.logOut(accessToken).then(() => {
+    sasService.logOut().then(() => {
       setIsUserLoggedIn(false)
-      if (accessToken) {
-        saveTokens('', '')
-        setAccessToken('')
-        setRefreshToken('')
-      }
     })
-  }, [accessToken])
+  }, [])
 
-  const request = useCallback(
-    ({ url, data }) => {
-      const { REACT_APP_CLIENT_ID: clientId } = process.env
-      const authConfig =
-        sasjsConfig.serverType === ServerType.Sasjs
-          ? {
-              access_token: accessToken,
-              refresh_token: refreshToken,
-              client: clientId as string,
-              secret: ''
-            }
-          : undefined
-      return sasService.request(
-        url,
-        data,
-        {},
-        () => setIsUserLoggedIn(false),
-        authConfig
-      )
-    },
-    [accessToken, refreshToken]
-  )
+  const request = useCallback(({ url, data }) => {
+    return sasService.request(url, data, {}, () => setIsUserLoggedIn(false))
+  }, [])
 
   useEffect(() => {
     setCheckingSession(true)
-    const { accessToken, refreshToken } = getTokens()
-    sasService.checkSession(accessToken).then((response) => {
+    sasService.checkSession().then((response) => {
       setCheckingSession(false)
-      if (response.isLoggedIn) {
-        setAccessToken(accessToken as string)
-        setRefreshToken(refreshToken as string)
-      }
       setIsUserLoggedIn(response.isLoggedIn)
     })
   }, [])
