@@ -4,9 +4,9 @@
   "description": "React app built from scratch with webpack and babel",
   "main": "index.tsx",
   "scripts": {
-    "start": "npx webpack-dev-server --mode development --open --hot",
-    "build": "npx webpack --mode production",
-    "deploy": "rsync -avhe ssh ./build/* --delete $SSH_ACCOUNT:$DEPLOY_PATH",
+    "start": "npx webpack-dev-server --config webpack.dev.js --open --hot",
+    "build": "npx webpack --config webpack.prod.js",
+    "deploy": "rsync -avhe ssh ./build/* --delete sabhas@sas.analytium.co.uk:/var/www/html/sabhas/react-seed-app-2",
     "buildAndDeploy": "npm run build && npm run deploy",
     "lint:fix": "npx prettier --write \"src/**/*.{ts,tsx,js,jsx,html,css,sass,less,json,yml,md,graphql}\"",
     "lint": "npx prettier --check \"src/**/*.{ts,tsx,js,jsx,html,css,sass,less,json,yml,md,graphql}\"",
@@ -37,7 +37,8 @@
     "ts-loader": "^9.2.6",
     "webpack": "5.64.3",
     "webpack-cli": "4.9.1",
-    "webpack-dev-server": "4.5.0"
+    "webpack-dev-server": "4.5.0",
+    "webpack-merge": "^5.8.0"
   },
   "dependencies": {
     "@material-ui/core": "^4.12.3",

@@ -9,20 +9,8 @@ dotenv.config()
 
 module.exports = {
   entry: path.join(__dirname, 'src', 'index.tsx'),
-  output: {
-    path: path.join(__dirname, 'build'),
-    filename: 'index.bundle.js',
-    publicPath: './'
-  },
-  mode: process.env.NODE_ENV || 'development',
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.jsx']
-  },
-  devServer: {
-    static: {
-      directory: path.join(__dirname, 'public')
-    },
-    port: 3000
   },
   module: {
     rules: [
