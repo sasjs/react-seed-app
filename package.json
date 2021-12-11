@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npx webpack-dev-server --config webpack.dev.js --open --hot",
     "build": "npx webpack --config webpack.prod.js",
-    "deploy": "rsync -avhe ssh ./build/* --delete sabhas@sas.analytium.co.uk:/var/www/html/sabhas/react-seed-app-2",
+    "deploy": "rsync -avhe ssh ./build/* --delete $SSH_ACCOUNT:$DEPLOY_PATH",
     "buildAndDeploy": "npm run build && npm run deploy",
     "lint:fix": "npx prettier --write \"src/**/*.{ts,tsx,js,jsx,html,css,sass,less,json,yml,md,graphql}\"",
     "lint": "npx prettier --check \"src/**/*.{ts,tsx,js,jsx,html,css,sass,less,json,yml,md,graphql}\"",
