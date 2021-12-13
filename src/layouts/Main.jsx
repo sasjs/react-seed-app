@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
 
 import { makeStyles } from '@material-ui/styles'
 import AppBar from '@material-ui/core/AppBar'
@@ -12,7 +11,7 @@ import Button from '@material-ui/core/Button'
 import Menu from '@material-ui/core/Menu'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
-import { Link, useHistory, useLocation } from 'react-router-dom'
+import { Link, useNavigate, useLocation, Outlet } from 'react-router-dom'
 import RequestModal from '../components/request-modal.component'
 import UserName from '../components/user-name.component'
 import { SASContext } from '../context/sasContext'
@@ -48,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Main = (props) => {
-  const history = useHistory()
+  const navigate = useNavigate()
   const sasContext = useContext(SASContext)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
@@ -59,8 +58,11 @@ const Main = (props) => {
   const { pathname } = useLocation()
   const [tabValue, setTabValue] = useState(pathname)
 
+  useEffect(() => {
+    setTabValue(pathname)
+  }, [pathname])
+
   const classes = useStyles()
-  const { children } = props
   const open = Boolean(anchorEl)
 
   useEffect(() => {
@@ -98,7 +100,7 @@ const Main = (props) => {
                 cursor: 'pointer',
                 marginRight: '25px'
               }}
-              onClick={() => history.push('/home')}
+              onClick={() => navigate('/home')}
             />
             <Tabs
               value={tabValue}
@@ -161,7 +163,6 @@ const Main = (props) => {
 
                 <Divider variant="middle" />
 
-                {/* <MenuItem onClick={() => props.history.push('debug-logs')}>Debug Logs</MenuItem> */}
                 <MenuItem onClick={() => setIsModalOpen(true)}>
                   Requests
                 </MenuItem>
@@ -181,8 +182,8 @@ const Main = (props) => {
             </div>
           </Toolbar>
         </AppBar>
+        <Outlet />
 
-        <main className={classes.content}>{children}</main>
         <RequestModal
           programLogs={sasContext.sasService.getSasRequests()}
           sasjsConfig={sasContext.sasService.getSasjsConfig()}
@@ -196,10 +197,6 @@ const Main = (props) => {
       )}
     </>
   )
-}
-
-Main.propTypes = {
-  children: PropTypes.node
 }
 
 export default Main

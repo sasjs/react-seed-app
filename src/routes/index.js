@@ -1,9 +1,8 @@
 import React from 'react'
-import { Route, HashRouter, Redirect } from 'react-router-dom'
+import { Routes, Route, HashRouter, Navigate } from 'react-router-dom'
 import HomePageComponent from '../components/home-page.component'
 import DataPageComponent from '../components/data-page.component'
 import FileUploaderComponent from '../components/file-uploader.component'
-import RouteWithLayout from './routeHOC/RouteWithLayout'
 import MainLayout from '../layouts/Main'
 import ThemeProvider from '@material-ui/styles/ThemeProvider'
 import theme from '../theme'
@@ -13,25 +12,14 @@ export default (
   <ThemeProvider theme={theme}>
     <SASProvider>
       <HashRouter>
-        <Route exact path="/" component={() => <Redirect to="/home" />} />
-        <RouteWithLayout
-          exact
-          path="/home"
-          layout={MainLayout}
-          component={HomePageComponent}
-        />
-        <RouteWithLayout
-          exact
-          path="/demo"
-          layout={MainLayout}
-          component={DataPageComponent}
-        />
-        <RouteWithLayout
-          exact
-          path="/file-uploader"
-          layout={MainLayout}
-          component={FileUploaderComponent}
-        />
+        <Routes>
+          <Route path="/" element={<MainLayout />}>
+            <Route index element={<Navigate to="/home" />} />
+            <Route path="home" element={<HomePageComponent />} />
+            <Route path="demo" element={<DataPageComponent />} />
+            <Route path="file-uploader" element={<FileUploaderComponent />} />
+          </Route>
+        </Routes>
       </HashRouter>
     </SASProvider>
   </ThemeProvider>

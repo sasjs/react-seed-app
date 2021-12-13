@@ -14,7 +14,7 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
-import Highlight from 'react-highlight.js'
+import Highlight from 'react-highlight'
 import './syntax-highlighting.css'
 
 const AntTabs = withStyles({
@@ -216,7 +216,7 @@ const RequestModal = (props) => {
                       variant="h5"
                       className={classes.expansionDescription}
                     >
-                      <Highlight language={'html'}>
+                      <Highlight className={'html'}>
                         {decodeHtml(programLog.logFile)}
                       </Highlight>
                     </Typography>
@@ -231,7 +231,7 @@ const RequestModal = (props) => {
                       variant="h5"
                       className={classes.expansionDescription}
                     >
-                      <Highlight language={'SAS'}>
+                      <Highlight className={'SAS'}>
                         {decodeHtml(programLog.sourceCode)}
                       </Highlight>
                     </Typography>
@@ -246,7 +246,7 @@ const RequestModal = (props) => {
                       variant="h5"
                       className={classes.expansionDescription}
                     >
-                      <Highlight language={'SAS'}>
+                      <Highlight className={'SAS'}>
                         {decodeHtml(programLog.generatedCode)}
                       </Highlight>
                     </Typography>
