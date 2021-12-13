@@ -26,12 +26,13 @@ interface SASContextProps {
   startupData: any
 }
 
-const sasjsConfig = {
-  serverUrl: '',
-  appLoc: '/Public/app/react-seed-app',
-  serverType: ServerType.Sas9,
-  debug: false
-} as SASjsConfig
+declare global {
+  interface Window {
+    sasjsConfig: SASjsConfig
+  }
+}
+
+const sasjsConfig = window.sasjsConfig as SASjsConfig
 
 const sasService = new SASjs(sasjsConfig)
 
