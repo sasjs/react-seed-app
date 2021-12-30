@@ -17,7 +17,11 @@ import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
+
 import { SASContext } from '../context/sasContext'
+import { AbortModalPayload } from '../types'
+import { getAbortModalPayload } from '../utils'
+import AbortModal from './abortModal'
 
 function usePrevious(value: any) {
   const ref = useRef()
@@ -35,6 +39,10 @@ const DataPageComponent = () => {
   const [springs, setSprings] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [currentRequest, setCurrentRequest] = useState(null as any)
+  const [abortModalOpen, setAbortModalOpen] = useState(false)
+  const [abortModalPayload, setAbortModalPayload] = useState<AbortModalPayload>(
+    { MSG: '' }
+  )
 
   const executeRequest = useCallback(
     (request) => {
@@ -44,6 +52,9 @@ const DataPageComponent = () => {
           sasContext.request(request).then((res) => {
             if (res && res.springs) {
               setSprings(res.springs)
+            } else if (res.sasjsAbort) {
+              getAbortModalPayload(res, setAbortModalPayload)
+              setAbortModalOpen(true)
             }
             setIsLoading(false)
           })
@@ -165,6 +176,11 @@ const DataPageComponent = () => {
           ''
         )}
       </div>
+      <AbortModal
+        abortModalOpen={abortModalOpen}
+        setAbortModalOpen={setAbortModalOpen}
+        payload={abortModalPayload}
+      />
     </div>
   )
 }
