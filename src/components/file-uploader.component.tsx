@@ -13,6 +13,9 @@ import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 
 import { SASContext } from '../context/sasContext'
+import { AbortModalPayload } from '../types'
+import { getAbortModalPayload } from '../utils'
+import AbortModal from './abortModal'
 
 const useStyles = makeStyles((theme) => ({
   pageLayout: {
@@ -52,7 +55,10 @@ export default function FileUploaderComponent() {
   const [uploadDisabled, setUploadDisabled] = useState(true)
   const [isUploading, setIsUploading] = useState(false)
   const [dirList, setDirList] = useState([])
-  const [errorMessage, setErrorMessage] = useState('')
+  const [abortModalOpen, setAbortModalOpen] = useState(false)
+  const [abortModalPayload, setAbortModalPayload] = useState<AbortModalPayload>(
+    { MSG: '' }
+  )
 
   useEffect(() => {
     if (file) {
@@ -60,8 +66,9 @@ export default function FileUploaderComponent() {
       setLocation(`${uploadPath}/${file.name}`)
       setFileSize(bytesToSize(file.size))
     }
+
     setDirList([])
-    setErrorMessage('')
+    setAbortModalOpen(false)
   }, [file, uploadPath])
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,7 +90,8 @@ export default function FileUploaderComponent() {
     setUploadDisabled(true)
     setIsUploading(true)
     setDirList([])
-    setErrorMessage('')
+    setAbortModalOpen(false)
+
     if (sasContext.isUserLoggedIn) {
       if (file) {
         await sasContext.sasService
@@ -93,13 +101,16 @@ export default function FileUploaderComponent() {
             { path: uploadPath }
           )
           .then((res: any) => {
-            if (res?.sasjsAbort) {
-              const error = `MAC: ${res.sasjsAbort[0].MAC}\n MSG: ${res.sasjsAbort[0].MSG}`
-              setErrorMessage(error)
+            if (res.sasjsAbort) {
+              getAbortModalPayload(res, setAbortModalPayload)
+              setAbortModalOpen(true)
             } else if (typeof res?.dirlist === 'object') {
               setDirList(res.dirlist)
             } else {
-              setErrorMessage('Response does not contain dir list')
+              setAbortModalPayload({
+                MSG: 'Response does not contain dir list'
+              })
+              setAbortModalOpen(true)
             }
           })
           .catch((err) => console.log(err))
@@ -167,12 +178,11 @@ export default function FileUploaderComponent() {
         </TableContainer>
       ) : null}
 
-      {errorMessage ? (
-        <div>
-          <h1 className={classes.errorTitle}>Error Occurred</h1>
-          <p>{errorMessage}</p>
-        </div>
-      ) : null}
+      <AbortModal
+        abortModalOpen={abortModalOpen}
+        setAbortModalOpen={setAbortModalOpen}
+        payload={abortModalPayload}
+      />
     </div>
   )
 }
