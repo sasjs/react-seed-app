@@ -1,15 +1,22 @@
 {
   "$schema": "https://cli.sasjs.io/sasjsconfig-schema.json",
-  "macroFolders": ["sasjs/macros"],
+  "macroFolders": [
+    "sasjs/macros"
+  ],
   "programFolders": [],
   "serviceConfig": {
-    "serviceFolders": ["sasjs/services/common", "sasjs/services/files"],
+    "serviceFolders": [
+      "sasjs/services/common",
+      "sasjs/services/files"
+    ],
     "initProgram": "",
     "termProgram": "",
     "macroVars": {}
   },
   "streamConfig": {
-    "assetPaths": [""],
+    "assetPaths": [
+      ""
+    ],
     "streamWeb": false,
     "streamWebFolder": "webv",
     "webSourcePath": "build"
@@ -26,10 +33,17 @@
     },
     {
       "name": "server",
+      "serverUrl": "http://localhost:5000",
       "serverType": "SASJS",
+      "httpsAgentOptions": {
+        "allowInsecureRequests": false
+      },
       "appLoc": "/Public/app/react-seed-app",
+      "macroFolders": [],
+      "programFolders": [],
       "deployConfig": {
-        "deployServicePack": true
+        "deployServicePack": true,
+        "deployScripts": []
       }
     },
     {
