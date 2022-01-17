@@ -44,7 +44,7 @@
     "@babel/preset-react": "^7.16.0",
     "@babel/preset-typescript": "^7.16.0",
     "@sasjs/cli": "^3.0.4",
-    "@types/react": "^17.0.37",
+    "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
     "babel-loader": "^8.2.3",
     "copy-webpack-plugin": "^10.0.0",
