@@ -55,6 +55,7 @@
     "path": "0.12.7",
     "sass": "^1.44.0",
     "sass-loader": "^12.3.0",
+    "semantic-release": "^18.0.1",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.2.6",
     "typescript": "^4.5.2",
@@ -86,6 +87,11 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "release": {
+    "branches": [
+      "main"
     ]
   }
 }
