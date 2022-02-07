@@ -8,6 +8,15 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline'
+import WarningIcon from '@material-ui/icons/Warning'
+import GetAppIcon from '@material-ui/icons/GetApp'
+import Tooltip from '@material-ui/core/Tooltip'
+import TreeView from '@material-ui/lab/TreeView'
+import ChevronRightIcon from '@material-ui/icons/ChevronRight'
+import TreeItem from '@material-ui/lab/TreeItem'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
 import Grid from '@material-ui/core/Grid'
 
 import Tabs from '@material-ui/core/Tabs'
@@ -108,15 +117,60 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   programlogWrapper: {
-    padding: '20px'
+    padding: '20px',
+    overflowY: 'auto',
+    maxHeight: '300px'
   },
   closeButton: {
     position: 'absolute',
     right: theme.spacing(1),
     top: theme.spacing(1),
     color: theme.palette.icon
+  },
+  errorLabel: {
+    color: theme.palette.error.main
+  },
+  warningLabel: {
+    color: theme.palette.sasWarning
   }
 }))
+
+const parseErrorsAndWarnings = (req) => {
+  if (!req || !req.logFile) return
+  if (req['logErrors'] !== undefined || req['logWarnings'] !== undefined) return
+
+  const errorLines = []
+  const warningLines = []
+
+  const logLines = req.logFile.split('\n')
+
+  logLines.forEach((line, index) => {
+    // check if content in element starts with ERROR
+    if (/<.*>ERROR/gm.test(line)) {
+      const errorLine = line.substring(line.indexOf('E'), line.length - 1)
+      errorLines.push(errorLine)
+    }
+    // check if line starts with ERROR
+    else if (/^ERROR/gm.test(line)) {
+      errorLines.push(line)
+      logLines[index] = '<font>' + logLines[index] + '</font>'
+    }
+    // check if content in element starts with WARNING
+    else if (/<.*>WARNING/gm.test(line)) {
+      const warningLine = line.substring(line.indexOf('W'), line.length - 1)
+      warningLines.push(warningLine)
+    }
+    // check if line starts with WARNING
+    else if (/^WARNING/gm.test(line)) {
+      warningLines.push(line)
+      logLines[index] = '<font>' + logLines[index] + '</font>'
+    }
+  })
+
+  req.logFile = logLines.join('\n')
+  req['logErrors'] = errorLines
+  req['logWarnings'] = warningLines
+}
 
 const RequestModal = (props) => {
   const { programLogs, sasjsConfig, isModalOpen, handleClose, open } = props
@@ -136,6 +190,41 @@ const RequestModal = (props) => {
 
   const handleTabChange = (event, newValue) => {
     setTab(newValue)
+  }
+
+  const goToLogLine = (linkingLine, requestIndex) => {
+    const allLines = document.querySelectorAll(`#request_${requestIndex} font`)
+    const logWrapper = document.querySelector(`#request_${requestIndex}`)
+    const logContainer = document.querySelector(
+      `#log_container_${requestIndex}`
+    )
+    for (const line of allLines) {
+      if (line.textContent.includes(linkingLine)) {
+        logWrapper.scrollTop =
+          line.offsetTop - logWrapper.offsetTop + logContainer.offsetTop
+        line.style.backgroundColor = '#f6e30599'
+
+        setTimeout(() => {
+          line.style = ''
+        }, 3000)
+      }
+    }
+  }
+
+  const downloadLogs = (event, index) => {
+    event.stopPropagation()
+    const element = document.createElement('a')
+    const file = new Blob([programLogs[index].logFile], {
+      type: 'text/plain'
+    })
+    element.href = URL.createObjectURL(file)
+    element.download = `${programLogs[index].serviceLink}_${programLogs[index].timestamp}`
+    document.body.appendChild(element)
+    element.click()
+  }
+
+  for (const programLog of programLogs) {
+    parseErrorsAndWarnings(programLog)
   }
 
   let revealModal = null
@@ -175,26 +264,68 @@ const RequestModal = (props) => {
                   aria-controls="panel1bh-content"
                   id="panel1bh-header"
                 >
-                  <Grid container spacing={3}>
+                  <Grid container spacing={2} style={{ alignItems: 'center' }}>
                     <Grid item sm={6} xs={12}>
-                      <Typography variant="h5" className={classes.heading}>
-                        {programLog.serviceLink.replace(sasjsConfig.appLoc, '')}
-                      </Typography>
+                      <Grid
+                        container
+                        spacing={2}
+                        style={{ alignItems: 'center' }}
+                      >
+                        <Grid item>
+                          <Typography variant="h5" className={classes.heading}>
+                            {programLog.serviceLink.replace(
+                              sasjsConfig.appLoc,
+                              ''
+                            )}
+                          </Typography>
+                        </Grid>
+                        <Grid item>
+                          {programLog.logWarnings?.length > 0 && (
+                            <WarningIcon className={classes.warningLabel} />
+                          )}
+                        </Grid>
+                        <Grid item>
+                          {programLog.logErrors?.length > 0 && (
+                            <ErrorOutlineIcon color="error" />
+                          )}
+                        </Grid>
+                      </Grid>
                     </Grid>
                     <Grid item sm={6} xs={12}>
-                      <Typography
-                        variant="h5"
-                        className={classes.secondaryHeading}
+                      <Grid
+                        container
+                        spacing={2}
+                        style={{
+                          alignItems: 'center',
+                          justifyContent: 'flex-end'
+                        }}
                       >
-                        {moment(programLog.timestamp).format
-                          ? moment(programLog.timestamp).format(
-                              'dddd, MMMM Do YYYY, h:mm:ss a'
-                            )
-                          : programLog.timestamp}
-                        {moment(programLog.timestamp).format
-                          ? ` (${moment(programLog.timestamp).fromNow()})`
-                          : ''}
-                      </Typography>
+                        <Grid item>
+                          <Typography
+                            variant="h5"
+                            className={classes.secondaryHeading}
+                          >
+                            {moment(programLog.timestamp).format
+                              ? moment(programLog.timestamp).format(
+                                  'dddd, MMMM Do YYYY, h:mm:ss a'
+                                )
+                              : programLog.timestamp}
+                            {moment(programLog.timestamp).format
+                              ? ` (${moment(programLog.timestamp).fromNow()})`
+                              : ''}
+                          </Typography>
+                        </Grid>
+                        <Grid item>
+                          <Tooltip title="Download Logs">
+                            <IconButton
+                              style={{ color: 'blue' }}
+                              onClick={(event) => downloadLogs(event, index)}
+                            >
+                              <GetAppIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </Grid>
+                      </Grid>
                     </Grid>
                   </Grid>
                 </ExpansionPanelSummary>
@@ -211,12 +342,67 @@ const RequestModal = (props) => {
                 </AntTabs>
 
                 {currentTab === 0 ? (
-                  <div className={classes.programlogWrapper}>
+                  <div
+                    id={`request_${index}`}
+                    className={classes.programlogWrapper}
+                  >
+                    <TreeView
+                      defaultCollapseIcon={<ExpandMoreIcon />}
+                      defaultExpandIcon={<ChevronRightIcon />}
+                    >
+                      <TreeItem
+                        nodeId="error"
+                        label={
+                          <Typography className={classes.errorLabel}>
+                            {`Errors (${programLog.logErrors?.length})`}
+                          </Typography>
+                        }
+                      >
+                        {programLog.logErrors &&
+                          programLog.logErrors.map((error, ind) => (
+                            <TreeItem
+                              nodeId={`error_${ind}`}
+                              label={
+                                <ListItem
+                                  className={classes.listItem}
+                                  onClick={() => goToLogLine(error, index)}
+                                >
+                                  <ListItemText primary={error} />
+                                </ListItem>
+                              }
+                            />
+                          ))}
+                      </TreeItem>
+                      <TreeItem
+                        nodeId="warnings"
+                        label={
+                          <Typography className={classes.warningLabel}>
+                            {`Warnings (${programLog.logWarnings?.length})`}
+                          </Typography>
+                        }
+                      >
+                        {programLog.logWarnings &&
+                          programLog.logWarnings.map((warning, ind) => (
+                            <TreeItem
+                              nodeId={`error_${ind}`}
+                              label={
+                                <ListItem
+                                  className={classes.listItem}
+                                  onClick={() => goToLogLine(warning, index)}
+                                >
+                                  <ListItemText primary={warning} />
+                                </ListItem>
+                              }
+                            />
+                          ))}
+                      </TreeItem>
+                    </TreeView>
                     <Typography
+                      id={`log_container_${index}`}
                       variant="h5"
                       className={classes.expansionDescription}
                     >
-                      <Highlight className={'html'}>
+                      <Highlight className={'html'} innerHTML={true}>
                         {decodeHtml(programLog.logFile)}
                       </Highlight>
                     </Typography>
@@ -231,7 +417,7 @@ const RequestModal = (props) => {
                       variant="h5"
                       className={classes.expansionDescription}
                     >
-                      <Highlight className={'SAS'}>
+                      <Highlight className={'html'}>
                         {decodeHtml(programLog.sourceCode)}
                       </Highlight>
                     </Typography>
