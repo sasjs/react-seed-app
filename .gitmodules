@@ -1,0 +1,3 @@
+[submodule "public/docs"]
+	path = public/docs
+	url = git@github.com:sasjs/docs
