@@ -22,3 +22,7 @@ yarn-error.log*
 sasjsbuild/
 sasjsresults/
 .sasjsrc
+
+# temporary documentation sites
+public/docs/static/js
+public/docs/stastic/sas
