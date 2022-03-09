@@ -32,11 +32,19 @@
   "targets": [
     {
       "name": "viya",
+      "serverUrl": "https://azureuse011059.my-trials.sas.com/",
       "serverType": "SASVIYA",
+      "httpsAgentOptions": {
+        "allowInsecureRequests": false
+      },
       "appLoc": "/Public/app/react-seed-app",
+      "macroFolders": [],
+      "programFolders": [],
       "deployConfig": {
-        "deployServicePack": true
-      }
+        "deployServicePack": true,
+        "deployScripts": []
+      },
+      "contextName": "SAS Job Execution compute context"
     },
     {
       "name": "server",
