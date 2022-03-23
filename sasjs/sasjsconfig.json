@@ -48,17 +48,14 @@
     },
     {
       "name": "server",
-      "serverUrl": "http://localhost:5000",
+      "serverUrl": "",
       "serverType": "SASJS",
-      "httpsAgentOptions": {
-        "allowInsecureRequests": false
-      },
       "appLoc": "/Public/app/react-seed-app",
-      "macroFolders": [],
-      "programFolders": [],
-      "deployConfig": {
-        "deployServicePack": true,
-        "deployScripts": []
+      "streamConfig": {
+        "streamLogo": "logo512.png",
+        "streamWeb": true,
+        "streamWebFolder": "web",
+        "webSourcePath": "build"
       }
     },
     {
