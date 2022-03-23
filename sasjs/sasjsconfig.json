@@ -53,6 +53,7 @@
       "appLoc": "/Public/app/react-seed-app",
       "streamConfig": {
         "streamLogo": "logo512.png",
+        "streamServiceName": "React",
         "streamWeb": true,
         "streamWebFolder": "web",
         "webSourcePath": "build"
