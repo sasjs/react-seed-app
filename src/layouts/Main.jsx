@@ -192,9 +192,11 @@ const Main = (props) => {
           open={open}
         />
       </div>
-      {!(sasContext.isUserLoggedIn || sasContext.checkingSession) && (
-        <LoginComponent />
-      )}
+      {!(
+        window.sasjsConfig.loginMechanism === 'Redirected' ||
+        sasContext.isUserLoggedIn ||
+        sasContext.checkingSession
+      ) && <LoginComponent />}
     </>
   )
 }

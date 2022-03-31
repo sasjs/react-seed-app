@@ -138,6 +138,23 @@ const SASProvider = (props: { children: ReactNode }) => {
       if (!startupData) {
         fetchStartupData()
       }
+    } else if (sasjsConfig.loginMechanism === 'Redirected') {
+      sasService
+        .logIn()
+        .then(
+          (res: { isLoggedIn: boolean; userName: string }) => {
+            setIsUserLoggedIn(res.isLoggedIn)
+          },
+          (err) => {
+            console.error(err)
+            setIsUserLoggedIn(false)
+          }
+        )
+        .catch((e) => {
+          if (e === 403) {
+            console.error('Invalid host')
+          }
+        })
     }
   }, [isUserLoggedIn, startupData, fetchStartupData])
 
