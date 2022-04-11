@@ -29,7 +29,7 @@
     "@mui/icons-material": "^5.2.5",
     "@mui/material": "^5.2.6",
     "@sasjs/adapter": "^3.7.12",
-    "@sasjs/core": "^4.15.3",
+    "@sasjs/core": "^4.18.11",
     "@sasjs/utils": "^2.36.1",
     "axios": "^0.24.0",
     "moment": "^2.29.1",
