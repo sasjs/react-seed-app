@@ -27,7 +27,7 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.60",
     "@mui/icons-material": "^5.8.2",
-    "@mui/material": "^5.2.6",
+    "@mui/material": "^5.9.0",
     "@sasjs/adapter": "^3.7.12",
     "@sasjs/core": "^4.18.11",
     "@sasjs/utils": "^2.36.1",
