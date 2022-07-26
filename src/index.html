@@ -32,6 +32,27 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <!--
+      ## SASJS Adapter config details ##
+
+      * appLoc: The location in metadata or SAS drive where App/services will be deployed
+      * serverType: either SAS9, SASVIYA or SASJS
+      * serverUrl: Url of the server where services are deployed. Can leave blank if frontend and backend is running on same server
+      * loginMechanism: Use 'Default' for regular (user/pass) logins, or 'Redirected' for 2FA/SSO
+      * debug: Whether to enable debug on startup
+
+      ## Viya only settings ##
+      * useComputeApi: either true or false
+      * contextName: Compute Context
+
+    -->
+
+    <sasjs
+      appLoc="/Public/app/react-seed-app"
+      serverType="SASJS"
+      debug="false"
+    ></sasjs>
     <div id="root"></div>
     <!--
       This HTML file is a template.
@@ -43,14 +64,5 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-    <script>
-      window.sasjsConfig = {
-        serverUrl: 'https://sas.analytium.co.uk:5000',
-        appLoc: '/Public/app/react-seed-app',
-        serverType: 'SASJS',
-        debug: false,
-        loginMechanism: 'Redirected'
-      }
-    </script>
   </body>
 </html>
