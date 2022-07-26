@@ -193,7 +193,8 @@ const Main = (props) => {
         />
       </div>
       {!(
-        window.sasjsConfig.loginMechanism === 'Redirected' ||
+        document.querySelector('sasjs')?.getAttribute('loginMechanism') ===
+          'Redirected' ||
         sasContext.isUserLoggedIn ||
         sasContext.checkingSession
       ) && <LoginComponent />}

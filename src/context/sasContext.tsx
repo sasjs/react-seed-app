@@ -26,13 +26,24 @@ interface SASContextProps {
   startupData: any
 }
 
-declare global {
-  interface Window {
-    sasjsConfig: SASjsConfig
-  }
-}
+const sasElement = document.querySelector('sasjs')
 
-const sasjsConfig = window.sasjsConfig as SASjsConfig
+const useComputeApi = sasElement?.getAttribute('useComputeApi')
+
+const sasjsConfig = {
+  serverUrl: sasElement?.getAttribute('serverUrl') ?? undefined,
+  appLoc: sasElement?.getAttribute('appLoc') ?? undefined,
+  serverType: sasElement?.getAttribute('serverType'),
+  debug: sasElement?.getAttribute('debug') === 'true',
+  loginMechanism: sasElement?.getAttribute('loginMechanism') ?? undefined,
+  useComputeApi:
+    useComputeApi === 'true'
+      ? true
+      : useComputeApi === 'false'
+      ? false
+      : useComputeApi,
+  contextName: sasElement?.getAttribute('contextName') ?? undefined
+} as SASjsConfig
 
 const sasService = new SASjs(sasjsConfig)
 

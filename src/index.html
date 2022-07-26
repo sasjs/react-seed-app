@@ -32,6 +32,11 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <sasjs
+      appLoc="/Public/app/react-seed-app"
+      serverType="SASJS"
+      debug="false"
+    ></sasjs>
     <div id="root"></div>
     <!--
       This HTML file is a template.
@@ -43,14 +48,5 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-    <script>
-      window.sasjsConfig = {
-        serverUrl: 'https://sas.analytium.co.uk:5000',
-        appLoc: '/Public/app/react-seed-app',
-        serverType: 'SASJS',
-        debug: false,
-        loginMechanism: 'Redirected'
-      }
-    </script>
   </body>
 </html>
