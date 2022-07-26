@@ -3,7 +3,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-This React seed app provides a wrapper for `@sasjs/adapter`, a lightning fast adapter for talking to both SAS 9 and Viya.
+This React seed app provides a wrapper for `@sasjs/adapter`, a lightning fast adapter for talking to SAS - on Viya, EBI, or SASjs Server.
 
 
 ## Frontend Web
@@ -27,7 +27,7 @@ sasjs cbd
 
 This will first authenticate to your target (follow the prompts) and after that you can just run `sasjs cbd` to rebuild and deploy your services.  If you set `streamweb:true` in the sasjsconfig.json it will also deploy your frontend as a streaming app (no need for a web server).
 
-If you are just looking to build quickly and don't have time to install NPM then you can also create the web services on both SAS 9 and Viya by running the code below.
+If you are just looking to build quickly and don't have time to install NPM then you can also create the web services on ANY version of SAS by running the code below.
 
 ```sas
 %let appLoc=/Public/app/react-seed-app; /* SAS Folders App Location */
@@ -41,7 +41,7 @@ parmcards4;
     %webout(OBJ,areas)
     %webout(CLOSE)
 ;;;;
-%mp_createwebservice(path=&appLoc/services/common, name=appinit)
+%mx_createwebservice(path=&appLoc/services/common, name=appinit)
 parmcards4;
     %webout(FETCH)
     proc sql;
@@ -51,14 +51,14 @@ parmcards4;
     %webout(OBJ,springs)
     %webout(CLOSE)
 ;;;;
-%mp_createwebservice(path=&appLoc/services/common, name=getdata)
+%mx_createwebservice(path=&appLoc/services/common, name=getdata)
 ```
 
 ## Supported Versions of SAS
 
-This app will work on all versions of SAS Viya, and in SAS 9 EBI from 9.3 and above.
+This app will work on all versions of SAS Viya, in SAS 9 EBI from 9.3 and above, and on regular Foundation SAS (or WPS) installs using SASjs Server.
 
-It will not work on SAS University edition, or local (base only) instances of SAS. A web server, and application server (STP or Compute) is required
+It will not work on SAS University edition.
 
 ### Code Style
 
