@@ -7,9 +7,12 @@
 
 **/
 
+/* mydb.springs was created in the serviceInit program */
 proc sql;
-create table areas as select distinct area
-  from sashelp.springs;
+create table areas as 
+  select distinct area
+  from mydb.springs;
+
 %webout(OPEN)
 %webout(OBJ,areas)
 %webout(CLOSE)
