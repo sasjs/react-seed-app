@@ -7,12 +7,17 @@
 
 **/
 
+/* this macro converts the JS input to a WORK table - work.areas */
 %webout(FETCH)
 
+/* mydb.springs was created in the serviceInit program */
 proc sql;
-create table springs as select * from sashelp.springs
-  where area in (select area from areas);
+create table springs as
+  select *
+  from mydb.springs
+  where area in (select area from work.areas);
 
+/* these macros open the JSON, send the table back, and close the JSON */
 %webout(OPEN)
 %webout(OBJ,springs)
 %webout(CLOSE)
