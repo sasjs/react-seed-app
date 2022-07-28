@@ -32,17 +32,17 @@ const useComputeApi = sasElement?.getAttribute('useComputeApi')
 
 const sasjsConfig = {
   serverUrl: sasElement?.getAttribute('serverUrl') ?? undefined,
-  appLoc: sasElement?.getAttribute('appLoc') ?? undefined,
+  appLoc: sasElement?.getAttribute('appLoc') ?? '',
   serverType: sasElement?.getAttribute('serverType'),
   debug: sasElement?.getAttribute('debug') === 'true',
-  loginMechanism: sasElement?.getAttribute('loginMechanism') ?? undefined,
+  loginMechanism: sasElement?.getAttribute('loginMechanism') ?? 'Default',
   useComputeApi:
     useComputeApi === 'true'
       ? true
       : useComputeApi === 'false'
       ? false
       : useComputeApi,
-  contextName: sasElement?.getAttribute('contextName') ?? undefined
+  contextName: sasElement?.getAttribute('contextName') ?? ''
 } as SASjsConfig
 
 const sasService = new SASjs(sasjsConfig)
