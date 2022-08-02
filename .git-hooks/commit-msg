@@ -5,9 +5,10 @@ GREEN="\033[1;32m"
 # Get the commit message (the parameter we're given is just the path to the
 # temporary file which holds the message).
 commit_message=$(cat "$1")
+echo commit_message=$commit_message
 
 # abort processing if this is a changelog release commit
-if [[ "$commit_message" =~ ^chore\(release\).* ]]; then
+if [[ "$commit_message" =~ ^chore.* ]]; then
    echo "${GREEN} ✔ Changelog release"
    exit 0
 fi
