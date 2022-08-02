@@ -32,7 +32,7 @@
     "@sasjs/core": "4.34.2",
     "@sasjs/utils": "^2.47.0",
     "axios": "^0.27.2",
-    "moment": "^2.29.1",
+    "moment": "^2.29.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-highlight": "^0.14.0",
