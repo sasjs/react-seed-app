@@ -1,9 +1,15 @@
 #!/bin/bash
 sasjs lint
 
-# Avoid commits to the master branch
-BRANCH=`git rev-parse --abbrev-ref HEAD`
+# Ignore CICD changelog commits
+commit_message=$(cat "$1")
+if (echo "$commit_message" | grep -Eq "^chore\(release\): .+$") then
+   echo "${GREEN} ✔ Changelog release"
+   exit 0
+fi
 
+# Otherwise, prevent accidential commits to the master branch
+BRANCH=`git rev-parse --abbrev-ref HEAD`
 if [[ "$BRANCH" =~ ^(master|main|develop)$ ]]; then
   echo "You are on branch $BRANCH. Are you sure you want to commit to this branch?"
   echo "If so, commit with -n to bypass the pre-commit hook."
