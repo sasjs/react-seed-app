@@ -9,7 +9,7 @@
 
 /* mydb.springs was created in the serviceInit program */
 proc sql;
-create table areas as 
+create table areas as
   select distinct area
   from mydb.springs;
 

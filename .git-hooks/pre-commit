@@ -3,7 +3,7 @@ sasjs lint
 
 # Ignore CICD changelog commits
 commit_message=$(cat "$1")
-if (echo "$commit_message" | grep -Eq "^chore\(release\): .+$") then
+if [[ "$commit_message" =~ ^chore(release).* ]] then
    echo "${GREEN} ✔ Changelog release"
    exit 0
 fi
