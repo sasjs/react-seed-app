@@ -1,0 +1,43 @@
+{
+  "branches": [
+    "main"
+  ],
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "CHANGELOG.md"
+        ]
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          {
+            "path": "./artefacts/server.json.zip",
+            "label": "SASjs Streamed App (Zip File)"
+          },
+          {
+            "path": "./artefacts/sas9.sas",
+            "label": "SAS 9 EBI Deployment (SAS Program)"
+          },
+          {
+            "path": "./artefacts/viya.sas",
+            "label": "Viya Deployment (SAS Program)"
+          }
+        ]
+      }
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "publishCmd": "echo 'publish command'"
+      }
+    ]
+  ]
+}
