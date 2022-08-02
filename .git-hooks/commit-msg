@@ -6,6 +6,24 @@ GREEN="\033[1;32m"
 # temporary file which holds the message).
 commit_message=$(cat "$1")
 
+# abort processing if this is a changelog release commit
+if [[ "$commit_message" =~ ^chore(release).* ]]; then
+   echo "${GREEN} ✔ Changelog release"
+   exit 0
+fi
+
+# abort processing if there are linting errors
+sasjs lint
+
+# Prevent accidential commits to the master branch
+BRANCH=`git rev-parse --abbrev-ref HEAD`
+if [[ "$BRANCH" =~ ^(master|main|develop)$ ]]; then
+  echo "You are on branch $BRANCH. Are you sure you want to commit to this branch?"
+  echo "If so, commit with -n to bypass the pre-commit hook."
+  exit 1
+fi
+
+# Finally, check the commit message for any obvious mistakes.
 if (echo "$commit_message" | grep -Eq "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-z0-9 \-]+\))?!?: .+$") then
    echo "${GREEN} ✔ Commit message meets Conventional Commit standards"
    exit 0
