@@ -7,7 +7,7 @@ GREEN="\033[1;32m"
 commit_message=$(cat "$1")
 
 # abort processing if this is a changelog release commit
-if [[ "$commit_message" =~ ^chore(release).* ]]; then
+if [[ "$commit_message" =~ ^chore\(release\).* ]]; then
    echo "${GREEN} ✔ Changelog release"
    exit 0
 fi
