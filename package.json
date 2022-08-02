@@ -3,7 +3,6 @@
   "repository": "https://github.com/sasjs/react-seed-app",
   "description": "The SASjs React Seed App",
   "version": "2.0.0",
-  "private": true,
   "keywords": [
     "SAS",
     "SASViya",
@@ -93,11 +92,6 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
-    ]
-  },
-  "release": {
-    "branches": [
-      "main"
     ]
   }
 }
