@@ -1,14 +1,15 @@
-#!/bin/sh
+#!/bin/bash
 RED="\033[1;31m"
 GREEN="\033[1;32m"
 
 # Get the commit message (the parameter we're given is just the path to the
 # temporary file which holds the message).
 commit_message=$(cat "$1")
-ischore=$(cut -c 1-15 <<< "$commit_message         ")
+choretxt=$(cut -c 1-15 <<< "$commit_message")
+echo choretxt=$choretxt
 
 # abort processing if this is a changelog release commit
-if [[ "$ischore" == "chore(release):" ]]; then
+if [[ "$choretxt" = "chore(release):" ]]; then
    echo "${GREEN} ✔ Changelog release"
    exit 0
 fi
