@@ -124,7 +124,7 @@ const Main = (props) => {
               }}
             >
               <UserName
-                userName={sasContext.fullName}
+                userName={sasContext.fullName || sasContext.userName}
                 avatarContent={sasContext.avatarContent}
                 onClickHandler={handleMenu}
                 className={classes.title}
@@ -170,14 +170,16 @@ const Main = (props) => {
                   Documentation
                 </MenuItem>
                 <Divider variant="middle" />
-                <MenuItem
-                  onClick={sasContext.logout}
-                  className={classes.logoutButton}
-                >
-                  <Button variant="contained" color="primary">
-                    Logout
-                  </Button>
-                </MenuItem>
+                {sasContext.isUserLoggedIn && (
+                  <MenuItem
+                    onClick={sasContext.logout}
+                    className={classes.logoutButton}
+                  >
+                    <Button variant="contained" color="primary">
+                      Logout
+                    </Button>
+                  </MenuItem>
+                )}
               </Menu>
             </div>
           </Toolbar>
