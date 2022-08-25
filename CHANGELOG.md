@@ -1,3 +1,12 @@
+## [1.4.3](https://github.com/sasjs/react-seed-app/compare/v1.4.2...v1.4.3) (2022-08-25)
+
+
+### Bug Fixes
+
+* bump adapter version and fix vulnerabilities ([c56fb3c](https://github.com/sasjs/react-seed-app/commit/c56fb3c52a80caa7afe0bfbd88302c1cd4ad5a27))
+* remove username and logout button when logged out ([e047f53](https://github.com/sasjs/react-seed-app/commit/e047f5361db8e11bda78bd0efd577b364e7b6277))
+* submit form on enter ([024618b](https://github.com/sasjs/react-seed-app/commit/024618be3121be0a5154011d0847a52c33337270))
+
 ## [1.4.2](https://github.com/sasjs/react-seed-app/compare/v1.4.1...v1.4.2) (2022-08-02)
 
 
