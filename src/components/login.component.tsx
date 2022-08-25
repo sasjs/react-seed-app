@@ -49,7 +49,9 @@ const LoginComponent = (props: any) => {
   const classes = props.classes
   const context = useContext(SASContext)
 
-  const signIn = () => {
+  const signIn = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
     setLoading(true)
     if (context.login) {
       context.login(username, password).then(() => {
@@ -82,7 +84,7 @@ const LoginComponent = (props: any) => {
         <Typography component="h1" variant="h5" style={{ textAlign: 'center' }}>
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={signIn} noValidate>
           <TextField
             variant="outlined"
             margin="normal"
@@ -112,12 +114,11 @@ const LoginComponent = (props: any) => {
             label="Remember me"
           />
           <Button
-            type="button"
+            type="submit"
             fullWidth
             variant="contained"
             color="primary"
             disabled={loading}
-            onClick={signIn}
             className={classes.submit}
           >
             {loading ? (
