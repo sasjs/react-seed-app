@@ -10,11 +10,13 @@ This React seed app provides a wrapper for `@sasjs/adapter`, a lightning fast ad
 
 ## Frontend Web
 
-If you are running on SAS 9 you need to set `serverType` to SAS9 in `sasContext.tsx`.
+These are the minimal steps to get up and running:
 
 1. clone the repo and change into the directory
-2. run `npm install`
-3. run `npm run build` to create a production build in the `build` folder. This can be deployed to the SAS web server [here](https://sasjs.io/frontend-deployment/).
+2. Open `index.html` and set the `serverType` to SASVIYA, SAS9, or SASJS depending on backend server
+3. Also change `appLoc` to the backend root location in which you plan to deploy the services.
+4. run `npm install`
+5. run `npm run build` to create a production build in the `build` folder. This can be deployed to the SAS web server [here](https://sasjs.io/frontend-deployment/).
 
 If you are running locally you will also need to whitelist `localhost` on the server, or enable CORS in your browser as described [here](https://sasjs.io/cors)
 
@@ -23,13 +25,13 @@ If you are running locally you will also need to whitelist `localhost` on the se
 The best way to deploy SAS services is using the [SASjs CLI](https://cli.sasjs.io). Simply [install](https://cli.sasjs.io/installation/), update the `defaultTarget` attribute in the [sasjsconfig.json](https://github.com/sasjs/react-seed-app/blob/main/sasjs/sasjsconfig.json) file, and run the following commands:
 
 ```bash
-sasjs auth
+sasjs auth # be sure to use the same serverType and appLoc as steps 2 & 3 above
 sasjs cbd
 ```
 
 This will first authenticate to your target (follow the prompts) and after that you can just run `sasjs cbd` to rebuild and deploy your services. If you set `streamweb:true` in the sasjsconfig.json it will also deploy your frontend as a streaming app (no need for a web server).
 
-If you are just looking to build quickly and don't have time to install NPM then you can also create the web services on ANY version of SAS by running the code below.
+If you are just looking to build quickly and don't have time to install NPM then you can also create the web services on SAS9 or SASVIYA by running the code below.
 
 ```sas
 %let appLoc=/Public/app/react-seed-app; /* SAS Folders App Location */
