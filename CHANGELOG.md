@@ -1,3 +1,10 @@
+## [1.4.4](https://github.com/sasjs/react-seed-app/compare/v1.4.3...v1.4.4) (2022-09-27)
+
+
+### Bug Fixes
+
+* bump sasjs ([8934fbc](https://github.com/sasjs/react-seed-app/commit/8934fbc226f910582116ce369d94005c1bb000eb))
+
 ## [1.4.3](https://github.com/sasjs/react-seed-app/compare/v1.4.2...v1.4.3) (2022-08-25)
 
 
