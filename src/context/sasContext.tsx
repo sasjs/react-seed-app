@@ -100,14 +100,11 @@ const SASProvider = (props: { children: ReactNode }) => {
   }, [])
 
   const login = useCallback(async (username, password) => {
-    const clientId =
-      sasjsConfig.serverType === ServerType.Sasjs
-        ? process.env.REACT_APP_CLIENT_ID
-        : undefined
     return sasService
-      .logIn(username, password, clientId)
+      .logIn(username, password)
       .then(
         (res: LoginResult) => {
+          setUserName(res.userName)
           setIsUserLoggedIn(res.isLoggedIn)
           return true
         },
@@ -128,6 +125,8 @@ const SASProvider = (props: { children: ReactNode }) => {
   const logout = useCallback(() => {
     sasService.logOut().then(() => {
       setIsUserLoggedIn(false)
+      setFullName('')
+      setUserName('')
     })
   }, [])
 
@@ -137,10 +136,16 @@ const SASProvider = (props: { children: ReactNode }) => {
 
   useEffect(() => {
     setCheckingSession(true)
-    sasService.checkSession().then((response) => {
-      setCheckingSession(false)
-      setIsUserLoggedIn(response.isLoggedIn)
-    })
+    sasService
+      .checkSession()
+      .then((response) => {
+        setCheckingSession(false)
+        setIsUserLoggedIn(response.isLoggedIn)
+      })
+      .catch((_) => {
+        setCheckingSession(false)
+        setIsUserLoggedIn(false)
+      })
   }, [])
 
   useEffect(() => {

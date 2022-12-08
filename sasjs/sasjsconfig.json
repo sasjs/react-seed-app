@@ -55,6 +55,12 @@
       },
       "serverName": "SASApp",
       "repositoryName": "Foundation"
+    },
+    {
+      "name": "electron",
+      "serverType": "SASJS",
+      "serverUrl": "http://localhost:5000",
+      "appLoc": "/Public/app/react-seed-app"
     }
   ]
 }

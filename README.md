@@ -1,33 +1,37 @@
 # Overview
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 This React seed app provides a wrapper for `@sasjs/adapter`, a lightning fast adapter for talking to SAS - on Viya, EBI, or SASjs Server.
 
-
 ## Frontend Web
 
-If you are running on SAS 9 you need to set `serverType` to SAS9 in `sasContext.tsx`.
+These are the minimal steps to get up and running:
 
 1. clone the repo and change into the directory
-2. run `npm install`
-3. run `npm run build` to create a production build in the `build` folder. This can be deployed to the SAS web server [here](https://sasjs.io/frontend-deployment/).
+2. Open `index.html` and set the `serverType` to SASVIYA, SAS9, or SASJS depending on backend server
+3. Also change `appLoc` to the backend root location in which you plan to deploy the services.
+4. run `npm install`
+5. run `npm run build` to create a production build in the `build` folder. This can be deployed to the SAS web server [here](https://sasjs.io/frontend-deployment/).
 
 If you are running locally you will also need to whitelist `localhost` on the server, or enable CORS in your browser as described [here](https://sasjs.io/cors)
 
 ## Backend Services
 
-The best way to deploy SAS services is using the [SASjs CLI](https://cli.sasjs.io).  Simply [install](https://cli.sasjs.io/installation/), update the `defaultTarget` attribute in the [sasjsconfig.json](https://github.com/sasjs/react-seed-app/blob/main/sasjs/sasjsconfig.json) file, and run the following commands:
+The best way to deploy SAS services is using the [SASjs CLI](https://cli.sasjs.io). Simply [install](https://cli.sasjs.io/installation/), update the `defaultTarget` attribute in the [sasjsconfig.json](https://github.com/sasjs/react-seed-app/blob/main/sasjs/sasjsconfig.json) file, and run the following commands:
 
 ```bash
-sasjs auth 
+sasjs auth # be sure to use the same serverType and appLoc as steps 2 & 3 above
 sasjs cbd
 ```
 
-This will first authenticate to your target (follow the prompts) and after that you can just run `sasjs cbd` to rebuild and deploy your services.  If you set `streamweb:true` in the sasjsconfig.json it will also deploy your frontend as a streaming app (no need for a web server).
+This will first authenticate to your target (follow the prompts) and after that you can just run `sasjs cbd` to rebuild and deploy your services. If you set `streamweb:true` in the sasjsconfig.json it will also deploy your frontend as a streaming app (no need for a web server).
 
-If you are just looking to build quickly and don't have time to install NPM then you can also create the web services on ANY version of SAS by running the code below.
+If you are just looking to build quickly and don't have time to install NPM then you can also create the web services on SAS9 or SASVIYA by running the code below.
 
 ```sas
 %let appLoc=/Public/app/react-seed-app; /* SAS Folders App Location */
@@ -59,6 +63,15 @@ parmcards4;
 This app will work on all versions of SAS Viya, in SAS 9 EBI from 9.3 and above, and on regular Foundation SAS (or WPS) installs using SASjs Server.
 
 It will not work on SAS University edition.
+
+## Backend Services in JavaScript
+
+If you are writing services in JS and your service depends on any third party library/package then you need to bundle that service before deploying it to sasjs server otherwise the service wouldn't work. You can choose any bundler for this process. One possible option could be `webpack`. And if you choose webpack then you can use it like:<br/>
+`npx webpack --mode none --target node --entry <path-of-file-to-bundle/build> --output-path <path-of-output-folder> --output-filename <name-of-output-file>`
+<br/>
+
+In our case we have a mock service at path `sasjs/mocks/appinit.js` and we want to build and make it ready for deployment. So, we have to run following in terminal:<br/>
+`npx webpack --mode none --target node --entry ./sasjs/mocks/appinit.js --output-path sasjsbuild/mocks --output-filename appinit.js`
 
 ### Code Style
 
