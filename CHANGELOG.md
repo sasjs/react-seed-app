@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/sasjs/react-seed-app/compare/v1.4.5...v1.5.0) (2023-08-08)
+
+
+### Features
+
+* **sasjs:** used latest [@sasjs](https://github.com/sasjs) packages ([9a16188](https://github.com/sasjs/react-seed-app/commit/9a16188e5fb4dcb595968c3939d5899936dac44f))
+
 ## [1.4.5](https://github.com/sasjs/react-seed-app/compare/v1.4.4...v1.4.5) (2022-12-05)
 
 
