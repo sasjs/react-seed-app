@@ -1,34 +1,34 @@
+import { useTheme } from '@mui/material/styles'
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-
-const useStyles = makeStyles((theme) => ({
-  homePage: {
-    padding: '16px',
-    color: '#1c1c1c',
-    display: 'flex',
-    flexDirection: 'column' as 'column',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  code: {
-    fontFamily: 'Monaco, Courier, monospace',
-    border: '1px solid #d9d9d9',
-    padding: '5px',
-    borderRadius: '3px',
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.secondary.main,
-    fontWeight: 'bold'
-  },
-  sasjsLink: {
-    marginLeft: '5px'
-  }
-}))
 
 const HomePageComponent = () => {
-  const classes = useStyles()
+  const theme = useTheme()
+
+  const styles = {
+    homePage: {
+      padding: '16px',
+      color: '#1c1c1c',
+      display: 'flex',
+      flexDirection: 'column' as 'column',
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    code: {
+      fontFamily: 'Monaco, Courier, monospace',
+      border: '1px solid #d9d9d9',
+      padding: '5px',
+      borderRadius: '3px',
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.secondary.main,
+      fontWeight: 'bold'
+    },
+    sasjsLink: {
+      marginLeft: '5px'
+    }
+  }
 
   return (
-    <div className={classes.homePage}>
+    <div style={styles.homePage}>
       <h1>
         Hello!{' '}
         <span role="img" aria-label="wave">
@@ -37,12 +37,12 @@ const HomePageComponent = () => {
       </h1>
       <h3>
         Welcome to the React Seed App for{' '}
-        <span className={classes.code}>SASjs</span>.
+        <span style={styles.code}>SASjs</span>.
       </h3>
       <div>
         App Source Code:{' '}
         <a
-          className={classes.sasjsLink}
+          style={styles.sasjsLink}
           target="_blank"
           rel="noopener noreferrer"
           href="https://github.com/sasjs/react-seed-app"
@@ -52,9 +52,9 @@ const HomePageComponent = () => {
       </div>
       <br />
       <div>
-        <span className={classes.code}>SASjs</span> Source Code:
+        <span style={styles.code}>SASjs</span> Source Code:
         <a
-          className={classes.sasjsLink}
+          style={styles.sasjsLink}
           target="_blank"
           rel="noopener noreferrer"
           href="https://github.com/sasjs"
@@ -64,9 +64,9 @@ const HomePageComponent = () => {
       </div>
       <br />
       <div>
-        <span className={classes.code}>SASjs</span> on NPM:
+        <span style={styles.code}>SASjs</span> on NPM:
         <a
-          className={classes.sasjsLink}
+          style={styles.sasjsLink}
           target="_blank"
           rel="noopener noreferrer"
           href="https://www.npmjs.com/package/@sasjs/adapter"
