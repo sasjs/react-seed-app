@@ -1,7 +1,7 @@
 import React from 'react'
-import IconButton from '@material-ui/core/IconButton'
-import AccountCircle from '@material-ui/icons/AccountCircle'
-import Typography from '@material-ui/core/Typography'
+import { IconButton } from '@mui/material'
+import { Typography } from '@mui/material'
+import { AccountCircle } from '@mui/icons-material'
 
 const UserName = (props: any) => {
   return (

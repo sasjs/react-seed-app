@@ -5,18 +5,18 @@ import React, {
   useContext,
   useCallback
 } from 'react'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import { CircularProgress, SelectChangeEvent } from '@mui/material'
 
-import MenuItem from '@material-ui/core/MenuItem'
-import Select from '@material-ui/core/Select'
-import Button from '@material-ui/core/Button'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableContainer from '@material-ui/core/TableContainer'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import Paper from '@material-ui/core/Paper'
+import { MenuItem } from '@mui/material'
+import { Select } from '@mui/material'
+import { Button } from '@mui/material'
+import { Table } from '@mui/material'
+import { TableBody } from '@mui/material'
+import { TableCell } from '@mui/material'
+import { TableContainer } from '@mui/material'
+import { TableHead } from '@mui/material'
+import { TableRow } from '@mui/material'
+import { Paper } from '@mui/material'
 
 import { SASContext } from '../context/sasContext'
 import { AbortModalPayload } from '../types'
@@ -83,12 +83,9 @@ const DataPageComponent = () => {
   }, [sasContext.isUserLoggedIn, prevLoggedIn, currentRequest, executeRequest])
 
   const areaOnChange = (
-    event: React.ChangeEvent<{
-      name?: string | undefined
-      value: unknown
-    }>
+    event: SelectChangeEvent<string>
   ) => {
-    setSelectedArea(event.target.value as string)
+    setSelectedArea(event.target.value)
   }
 
   const submitArea = () => {

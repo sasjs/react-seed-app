@@ -1,50 +1,49 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { bytesToSize } from '@sasjs/utils/utils/bytesToSize'
-import { makeStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
-import Button from '@material-ui/core/Button'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableContainer from '@material-ui/core/TableContainer'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import Paper from '@material-ui/core/Paper'
+import { TextField, useTheme } from '@mui/material'
+import { Button } from '@mui/material'
+import { CircularProgress } from '@mui/material'
+import { Table } from '@mui/material'
+import { TableBody } from '@mui/material'
+import { TableCell } from '@mui/material'
+import { TableContainer } from '@mui/material'
+import { TableHead } from '@mui/material'
+import { TableRow } from '@mui/material'
+import { Paper } from '@mui/material'
 
 import { SASContext } from '../context/sasContext'
 import { AbortModalPayload } from '../types'
 import { getAbortModalPayload } from '../utils'
 import AbortModal from './abortModal'
 
-const useStyles = makeStyles((theme) => ({
-  pageLayout: {
-    padding: '16px',
-    display: 'flex',
-    flexDirection: 'column' as 'column',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  input: {
-    marginTop: '10px',
-    width: '300px'
-  },
-  uploadButton: {
-    marginTop: '20px'
-  },
-  circularProgress: {
-    marginTop: '10px'
-  },
-  table: {
-    marginTop: '20px'
-  },
-  errorTitle: {
-    color: theme.palette.error.main
-  }
-}))
-
 export default function FileUploaderComponent() {
-  const classes = useStyles()
+  const theme = useTheme()
+
+  const styles = {
+    pageLayout: {
+      padding: '16px',
+      display: 'flex',
+      flexDirection: 'column' as 'column',
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    input: {
+      marginTop: '10px',
+      width: '300px'
+    },
+    uploadButton: {
+      marginTop: '20px'
+    },
+    circularProgress: {
+      marginTop: '10px'
+    },
+    table: {
+      marginTop: '20px'
+    },
+    errorTitle: {
+      color: theme.palette.error.main
+    }
+  }
 
   const sasContext = useContext(SASContext)
 
@@ -121,14 +120,14 @@ export default function FileUploaderComponent() {
   }
 
   return (
-    <div className={classes.pageLayout}>
+    <div style={styles.pageLayout}>
       <h1>This is a template file uploader component</h1>
       <p>
         You can use it to upload a local file to a directory on your Viya server
       </p>
 
       <TextField
-        className={classes.input}
+        style={styles.input}
         id="uploadPath"
         variant="outlined"
         label="Where to upload"
@@ -137,7 +136,7 @@ export default function FileUploaderComponent() {
         onChange={handleChange}
       />
       <TextField
-        className={classes.input}
+        style={styles.input}
         id="myFile"
         variant="outlined"
         type="file"
@@ -149,18 +148,18 @@ export default function FileUploaderComponent() {
       <Button
         variant="contained"
         color="primary"
-        className={classes.uploadButton}
+        style={styles.uploadButton}
         disabled={uploadDisabled}
         onClick={handleUpload}
       >
         Upload
       </Button>
       {isUploading ? (
-        <CircularProgress className={classes.circularProgress} />
+        <CircularProgress style={styles.circularProgress} />
       ) : null}
 
       {dirList && dirList.length > 0 && !isUploading ? (
-        <TableContainer component={Paper} className={classes.table}>
+        <TableContainer component={Paper} style={styles.table}>
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>

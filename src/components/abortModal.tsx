@@ -1,14 +1,14 @@
 import React from 'react'
 
-import Typography from '@material-ui/core/Typography'
 import { styled } from '@mui/material/styles'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 import IconButton from '@mui/material/IconButton'
-import CloseIcon from '@mui/icons-material/Close'
 
 import { AbortModalPayload } from '../types'
+import { Typography } from '@mui/material'
+import { Close } from '@mui/icons-material'
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -42,7 +42,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
             color: (theme) => theme.palette.grey[500]
           }}
         >
-          <CloseIcon />
+          <Close />
         </IconButton>
       ) : null}
     </DialogTitle>

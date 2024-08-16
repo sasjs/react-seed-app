@@ -1,139 +1,22 @@
 import React from 'react'
 import * as moment from 'moment'
-import { makeStyles, withStyles } from '@material-ui/styles'
-import Typography from '@material-ui/core/Typography'
-import Dialog from '@material-ui/core/Dialog'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import ExpansionPanel from '@material-ui/core/ExpansionPanel'
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline'
-import WarningIcon from '@material-ui/icons/Warning'
-import GetAppIcon from '@material-ui/icons/GetApp'
-import Tooltip from '@material-ui/core/Tooltip'
-import TreeView from '@material-ui/lab/TreeView'
-import ChevronRightIcon from '@material-ui/icons/ChevronRight'
-import TreeItem from '@material-ui/lab/TreeItem'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
-import Grid from '@material-ui/core/Grid'
+import { Accordion, AccordionSummary, styled, useTheme } from '@mui/material'
+import { Typography } from '@mui/material'
+import { Dialog } from '@mui/material'
+import { DialogContent } from '@mui/material'
+import { DialogTitle } from '@mui/material'
+import { Tooltip } from '@mui/material'
+import { ListItem } from '@mui/material'
+import { ListItemText } from '@mui/material'
+import { Grid } from '@mui/material'
 
-import Tabs from '@material-ui/core/Tabs'
-import Tab from '@material-ui/core/Tab'
-import IconButton from '@material-ui/core/IconButton'
-import CloseIcon from '@material-ui/icons/Close'
+import { Tabs } from '@mui/material'
+import { Tab } from '@mui/material'
+import { IconButton } from '@mui/material'
 import Highlight from 'react-highlight'
 import './syntax-highlighting.css'
-
-const AntTabs = withStyles({
-  root: {
-    borderBottom: '1px solid #e8e8e8'
-  },
-  indicator: {
-    backgroundColor: '#1890ff'
-  }
-})(Tabs)
-
-const AntTab = withStyles((theme) => ({
-  root: {
-    textTransform: 'none',
-    minWidth: 72,
-    fontWeight: theme.typography.fontWeightRegular,
-    marginRight: theme.spacing(4),
-    fontFamily: [
-      '-apple-system',
-      'BlinkMacSystemFont',
-      '"Segoe UI"',
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"'
-    ].join(','),
-    '&:hover': {
-      color: '#40a9ff',
-      opacity: 1
-    },
-    '&$selected': {
-      color: '#1890ff',
-      fontWeight: theme.typography.fontWeightMedium
-    },
-    '&:focus': {
-      color: '#40a9ff'
-    }
-  },
-  selected: {}
-}))((props) => <Tab disableRipple {...props} />)
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%'
-  },
-  heading: {
-    flexBasis: '33.33%',
-    flexShrink: 0,
-    [theme.breakpoints.down('sm')]: {
-      fontSize: theme.typography.pxToRem(12)
-    },
-    [theme.breakpoints.up('md')]: {
-      fontSize: theme.typography.pxToRem(16)
-    }
-  },
-  secondaryHeading: {
-    color: theme.palette.text.secondary,
-    [theme.breakpoints.down('sm')]: {
-      fontSize: theme.typography.pxToRem(12)
-    },
-    [theme.breakpoints.up('md')]: {
-      fontSize: theme.typography.pxToRem(16)
-    }
-  },
-  expansionText: {
-    display: 'block',
-    color: 'white'
-  },
-  headingTextExpansion: {
-    color: '#3f51b5'
-  },
-  expansionDescription: {
-    backgroundColor: '#fbfbfb',
-    border: '1px solid #e2e2e2',
-    borderRadius: '3px',
-    minHeight: '50px',
-    padding: '10px',
-    boxSizing: 'border-box',
-    whiteSpace: 'pre-wrap',
-    fontFamily: 'Monaco, Courier, monospace',
-    position: 'relative',
-    width: '100%',
-    [theme.breakpoints.down('sm')]: {
-      fontSize: theme.typography.pxToRem(12)
-    },
-    [theme.breakpoints.up('md')]: {
-      fontSize: theme.typography.pxToRem(16)
-    }
-  },
-  programlogWrapper: {
-    padding: '20px',
-    overflowY: 'auto',
-    maxHeight: '300px'
-  },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.icon
-  },
-  errorLabel: {
-    color: theme.palette.error.main
-  },
-  warningLabel: {
-    color: theme.palette.sasWarning
-  }
-}))
+import { ChevronRight, Close, ErrorOutline, ExpandMore, GetApp, Warning } from '@mui/icons-material'
+import { SimpleTreeView, TreeItem } from '@mui/x-tree-view'
 
 const parseErrorsAndWarnings = (req) => {
   if (!req || !req.logFile) return
@@ -173,8 +56,118 @@ const parseErrorsAndWarnings = (req) => {
 }
 
 const RequestModal = (props) => {
+  const theme = useTheme()
+
+  const AntTabs = styled(Tabs)({
+    root: {
+      borderBottom: '1px solid #e8e8e8'
+    },
+    indicator: {
+      backgroundColor: '#1890ff'
+    }
+  })
+  
+  const AntTab = styled((props) => <Tab disableRipple {...props} />)({
+    root: {
+      textTransform: 'none',
+      minWidth: 72,
+      fontWeight: theme.typography.fontWeightRegular,
+      marginRight: theme.spacing(4),
+      fontFamily: [
+        '-apple-system',
+        'BlinkMacSystemFont',
+        '"Segoe UI"',
+        'Roboto',
+        '"Helvetica Neue"',
+        'Arial',
+        'sans-serif',
+        '"Apple Color Emoji"',
+        '"Segoe UI Emoji"',
+        '"Segoe UI Symbol"'
+      ].join(','),
+      '&:hover': {
+        color: '#40a9ff',
+        opacity: 1
+      },
+      '&$selected': {
+        color: '#1890ff',
+        fontWeight: theme.typography.fontWeightMedium
+      },
+      '&:focus': {
+        color: '#40a9ff'
+      }
+    },
+    selected: {}
+  })
+
+  const styles = {
+    root: {
+      width: '100%'
+    },
+    heading: {
+      flexBasis: '33.33%',
+      flexShrink: 0,
+      [theme.breakpoints.down('sm')]: {
+        fontSize: theme.typography.pxToRem(12)
+      },
+      [theme.breakpoints.up('md')]: {
+        fontSize: theme.typography.pxToRem(16)
+      }
+    },
+    secondaryHeading: {
+      color: theme.palette.text.secondary,
+      [theme.breakpoints.down('sm')]: {
+        fontSize: theme.typography.pxToRem(12)
+      },
+      [theme.breakpoints.up('md')]: {
+        fontSize: theme.typography.pxToRem(16)
+      }
+    },
+    expansionText: {
+      display: 'block',
+      color: 'white'
+    },
+    headingTextExpansion: {
+      color: '#3f51b5'
+    },
+    expansionDescription: {
+      backgroundColor: '#fbfbfb',
+      border: '1px solid #e2e2e2',
+      borderRadius: '3px',
+      minHeight: '50px',
+      padding: '10px',
+      boxSizing: 'border-box',
+      whiteSpace: 'pre-wrap',
+      fontFamily: 'Monaco, Courier, monospace',
+      position: 'relative',
+      width: '100%',
+      [theme.breakpoints.down('sm')]: {
+        fontSize: theme.typography.pxToRem(12)
+      },
+      [theme.breakpoints.up('md')]: {
+        fontSize: theme.typography.pxToRem(16)
+      }
+    },
+    programlogWrapper: {
+      padding: '20px',
+      overflowY: 'auto',
+      maxHeight: '300px'
+    },
+    closeButton: {
+      position: 'absolute',
+      right: theme.spacing(1),
+      top: theme.spacing(1),
+      color: theme.palette.icon
+    },
+    errorLabel: {
+      color: theme.palette.error.main
+    },
+    warningLabel: {
+      color: theme.palette.sasWarning
+    }
+  }
+  
   const { programLogs, sasjsConfig, isModalOpen, handleClose, open } = props
-  const classes = useStyles()
   const [expanded, setExpanded] = React.useState(false)
   const [currentTab, setTab] = React.useState(0)
 
@@ -245,22 +238,22 @@ const RequestModal = (props) => {
           {`App Location: ${sasjsConfig.appLoc}`}
           <IconButton
             aria-label="close"
-            className={classes.closeButton}
+            style={styles.closeButton}
             onClick={handleClose}
           >
-            <CloseIcon />
+            <Close/>
           </IconButton>
         </DialogTitle>
         <DialogContent>
-          <div className={classes.root}>
+          <div style={styles.root}>
             {programLogs.map((programLog, index) => (
-              <ExpansionPanel
+              <Accordion
                 key={index}
                 expanded={expanded === index + 1}
                 onChange={handleChange(index + 1)}
               >
-                <ExpansionPanelSummary
-                  expandIcon={<ExpandMoreIcon />}
+                <AccordionSummary
+                  expandIcon={<ExpandMore />}
                   aria-controls="panel1bh-content"
                   id="panel1bh-header"
                 >
@@ -272,7 +265,7 @@ const RequestModal = (props) => {
                         style={{ alignItems: 'center' }}
                       >
                         <Grid item>
-                          <Typography variant="h5" className={classes.heading}>
+                          <Typography variant="h5" style={styles.heading}>
                             {programLog.serviceLink.replace(
                               sasjsConfig.appLoc,
                               ''
@@ -281,12 +274,12 @@ const RequestModal = (props) => {
                         </Grid>
                         <Grid item>
                           {programLog.logWarnings?.length > 0 && (
-                            <WarningIcon className={classes.warningLabel} />
+                            <Warning style={styles.warningLabel} />
                           )}
                         </Grid>
                         <Grid item>
                           {programLog.logErrors?.length > 0 && (
-                            <ErrorOutlineIcon color="error" />
+                            <ErrorOutline color="error" />
                           )}
                         </Grid>
                       </Grid>
@@ -303,7 +296,7 @@ const RequestModal = (props) => {
                         <Grid item>
                           <Typography
                             variant="h5"
-                            className={classes.secondaryHeading}
+                            style={styles.secondaryHeading}
                           >
                             {moment(programLog.timestamp).format
                               ? moment(programLog.timestamp).format(
@@ -321,14 +314,14 @@ const RequestModal = (props) => {
                               style={{ color: 'blue' }}
                               onClick={(event) => downloadLogs(event, index)}
                             >
-                              <GetAppIcon />
+                              <GetApp />
                             </IconButton>
                           </Tooltip>
                         </Grid>
                       </Grid>
                     </Grid>
                   </Grid>
-                </ExpansionPanelSummary>
+                </AccordionSummary>
                 <AntTabs
                   value={currentTab}
                   onChange={handleTabChange}
@@ -344,16 +337,16 @@ const RequestModal = (props) => {
                 {currentTab === 0 ? (
                   <div
                     id={`request_${index}`}
-                    className={classes.programlogWrapper}
+                    style={styles.programlogWrapper}
                   >
-                    <TreeView
-                      defaultCollapseIcon={<ExpandMoreIcon />}
-                      defaultExpandIcon={<ChevronRightIcon />}
+                    <SimpleTreeView
+                      defaultCollapseIcon={<ExpandMore />}
+                      defaultExpandIcon={<ChevronRight />}
                     >
                       <TreeItem
                         nodeId="error"
                         label={
-                          <Typography className={classes.errorLabel}>
+                          <Typography style={styles.errorLabel}>
                             {`Errors (${programLog.logErrors?.length})`}
                           </Typography>
                         }
@@ -364,7 +357,7 @@ const RequestModal = (props) => {
                               nodeId={`error_${ind}`}
                               label={
                                 <ListItem
-                                  className={classes.listItem}
+                                  style={styles.listItem}
                                   onClick={() => goToLogLine(error, index)}
                                 >
                                   <ListItemText primary={error} />
@@ -376,7 +369,7 @@ const RequestModal = (props) => {
                       <TreeItem
                         nodeId="warnings"
                         label={
-                          <Typography className={classes.warningLabel}>
+                          <Typography style={styles.warningLabel}>
                             {`Warnings (${programLog.logWarnings?.length})`}
                           </Typography>
                         }
@@ -387,7 +380,7 @@ const RequestModal = (props) => {
                               nodeId={`error_${ind}`}
                               label={
                                 <ListItem
-                                  className={classes.listItem}
+                                  style={styles.listItem}
                                   onClick={() => goToLogLine(warning, index)}
                                 >
                                   <ListItemText primary={warning} />
@@ -396,11 +389,11 @@ const RequestModal = (props) => {
                             />
                           ))}
                       </TreeItem>
-                    </TreeView>
+                    </SimpleTreeView>
                     <Typography
                       id={`log_container_${index}`}
                       variant="h5"
-                      className={classes.expansionDescription}
+                      style={styles.expansionDescription}
                     >
                       <Highlight className={'html'} innerHTML={true}>
                         {decodeHtml(programLog.logFile)}
@@ -412,10 +405,10 @@ const RequestModal = (props) => {
                 )}
 
                 {currentTab === 1 ? (
-                  <div className={classes.programlogWrapper}>
+                  <div style={styles.programlogWrapper}>
                     <Typography
                       variant="h5"
-                      className={classes.expansionDescription}
+                      style={styles.expansionDescription}
                     >
                       <Highlight className={'html'}>
                         {decodeHtml(programLog.sourceCode)}
@@ -427,10 +420,10 @@ const RequestModal = (props) => {
                 )}
 
                 {currentTab === 2 ? (
-                  <div className={classes.programlogWrapper}>
+                  <div style={styles.programlogWrapper}>
                     <Typography
                       variant="h5"
-                      className={classes.expansionDescription}
+                      style={styles.expansionDescription}
                     >
                       <Highlight className={'SAS'}>
                         {decodeHtml(programLog.generatedCode)}
@@ -440,14 +433,14 @@ const RequestModal = (props) => {
                 ) : (
                   ''
                 )}
-              </ExpansionPanel>
+              </Accordion>
             ))}
           </div>
         </DialogContent>
       </Dialog>
     )
   }
-  return <div className={classes.root}>{revealModal}</div>
+  return <div style={styles.root}>{revealModal}</div>
 }
 
 export default RequestModal

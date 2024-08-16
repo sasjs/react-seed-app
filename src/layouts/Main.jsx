@@ -1,52 +1,53 @@
 import React, { useContext, useState, useEffect } from 'react'
 
-import { makeStyles } from '@material-ui/styles'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import MenuItem from '@material-ui/core/MenuItem'
-import Switch from '@material-ui/core/Switch'
-import Divider from '@material-ui/core/Divider'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Button from '@material-ui/core/Button'
-import Menu from '@material-ui/core/Menu'
-import Tabs from '@material-ui/core/Tabs'
-import Tab from '@material-ui/core/Tab'
+import { AppBar, useTheme } from '@mui/material'
+import { Toolbar } from '@mui/material'
+import { MenuItem } from '@mui/material'
+import { Switch } from '@mui/material'
+import { Divider } from '@mui/material'
+import { FormControlLabel } from '@mui/material'
+import { Button } from '@mui/material'
+import { Menu } from '@mui/material'
+import { Tabs } from '@mui/material'
+import { Tab } from '@mui/material'
 import { Link, useNavigate, useLocation, Outlet } from 'react-router-dom'
 import RequestModal from '../components/request-modal.component'
 import UserName from '../components/user-name.component'
 import { SASContext } from '../context/sasContext'
 import LoginComponent from '../components/login.component'
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1
-  },
-  menuButton: {
-    marginRight: theme.spacing(2)
-  },
-  title: {
-    color: 'white',
-    padding: '0 8px'
-  },
-  tabs: {
-    '& .MuiTab-root': {
-      fontSize: '21px'
-    },
-    '& .Mui-selected': {
-      color: theme.palette.secondary.main
-    }
-  },
-  popOverMenu: {
-    '& .MuiList-padding': {
-      padding: 0
-    }
-  },
-  logoutButton: {
-    justifyContent: 'center'
-  }
-}))
-
 const Main = (props) => {
+  const theme = useTheme()
+  
+  const styles = {
+    root: {
+      flexGrow: 1
+    },
+    menuButton: {
+      marginRight: theme.spacing(2)
+    },
+    title: {
+      color: 'white',
+      padding: '0 8px'
+    },
+    tabs: {
+      '& .MuiTab-root': {
+        fontSize: '21px'
+      },
+      '& .Mui-selected': {
+        color: theme.palette.secondary.main
+      }
+    },
+    popOverMenu: {
+      '& .MuiList-padding': {
+        padding: 0
+      }
+    },
+    logoutButton: {
+      justifyContent: 'center'
+    }
+  }
+
   const navigate = useNavigate()
   const sasContext = useContext(SASContext)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -61,8 +62,7 @@ const Main = (props) => {
   useEffect(() => {
     setTabValue(pathname)
   }, [pathname])
-
-  const classes = useStyles()
+  
   const open = Boolean(anchorEl)
 
   useEffect(() => {
@@ -89,7 +89,7 @@ const Main = (props) => {
 
   return (
     <>
-      <div className={classes.root}>
+      <div style={styles.root}>
         <AppBar position="static">
           <Toolbar variant="dense">
             <img
@@ -105,7 +105,7 @@ const Main = (props) => {
             <Tabs
               value={tabValue}
               onChange={handleTabChange}
-              className={classes.tabs}
+              style={styles.tabs}
             >
               <Tab label="Home" value="/home" to="/home" component={Link} />
               <Tab label="Demo" value="/demo" to="/demo" component={Link} />
@@ -127,10 +127,10 @@ const Main = (props) => {
                 userName={sasContext.fullName || sasContext.userName}
                 avatarContent={sasContext.avatarContent}
                 onClickHandler={handleMenu}
-                className={classes.title}
+                style={styles.title}
               />
               <Menu
-                className={classes.popOverMenu}
+                style={styles.popOverMenu}
                 id="menu-appbar"
                 anchorEl={anchorEl}
                 getContentAnchorEl={null}
@@ -173,7 +173,7 @@ const Main = (props) => {
                 {sasContext.isUserLoggedIn && (
                   <MenuItem
                     onClick={sasContext.logout}
-                    className={classes.logoutButton}
+                    style={styles.logoutButton}
                   >
                     <Button variant="contained" color="primary">
                       Logout
