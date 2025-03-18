@@ -25,6 +25,7 @@ import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import Highlight from 'react-highlight'
 import './syntax-highlighting.css'
+import ResizableBox from './resizeableBox'
 
 const AntTabs = withStyles({
   root: {
@@ -117,9 +118,7 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   programlogWrapper: {
-    padding: '20px',
-    overflowY: 'auto',
-    maxHeight: '300px'
+    padding: '20px'
   },
   closeButton: {
     position: 'absolute',
@@ -235,6 +234,9 @@ const RequestModal = (props) => {
         maxWidth="lg"
         open={open}
         onClose={handleClose}
+        PaperProps={{
+          style: { height: '100%' }
+        }}
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description"
       >
@@ -342,7 +344,7 @@ const RequestModal = (props) => {
                 </AntTabs>
 
                 {currentTab === 0 ? (
-                  <div
+                  <ResizableBox
                     id={`request_${index}`}
                     className={classes.programlogWrapper}
                   >
@@ -406,13 +408,13 @@ const RequestModal = (props) => {
                         {decodeHtml(programLog.logFile)}
                       </Highlight>
                     </Typography>
-                  </div>
+                  </ResizableBox>
                 ) : (
                   ''
                 )}
 
                 {currentTab === 1 ? (
-                  <div className={classes.programlogWrapper}>
+                  <ResizableBox className={classes.programlogWrapper}>
                     <Typography
                       variant="h5"
                       className={classes.expansionDescription}
@@ -421,13 +423,13 @@ const RequestModal = (props) => {
                         {decodeHtml(programLog.sourceCode)}
                       </Highlight>
                     </Typography>
-                  </div>
+                  </ResizableBox>
                 ) : (
                   ''
                 )}
 
                 {currentTab === 2 ? (
-                  <div className={classes.programlogWrapper}>
+                  <ResizableBox className={classes.programlogWrapper}>
                     <Typography
                       variant="h5"
                       className={classes.expansionDescription}
@@ -436,7 +438,7 @@ const RequestModal = (props) => {
                         {decodeHtml(programLog.generatedCode)}
                       </Highlight>
                     </Typography>
-                  </div>
+                  </ResizableBox>
                 ) : (
                   ''
                 )}
