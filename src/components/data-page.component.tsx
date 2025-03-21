@@ -1,22 +1,19 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useContext,
-  useCallback
-} from 'react'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 
-import MenuItem from '@material-ui/core/MenuItem'
-import Select from '@material-ui/core/Select'
-import Button from '@material-ui/core/Button'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableContainer from '@material-ui/core/TableContainer'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import Paper from '@material-ui/core/Paper'
+import {
+  Button,
+  CircularProgress,
+  MenuItem,
+  Paper,
+  Select,
+  SelectChangeEvent,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow
+} from '@mui/material'
 
 import { SASContext } from '../context/sasContext'
 import { AbortModalPayload } from '../types'
@@ -82,12 +79,7 @@ const DataPageComponent = () => {
     }
   }, [sasContext.isUserLoggedIn, prevLoggedIn, currentRequest, executeRequest])
 
-  const areaOnChange = (
-    event: React.ChangeEvent<{
-      name?: string | undefined
-      value: unknown
-    }>
-  ) => {
+  const areaOnChange = (event: SelectChangeEvent) => {
     setSelectedArea(event.target.value as string)
   }
 

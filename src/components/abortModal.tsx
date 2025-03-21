@@ -1,11 +1,15 @@
 import React from 'react'
 
-import Typography from '@material-ui/core/Typography'
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Typography
+} from '@mui/material'
+
 import { styled } from '@mui/material/styles'
-import Dialog from '@mui/material/Dialog'
-import DialogTitle from '@mui/material/DialogTitle'
-import DialogContent from '@mui/material/DialogContent'
-import IconButton from '@mui/material/IconButton'
+
 import CloseIcon from '@mui/icons-material/Close'
 
 import { AbortModalPayload } from '../types'
