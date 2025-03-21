@@ -4,7 +4,7 @@ import HomePageComponent from '../components/home-page.component'
 import DataPageComponent from '../components/data-page.component'
 import FileUploaderComponent from '../components/file-uploader.component'
 import MainLayout from '../layouts/Main'
-import ThemeProvider from '@material-ui/styles/ThemeProvider'
+import { ThemeProvider } from '@mui/material/styles'
 import theme from '../theme'
 import SASProvider from '../context/sasContext'
 

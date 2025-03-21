@@ -1,80 +1,65 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import { Box, Typography, Link } from '@mui/material'
+import { styled } from '@mui/material/styles'
 
-const useStyles = makeStyles((theme) => ({
-  homePage: {
-    padding: '16px',
-    color: '#1c1c1c',
-    display: 'flex',
-    flexDirection: 'column' as 'column',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  code: {
-    fontFamily: 'Monaco, Courier, monospace',
-    border: '1px solid #d9d9d9',
-    padding: '5px',
-    borderRadius: '3px',
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.secondary.main,
-    fontWeight: 'bold'
-  },
-  sasjsLink: {
-    marginLeft: '5px'
-  }
+const HomePageContainer = styled(Box)(({ theme }) => ({
+  padding: '16px',
+  color: '#1c1c1c',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center'
 }))
 
-const HomePageComponent = () => {
-  const classes = useStyles()
+const CodeText = styled('span')(({ theme }) => ({
+  fontFamily: 'Monaco, Courier, monospace',
+  border: '1px solid #d9d9d9',
+  padding: '5px',
+  borderRadius: '3px',
+  backgroundColor: theme.palette.primary.main,
+  color: theme.palette.secondary.main,
+  fontWeight: 'bold'
+}))
 
+const StyledLink = styled(Link)(({ theme }) => ({
+  marginLeft: '5px',
+  color: theme.palette.text.link, // Use the link color from your palette
+  textDecoration: 'underline', // Underline to indicate it's a link
+  '&:hover': {
+    color: theme.palette.text.link, // Keep the same color on hover
+    textDecoration: 'none' // Optional: Remove underline on hover
+  }
+}))
+const links = [
+  { label: 'App Source Code', url: 'https://github.com/sasjs/react-seed-app' },
+  { label: 'SASjs Source Code', url: 'https://github.com/sasjs' },
+  { label: 'SASjs on NPM', url: 'https://www.npmjs.com/package/@sasjs/adapter' }
+]
+
+const HomePageComponent = () => {
   return (
-    <div className={classes.homePage}>
-      <h1>
+    <HomePageContainer>
+      <Typography variant="h4">
         Hello!{' '}
         <span role="img" aria-label="wave">
           👋
         </span>
-      </h1>
-      <h3>
-        Welcome to the React Seed App for{' '}
-        <span className={classes.code}>SASjs</span>.
-      </h3>
-      <div>
-        App Source Code:{' '}
-        <a
-          className={classes.sasjsLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://github.com/sasjs/react-seed-app"
-        >
-          https://github.com/sasjs/react-seed-app
-        </a>
-      </div>
-      <br />
-      <div>
-        <span className={classes.code}>SASjs</span> Source Code:
-        <a
-          className={classes.sasjsLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://github.com/sasjs"
-        >
-          https://github.com/sasjs
-        </a>
-      </div>
-      <br />
-      <div>
-        <span className={classes.code}>SASjs</span> on NPM:
-        <a
-          className={classes.sasjsLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.npmjs.com/package/@sasjs/adapter"
-        >
-          https://www.npmjs.com/package/@sasjs/adapter
-        </a>
-      </div>
-    </div>
+      </Typography>
+      <Typography variant="h6">
+        Welcome to the React Seed App for <CodeText>SASjs</CodeText>.
+      </Typography>
+
+      {links.map(({ label, url }) => (
+        <Box key={url} mt={2}>
+          <Typography>
+            {label}:{' '}
+            <StyledLink href={url} target="_blank" rel="noopener noreferrer">
+              {url}
+            </StyledLink>
+          </Typography>
+        </Box>
+      ))}
+    </HomePageContainer>
   )
 }
 
