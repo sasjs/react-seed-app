@@ -1,7 +1,6 @@
-import React from 'react'
-import IconButton from '@material-ui/core/IconButton'
-import AccountCircle from '@material-ui/icons/AccountCircle'
-import Typography from '@material-ui/core/Typography'
+import { IconButton, Typography } from '@mui/material'
+
+import AccountCircle from '@mui/icons-material/AccountCircle'
 
 const UserName = (props: any) => {
   return (
@@ -21,7 +20,7 @@ const UserName = (props: any) => {
       ) : (
         <AccountCircle></AccountCircle>
       )}
-      <Typography variant="h6" className={props.className}>
+      <Typography variant="h6" sx={props.sx}>
         {props.userName}
       </Typography>
     </IconButton>

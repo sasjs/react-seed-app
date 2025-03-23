@@ -1,57 +1,54 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { bytesToSize } from '@sasjs/utils/utils/bytesToSize'
-import { makeStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
-import Button from '@material-ui/core/Button'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableContainer from '@material-ui/core/TableContainer'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import Paper from '@material-ui/core/Paper'
+
+import {
+  Button,
+  CircularProgress,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography
+} from '@mui/material'
+import { styled } from '@mui/material/styles'
 
 import { SASContext } from '../context/sasContext'
 import { AbortModalPayload } from '../types'
 import { getAbortModalPayload } from '../utils'
 import AbortModal from './abortModal'
 
-const useStyles = makeStyles((theme) => ({
-  pageLayout: {
-    padding: '16px',
-    display: 'flex',
-    flexDirection: 'column' as 'column',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  input: {
-    marginTop: '10px',
-    width: '300px'
-  },
-  uploadButton: {
-    marginTop: '20px'
-  },
-  circularProgress: {
-    marginTop: '10px'
-  },
-  table: {
-    marginTop: '20px'
-  },
-  errorTitle: {
-    color: theme.palette.error.main
-  }
+const PageLayout = styled('div')(({ theme }) => ({
+  padding: theme.spacing(2),
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center'
+}))
+
+const UploadInput = styled(TextField)(({ theme }) => ({
+  marginTop: theme.spacing(1),
+  width: '300px'
+}))
+
+const UploadButton = styled(Button)(({ theme }) => ({
+  marginTop: theme.spacing(2)
+}))
+
+const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
+  marginTop: theme.spacing(2)
 }))
 
 export default function FileUploaderComponent() {
-  const classes = useStyles()
-
   const sasContext = useContext(SASContext)
 
   const [uploadPath, setUploadPath] = useState('')
   const [location, setLocation] = useState('')
   const [fileSize, setFileSize] = useState('')
-  const [file, setFile] = useState<File>()
+  const [file, setFile] = useState<File | null>(null)
   const [uploadDisabled, setUploadDisabled] = useState(true)
   const [isUploading, setIsUploading] = useState(false)
   const [dirList, setDirList] = useState([])
@@ -72,17 +69,10 @@ export default function FileUploaderComponent() {
   }, [file, uploadPath])
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    switch (event.target.id) {
-      case 'uploadPath':
-        setUploadPath(event.target.value)
-        break
-      case 'myFile':
-        if (event.target.files?.length) {
-          setFile(event.target.files[0])
-        }
-        break
-      default:
-        break
+    if (event.target.id === 'uploadPath') {
+      setUploadPath(event.target.value)
+    } else if (event.target.id === 'myFile' && event.target.files?.length) {
+      setFile(event.target.files[0])
     }
   }
 
@@ -92,43 +82,43 @@ export default function FileUploaderComponent() {
     setDirList([])
     setAbortModalOpen(false)
 
-    if (sasContext.isUserLoggedIn) {
-      if (file) {
-        await sasContext.sasService
-          .uploadFile(
-            'services/files/upload',
-            [{ file: file, fileName: file.name }],
-            { path: uploadPath }
-          )
-          .then((res: any) => {
-            if (res.sasjsAbort) {
-              getAbortModalPayload(res, setAbortModalPayload)
-              setAbortModalOpen(true)
-            } else if (typeof res?.dirlist === 'object') {
-              setDirList(res.dirlist)
-            } else {
-              setAbortModalPayload({
-                MSG: 'Response does not contain dir list'
-              })
-              setAbortModalOpen(true)
-            }
-          })
-          .catch((err) => console.log(err))
-      }
+    if (sasContext.isUserLoggedIn && file) {
+      await sasContext.sasService
+        .uploadFile(
+          'services/files/upload',
+          [{ file: file, fileName: file.name }],
+          { path: uploadPath }
+        )
+        .then((res: any) => {
+          if (res.sasjsAbort) {
+            getAbortModalPayload(res, setAbortModalPayload)
+            setAbortModalOpen(true)
+          } else if (typeof res?.dirlist === 'object') {
+            setDirList(res.dirlist)
+          } else {
+            setAbortModalPayload({
+              MSG: 'Response does not contain dir list'
+            })
+            setAbortModalOpen(true)
+          }
+        })
+        .catch((err) => console.log(err))
     }
+
     setUploadDisabled(false)
     setIsUploading(false)
   }
 
   return (
-    <div className={classes.pageLayout}>
-      <h1>This is a template file uploader component</h1>
-      <p>
+    <PageLayout>
+      <Typography variant="h5">
+        This is a template file uploader component
+      </Typography>
+      <Typography>
         You can use it to upload a local file to a directory on your Viya server
-      </p>
+      </Typography>
 
-      <TextField
-        className={classes.input}
+      <UploadInput
         id="uploadPath"
         variant="outlined"
         label="Where to upload"
@@ -136,31 +126,30 @@ export default function FileUploaderComponent() {
         disabled={isUploading}
         onChange={handleChange}
       />
-      <TextField
-        className={classes.input}
+      <UploadInput
         id="myFile"
         variant="outlined"
         type="file"
         disabled={isUploading}
         onChange={handleChange}
       />
-      {location ? <p>Location: {location}</p> : null}
-      {fileSize ? <p>Total Size: {fileSize}</p> : null}
-      <Button
+
+      {location && <Typography>Location: {location}</Typography>}
+      {fileSize && <Typography>Total Size: {fileSize}</Typography>}
+
+      <UploadButton
         variant="contained"
         color="primary"
-        className={classes.uploadButton}
         disabled={uploadDisabled}
         onClick={handleUpload}
       >
         Upload
-      </Button>
-      {isUploading ? (
-        <CircularProgress className={classes.circularProgress} />
-      ) : null}
+      </UploadButton>
 
-      {dirList && dirList.length > 0 && !isUploading ? (
-        <TableContainer component={Paper} className={classes.table}>
+      {isUploading && <CircularProgress sx={{ marginTop: 2 }} />}
+
+      {dirList.length > 0 && !isUploading && (
+        <StyledTableContainer>
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
@@ -175,14 +164,14 @@ export default function FileUploaderComponent() {
               ))}
             </TableBody>
           </Table>
-        </TableContainer>
-      ) : null}
+        </StyledTableContainer>
+      )}
 
       <AbortModal
         abortModalOpen={abortModalOpen}
         setAbortModalOpen={setAbortModalOpen}
         payload={abortModalPayload}
       />
-    </div>
+    </PageLayout>
   )
 }
