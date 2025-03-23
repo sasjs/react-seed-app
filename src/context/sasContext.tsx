@@ -40,8 +40,8 @@ const sasjsConfig = {
     useComputeApi === 'true'
       ? true
       : useComputeApi === 'false'
-      ? false
-      : useComputeApi,
+        ? false
+        : useComputeApi,
   contextName: sasElement?.getAttribute('contextName') ?? ''
 } as SASjsConfig
 
