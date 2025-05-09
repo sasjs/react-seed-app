@@ -1,6 +1,7 @@
+import { TypographyOptions } from '@mui/material/styles/createTypography'
 import palette from './palette'
 
-export default {
+const typography: TypographyOptions = {
   h1: {
     color: palette.text.primary,
     fontWeight: 500,
@@ -87,3 +88,5 @@ export default {
     textTransform: 'uppercase'
   }
 }
+
+export default typography

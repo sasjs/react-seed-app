@@ -1,4 +1,4 @@
-import { colors } from '@material-ui/core'
+import { colors } from '@mui/material'
 
 const white = '#FFFFFF'
 const black = '#000000'

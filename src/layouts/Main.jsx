@@ -1,52 +1,41 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import {
+  AppBar,
+  Button,
+  Divider,
+  FormControlLabel,
+  Menu,
+  MenuItem,
+  Switch,
+  Tab,
+  Tabs,
+  Toolbar
+} from '@mui/material'
+import { styled } from '@mui/material/styles'
 
-import { makeStyles } from '@material-ui/styles'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import MenuItem from '@material-ui/core/MenuItem'
-import Switch from '@material-ui/core/Switch'
-import Divider from '@material-ui/core/Divider'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Button from '@material-ui/core/Button'
-import Menu from '@material-ui/core/Menu'
-import Tabs from '@material-ui/core/Tabs'
-import Tab from '@material-ui/core/Tab'
-import { Link, useNavigate, useLocation, Outlet } from 'react-router-dom'
+import LoginComponent from '../components/login.component'
 import RequestModal from '../components/request-modal.component'
 import UserName from '../components/user-name.component'
-import { SASContext } from '../context/sasContext'
-import LoginComponent from '../components/login.component'
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1
-  },
-  menuButton: {
-    marginRight: theme.spacing(2)
-  },
-  title: {
-    color: 'white',
-    padding: '0 8px'
-  },
-  tabs: {
-    '& .MuiTab-root': {
-      fontSize: '21px'
-    },
-    '& .Mui-selected': {
-      color: theme.palette.secondary.main
-    }
-  },
-  popOverMenu: {
-    '& .MuiList-padding': {
-      padding: 0
-    }
-  },
-  logoutButton: {
-    justifyContent: 'center'
+import { SASContext } from '../context/sasContext'
+
+const Root = styled('div')({ flexGrow: 1 })
+
+const StyledTabs = styled(Tabs)(({ theme }) => ({
+  '& .MuiTab-root': {
+    fontSize: '21px',
+    color: theme.palette.primary.contrastText
   }
 }))
 
-const Main = (props) => {
+const StyledMenu = styled(Menu)({
+  '& .MuiList-padding': {
+    padding: 0
+  }
+})
+
+const Main = () => {
   const navigate = useNavigate()
   const sasContext = useContext(SASContext)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -61,9 +50,6 @@ const Main = (props) => {
   useEffect(() => {
     setTabValue(pathname)
   }, [pathname])
-
-  const classes = useStyles()
-  const open = Boolean(anchorEl)
 
   useEffect(() => {
     sasContext.sasService.setDebugState(debug)
@@ -89,23 +75,20 @@ const Main = (props) => {
 
   return (
     <>
-      <div className={classes.root}>
+      <Root>
         <AppBar position="static">
           <Toolbar variant="dense">
             <img
               src="logo-white.png"
               alt="logo"
-              style={{
-                width: '50px',
-                cursor: 'pointer',
-                marginRight: '25px'
-              }}
+              style={{ width: '50px', cursor: 'pointer', marginRight: '25px' }}
               onClick={() => navigate('/home')}
             />
-            <Tabs
+            <StyledTabs
               value={tabValue}
               onChange={handleTabChange}
-              className={classes.tabs}
+              indicatorColor="secondary"
+              textColor="secondary"
             >
               <Tab label="Home" value="/home" to="/home" component={Link} />
               <Tab label="Demo" value="/demo" to="/demo" component={Link} />
@@ -115,11 +98,11 @@ const Main = (props) => {
                 to="/file-uploader"
                 component={Link}
               />
-            </Tabs>
+            </StyledTabs>
             <div
               style={{
                 display: 'flex',
-                flexGrow: '1',
+                flexGrow: 1,
                 justifyContent: 'flex-end'
               }}
             >
@@ -127,23 +110,15 @@ const Main = (props) => {
                 userName={sasContext.fullName || sasContext.userName}
                 avatarContent={sasContext.avatarContent}
                 onClickHandler={handleMenu}
-                className={classes.title}
+                sx={{ color: 'white', padding: '0 8px' }}
               />
-              <Menu
-                className={classes.popOverMenu}
+              <StyledMenu
                 id="menu-appbar"
                 anchorEl={anchorEl}
-                getContentAnchorEl={null}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'center'
-                }}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                 keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'center'
-                }}
-                open={open}
+                transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+                open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
                 <MenuItem>
@@ -158,11 +133,9 @@ const Main = (props) => {
                     }
                     label="Debug"
                     labelPlacement="start"
-                  ></FormControlLabel>
+                  />
                 </MenuItem>
-
                 <Divider variant="middle" />
-
                 <MenuItem onClick={() => setIsModalOpen(true)}>
                   Requests
                 </MenuItem>
@@ -173,27 +146,26 @@ const Main = (props) => {
                 {sasContext.isUserLoggedIn && (
                   <MenuItem
                     onClick={sasContext.logout}
-                    className={classes.logoutButton}
+                    sx={{ justifyContent: 'center' }}
                   >
                     <Button variant="contained" color="primary">
                       Logout
                     </Button>
                   </MenuItem>
                 )}
-              </Menu>
+              </StyledMenu>
             </div>
           </Toolbar>
         </AppBar>
         <Outlet />
-
         <RequestModal
           programLogs={sasContext.sasService.getSasRequests()}
           sasjsConfig={sasContext.sasService.getSasjsConfig()}
           isModalOpen={isModalOpen}
           handleClose={handleClose}
-          open={open}
+          open={Boolean(anchorEl)}
         />
-      </div>
+      </Root>
       {!(
         document.querySelector('sasjs')?.getAttribute('loginMechanism') ===
           'Redirected' ||
