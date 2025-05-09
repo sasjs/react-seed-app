@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/sasjs/react-seed-app/compare/v1.5.0...v1.5.1) (2025-05-09)
+
+
+### Bug Fixes
+
+* versions bump ([77249cc](https://github.com/sasjs/react-seed-app/commit/77249cca01666bcb668b5930cc0cc2a8562641fd))
+
 # [1.5.0](https://github.com/sasjs/react-seed-app/compare/v1.4.5...v1.5.0) (2023-08-08)
 
 
