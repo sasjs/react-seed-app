@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/sasjs/react-seed-app/compare/v1.5.1...v1.6.0) (2025-07-14)
+
+
+### Features
+
+* adding npm audit ([0289461](https://github.com/sasjs/react-seed-app/commit/0289461059fff08d19e28b0970b896f067e10e6c))
+
 ## [1.5.1](https://github.com/sasjs/react-seed-app/compare/v1.5.0...v1.5.1) (2025-05-09)
 
 
