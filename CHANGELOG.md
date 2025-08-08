@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/sasjs/react-seed-app/compare/v1.6.0...v1.6.1) (2025-08-08)
+
+
+### Bug Fixes
+
+* adapter and webpack bump ([9c39e41](https://github.com/sasjs/react-seed-app/commit/9c39e4145dfc7d894043f2f1ecb937e67c88cca9))
+
 # [1.6.0](https://github.com/sasjs/react-seed-app/compare/v1.5.1...v1.6.0) (2025-07-14)
 
 
