@@ -28,7 +28,7 @@
     "@mui/material": "^5.16.7",
     "@mui/styles": "^6.4.8",
     "@mui/x-tree-view": "^6.17.0",
-    "@sasjs/adapter": "4.12.2",
+    "@sasjs/adapter": "^4.14.0",
     "@sasjs/core": "4.56.1",
     "@sasjs/utils": "3.5.2",
     "axios": "^1.12.2",
