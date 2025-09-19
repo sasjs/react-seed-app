@@ -1,3 +1,12 @@
+## [1.6.2](https://github.com/sasjs/react-seed-app/compare/v1.6.1...v1.6.2) (2025-09-19)
+
+
+### Bug Fixes
+
+* **deps:** bump @sasjs/adapter ([235475b](https://github.com/sasjs/react-seed-app/commit/235475b7e83228c11127713167e78590bf291556))
+* **deps:** bump @sasjs/cli ([781fcf5](https://github.com/sasjs/react-seed-app/commit/781fcf578b18cef374375bffd059f6d2cf609ab1))
+* **deps:** bump axios ([20fa2f7](https://github.com/sasjs/react-seed-app/commit/20fa2f74e0e22a747f558681de265d99bf952c51))
+
 ## [1.6.1](https://github.com/sasjs/react-seed-app/compare/v1.6.0...v1.6.1) (2025-08-08)
 
 
