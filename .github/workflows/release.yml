@@ -24,8 +24,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm install
-          npm install --location=global @sasjs/cli
+          npm ci --ignore-scripts
         env:
           CI: true
 
@@ -48,11 +47,6 @@ jobs:
           npx sasjs cb -t server
           cp ./sasjsbuild/server.json.zip ./artefacts/server.json.zip
 
-      - name: Install Semantic Release and plugins
-        run: |
-          npm i
-          npm i -g semantic-release
-
       - name: Release
         run: |
-          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} semantic-release
+          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} npx semantic-release
