@@ -1,3 +1,10 @@
+## [1.6.3](https://github.com/sasjs/react-seed-app/compare/v1.6.2...v1.6.3) (2025-11-25)
+
+
+### Bug Fixes
+
+* bump to @sasjs/adapter 4.16.0, @sasjs/core 4.59.7 and @sasjs/cli 4.12.14 ([060d999](https://github.com/sasjs/react-seed-app/commit/060d99938a0d2569735d36ad55af7cf3f0a3f811))
+
 ## [1.6.2](https://github.com/sasjs/react-seed-app/compare/v1.6.1...v1.6.2) (2025-09-19)
 
 
