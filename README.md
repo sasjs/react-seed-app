@@ -8,6 +8,16 @@
 
 This React seed app provides a wrapper for `@sasjs/adapter`, a lightning fast adapter for talking to SAS - on Viya, EBI, or SASjs Server.
 
+## Quick Deploy (Compiled App) on SAS Viya
+
+Just run the following in SAS Studio:
+
+```sas
+%let apploc=/Users/&sysuserid/ReactSeedApp; /* desired SAS Drive location */
+filename rsa url "https://github.com/sasjs/react-seed-app/releases/latest/download/viya.sas";
+%inc rsa;
+```
+
 ## Frontend Web
 
 These are the minimal steps to get up and running:
