@@ -30,7 +30,15 @@
       "serverUrl": "https://azureuse011059.my-trials.sas.com/",
       "serverType": "SASVIYA",
       "appLoc": "/Public/app/react-seed-app",
-      "contextName": "SAS Job Execution compute context"
+      "contextName": "SAS Job Execution compute context",
+      "streamConfig": {
+        "streamWeb": true,
+        "streamWebFolder": "web",
+        "webSourcePath": "build",
+        "streamLogo": "logo512.png",
+        "streamServiceName": "React",
+        "assetPaths": []
+      }
     },
     {
       "name": "server",
