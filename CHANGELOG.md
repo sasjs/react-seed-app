@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/sasjs/react-seed-app/compare/v1.6.4...v1.7.0) (2026-04-29)
+
+
+### Features
+
+* viya web build ([c1e1c4d](https://github.com/sasjs/react-seed-app/commit/c1e1c4d1b57a4edb8cb1924f562a50127fc44083))
+
 ## [1.6.4](https://github.com/sasjs/react-seed-app/compare/v1.6.3...v1.6.4) (2026-04-29)
 
 
