@@ -1,3 +1,11 @@
+## [1.6.4](https://github.com/sasjs/react-seed-app/compare/v1.6.3...v1.6.4) (2026-04-29)
+
+
+### Bug Fixes
+
+* **build:** rebuild package-lock.json with node v24 ([bf5ea0e](https://github.com/sasjs/react-seed-app/commit/bf5ea0efa66e2ca5b9ca1b1a126fe00c1e2e9113))
+* **deps:** pinned axios 1.15.0, updated [@sasjs](https://github.com/sasjs) deps ([d29ab8b](https://github.com/sasjs/react-seed-app/commit/d29ab8b30339527d9226fe30872bf5f71fd8a533))
+
 ## [1.6.3](https://github.com/sasjs/react-seed-app/compare/v1.6.2...v1.6.3) (2025-11-25)
 
 
