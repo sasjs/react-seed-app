@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/sasjs/react-seed-app/compare/v1.7.0...v1.7.1) (2026-04-29)
+
+
+### Bug Fixes
+
+* cli bump ([635f361](https://github.com/sasjs/react-seed-app/commit/635f3619c53b36e6848a8cc24c0bee6c0dc028e7))
+
 # [1.7.0](https://github.com/sasjs/react-seed-app/compare/v1.6.4...v1.7.0) (2026-04-29)
 
 
