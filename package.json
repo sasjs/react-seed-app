@@ -30,7 +30,7 @@
     "@mui/x-tree-view": "^6.17.0",
     "@sasjs/adapter": "^4.16.7",
     "@sasjs/core": "^4.65.5",
-    "@sasjs/utils": "3.5.7",
+    "@sasjs/utils": "^3.5.8",
     "axios": "1.16.0",
     "moment": "^2.29.1",
     "react": "^18.3.1",
