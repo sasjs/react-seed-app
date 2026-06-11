@@ -1,0 +1,19 @@
+{
+  "_captured_at": "2026-06-11T18:51:36.262210+00:00",
+  "_captured_run_id": "r_019eb80626037460b23beb88674578a0",
+  "status": "ok",
+  "exit_code": 0,
+  "log_contains": [
+    "NOTE: Wrote mydb.springs (1587 rows, 7 columns).",
+    "NOTE: Wrote work.sel_areas (5 rows, 1 columns).",
+    "NOTE: Table springs created."
+  ],
+  "log_does_not_contain": [
+    "ERROR:",
+    "[JENNER-ERROR"
+  ],
+  "diagnostics": {
+    "parse_warnings": [],
+    "runtime_warnings": []
+  }
+}

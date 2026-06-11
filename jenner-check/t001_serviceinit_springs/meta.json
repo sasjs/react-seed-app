@@ -1,0 +1,8 @@
+{
+  "bundle": "t001_serviceinit_springs",
+  "source_file": "sasjs/services/serviceinit.sas",
+  "source_blob_sha": "07dc8a6e20a6ef757d512dfb05a7cf4b6d1e563c",
+  "source_commit": "97367443d27df06064d01d298db02e847bab385f",
+  "tier": "real_data",
+  "notes": "Their service-init DATA step builds mydb.springs (1587 rows of US geothermal-springs DATALINES4) verbatim. One line substituted: `libname mydb (work);` (SAS library-concatenation alias for WORK) -> `libname mydb \".\";` so the WORK-backed libref resolves. Added a PROC SQL group-by + PROC PRINT to surface the load (the SASjs app ships this dataset to the frontend via %webout JSON instead)."
+}

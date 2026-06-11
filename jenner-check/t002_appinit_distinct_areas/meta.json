@@ -1,0 +1,8 @@
+{
+  "bundle": "t002_appinit_distinct_areas",
+  "source_file": "sasjs/services/common/appinit.sas",
+  "source_blob_sha": "b69ebef2f73d1d6fd6620eeecd8b7b3c16de38d5",
+  "source_commit": "97367443d27df06064d01d298db02e847bab385f",
+  "tier": "real_data",
+  "notes": "appinit service: `select distinct area from mydb.springs`. Adaptations: %webout JSON calls (SASjs adapter runtime) replaced with PROC PRINT; output table renamed `areas`->`app_areas` (SELECT DISTINCT unchanged). autoexec runs the configured initProgram serviceinit.sas to build mydb.springs, as the app does."
+}

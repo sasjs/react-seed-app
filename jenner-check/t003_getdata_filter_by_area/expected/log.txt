@@ -1,0 +1,31 @@
+Jenner 0.1.0 (Unlicensed - limited to 100 observations)
+Get a license at https://jenneranalytics.com/license
+
+NOTE: Option OBS changed to 100.
+NOTE: Library MYDB assigned path=..
+NOTE: DATA mydb.springs
+
+NOTE: Processing inline DATALINES (1587 lines)
+
+NOTE: Read 1587 rows from DATALINES.
+NOTE: Wrote mydb.springs (1587 rows, 7 columns).
+NOTE: DATA elapsed:
+  wall  0.01 seconds
+  cpu   0.01 seconds
+NOTE: DATA work.sel_areas
+
+NOTE: Processing inline DATALINES (5 lines)
+
+NOTE: Read 5 rows from DATALINES.
+NOTE: Wrote work.sel_areas (5 rows, 1 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: PROC SQL 
+
+NOTE: Table springs created.
+NOTE: PROC SQL statement used.
+NOTE: Option TITLE changed to getdata service: springs filtered to selected areas.
+NOTE: PROC PRINT data=springs
+
+NOTE: PROC PRINT completed: 15 observations printed, 7 variables

@@ -1,0 +1,18 @@
+                                           Springs loaded by Area (top rows)                                            
+
+
+        AREA  N_SPRINGS
+------------  ---------
+Ashton              139
+Challis              65
+Hailey               50
+Winnemucca           41
+Death Valley         38
+Santa Rosa           36
+Vya                  28
+Reno                 28
+Mariposa             24
+Alturas              24
+
+... 90 more observations (showing 10 of 100)
+

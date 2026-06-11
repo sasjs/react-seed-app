@@ -1,0 +1,23 @@
+                                            appinit service: distinct areas                                             
+
+
+          AREA
+--------------
+Adak
+Bendeleben
+Unalaska
+Atka
+Seguam
+Samalga Island
+Rat Islands
+Gareloi Island
+Umnak
+False Pass
+Ketchikan
+Unimak
+Mt. Fairweathe
+Ugashik
+Melozitna
+
+... 85 more observations (showing 15 of 100)
+

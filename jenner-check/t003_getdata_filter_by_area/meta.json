@@ -1,0 +1,8 @@
+{
+  "bundle": "t003_getdata_filter_by_area",
+  "source_file": "sasjs/services/common/getdata.sas",
+  "source_blob_sha": "ba813ba80e424ed9067c1198f8999b39c57eae44",
+  "source_commit": "97367443d27df06064d01d298db02e847bab385f",
+  "tier": "real_data",
+  "notes": "getdata service: `select * from mydb.springs where area in (select area from work.areas)`. Adaptations: %webout(FETCH) input table mocked as work.sel_areas (5 selected areas); %webout JSON output replaced with PROC PRINT; the work table renamed areas->sel_areas. The WHERE...IN subquery filter is unchanged. autoexec runs serviceinit.sas to build mydb.springs."
+}

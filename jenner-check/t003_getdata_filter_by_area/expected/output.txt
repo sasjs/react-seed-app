@@ -1,0 +1,23 @@
+                                  getdata service: springs filtered to selected areas                                   
+
+
+  Obs  LATITUDE  LONGITUDE                                NAME       AREA       TYPE  FARENHEIT  CELSIUS
+-----  --------  ---------  ----------------------------------  ---------  ---------  ---------  -------
+    1    65.233   -144.483  Hot Springs on Big Windy Creek      Circle     Hotspring  H          H
+    2     65.45       -150  Hot Spring Near Little Minook Cr    Tanana     Hotspring  H          H
+    3    65.216   -149.993  Hutlinana Hot Springs               Livengood  Hotspring  109        43
+    4    57.085   -134.839  Baranof Warm Springs                Sitka      Hotspring  124        51
+    5     65.81   -151.237  Kilo Hot Spring                     Tanana     Hotspring  122        50
+    6    57.644   -135.333  Nylen Hot Springs                   Sitka      Hotspring  120        49
+    7    65.963   -150.919  Ray River Hot Spring                Tanana     Hotspring  117        47
+    8    57.807   -136.341  White Sulphur Springs (Hooniah H S  Sitka      Hotspring  111        44
+    9    57.781   -135.217  Tenakee Hot Springs                 Sitka      Hotspring  109        43
+   10    57.771    -135.82  Hot Spring North Arm Peril Strait   Sitka      Hotspring  100        38
+   11    57.348   -135.385  Hot Spring Near Fish Bay            Sitka      Hotspring  117        47
+   12    65.983    -150.56  Hot Springs on Lower Ray River      Tanana     Hotspring  142        61
+   13    65.053   -146.057  Chena Hot Springs                   Circle     Hotspring  153        67
+   14    65.274   -148.847  Tolovana Hot Springs                Livengood  Hotspring  140        60
+   15    65.483   -144.637  Circle Hot Springs                  Circle     Hotspring  135        57
+
+... 39 more observations (showing 15 of 54)
+

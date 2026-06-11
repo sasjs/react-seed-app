@@ -1,0 +1,20 @@
+{
+  "_captured_at": "2026-06-11T18:43:21.207347+00:00",
+  "_captured_run_id": "r_019eb7fe877a71a18e5c3d4e24ba8de0",
+  "status": "ok",
+  "exit_code": 0,
+  "log_contains": [
+    "NOTE: Library MYDB assigned",
+    "NOTE: Read 1587 rows from DATALINES.",
+    "NOTE: Wrote mydb.springs (1587 rows, 7 columns).",
+    "NOTE: Table area_counts created."
+  ],
+  "log_does_not_contain": [
+    "ERROR:",
+    "[JENNER-ERROR"
+  ],
+  "diagnostics": {
+    "parse_warnings": [],
+    "runtime_warnings": []
+  }
+}
