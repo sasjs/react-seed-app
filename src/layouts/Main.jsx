@@ -137,7 +137,7 @@ const Main = () => {
                 </MenuItem>
                 <Divider variant="middle" />
                 <MenuItem onClick={() => setIsModalOpen(true)}>
-                  Requests
+                  SAS logs
                 </MenuItem>
                 <MenuItem onClick={() => openInNewTab('https://sasjs.io/')}>
                   Documentation
