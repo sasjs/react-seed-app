@@ -1,11 +1,9 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import './index.scss'
 import './App.scss'
 import routes from './routes'
 
-const render = () => {
-  ReactDOM.render(<>{routes}</>, document.getElementById('root'))
-}
+const container = document.getElementById('root')
 
-render()
+if (container) createRoot(container).render(<>{routes}</>)

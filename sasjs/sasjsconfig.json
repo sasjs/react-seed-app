@@ -1,5 +1,6 @@
 {
   "$schema": "https://cli.sasjs.io/sasjsconfig-schema.json",
+  "syncFolder": "sasjs/mocks",
   "docConfig": {
     "enableLineage": true,
     "doxyContent": {
@@ -76,6 +77,18 @@
       "serverType": "SASJS",
       "serverUrl": "http://localhost:5000",
       "appLoc": "/Public/app/react-seed-app"
+    },
+    {
+      "name": "mock",
+      "serverUrl": "",
+      "serverType": "SASJS",
+      "appLoc": "/Public/app/react-seed-app",
+      "streamConfig": {
+        "mockWeb": true,
+        "mockWebFolder": "sasjsbuild/mock",
+        "streamWeb": false,
+        "webSourcePath": "build"
+      }
     }
   ]
 }

@@ -50,7 +50,7 @@ const HomePageComponent = () => {
       </Typography>
 
       {links.map(({ label, url }) => (
-        <Box key={url} mt={2}>
+        <Box key={url} sx={{ mt: 2 }}>
           <Typography>
             {label}:{' '}
             <StyledLink href={url} target="_blank" rel="noopener noreferrer">

@@ -10,7 +10,7 @@ import React, {
 import SASjs, { SASjsConfig } from '@sasjs/adapter'
 import axios from 'axios'
 import { ServerType } from '@sasjs/utils/types'
-import { LoginResult } from '@sasjs/adapter/types/Login'
+import { LoginResult } from '@sasjs/adapter'
 
 interface SASContextProps {
   isUserLoggedIn: boolean
@@ -99,7 +99,7 @@ const SASProvider = (props: { children: ReactNode }) => {
       })
   }, [])
 
-  const login = useCallback(async (username, password) => {
+  const login = useCallback(async (username: string, password: string) => {
     return sasService
       .logIn(username, password)
       .then(
@@ -130,7 +130,7 @@ const SASProvider = (props: { children: ReactNode }) => {
     })
   }, [])
 
-  const request = useCallback(({ url, data }) => {
+  const request = useCallback(({ url, data }: { url: string; data: any }) => {
     return sasService.request(url, data, {}, () => setIsUserLoggedIn(false))
   }, [])
 

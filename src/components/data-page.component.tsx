@@ -21,7 +21,7 @@ import { getAbortModalPayload } from '../utils'
 import AbortModal from './abortModal'
 
 function usePrevious(value: any) {
-  const ref = useRef()
+  const ref = useRef<any>(undefined)
   useEffect(() => {
     ref.current = value
   })
@@ -42,7 +42,7 @@ const DataPageComponent = () => {
   )
 
   const executeRequest = useCallback(
-    (request) => {
+    (request: { url: string; data: any }) => {
       if (request) {
         setIsLoading(true)
         if (sasContext.request) {

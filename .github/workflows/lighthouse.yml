@@ -1,0 +1,85 @@
+# Measures the frontend build and posts the scores on the pull request, so a
+# performance regression is visible where the change is reviewed rather than in
+# a job log nobody opens.
+#
+# The artefact measured is `build/` - what a deployment serves - and not the mock
+# site, whose host reloads the page once while its service worker takes control;
+# an audit cannot survive a navigation underneath it. Three runs per page, the
+# median reported.
+name: Lighthouse
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lighthouse-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lighthouse:
+    name: Lighthouse scores
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build the frontend
+        run: npm run build
+
+      # the artefact a deployment serves, served here as static files
+      - name: Serve the build
+        run: |
+          python3 -m http.server 4173 --directory build &
+          for i in $(seq 1 30); do
+            curl -sf http://127.0.0.1:4173/ > /dev/null && exit 0
+            sleep 1
+          done
+          echo 'the build did not start' >&2
+          exit 1
+
+      - name: Measure
+        run: |
+          for i in 1 2 3; do
+            echo "run $i"
+            npx --yes lighthouse@12 http://127.0.0.1:4173/ --quiet \
+              --only-categories=performance,accessibility,best-practices,seo \
+              --chrome-flags="--headless=new --no-sandbox --disable-gpu" \
+              --output=json --output-path="lighthouse-$i.json"
+          done
+
+          node scripts/lighthouse-summary.js \
+            /=lighthouse-1.json /=lighthouse-2.json /=lighthouse-3.json \
+            > lighthouse-summary.md
+
+      - name: Post the scores on the pull request
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          if [ ! -s lighthouse-summary.md ]; then
+            printf '<!-- lighthouse-scores -->\n## Lighthouse - no scores\n\nThe measurement produced no report; check the "Measure" step of this job for the reason.\n' > lighthouse-summary.md
+          fi
+
+          ID=$(gh api "repos/$REPO/issues/$PR/comments" \
+            --jq '[.[] | select(.body | startswith("<!-- lighthouse-scores -->")) | .id] | first // empty' \
+            || true)
+
+          if [ -n "$ID" ]; then
+            gh api -X PATCH "repos/$REPO/issues/comments/$ID" -F body=@lighthouse-summary.md > /dev/null
+          else
+            gh api -X POST "repos/$REPO/issues/$PR/comments" -F body=@lighthouse-summary.md > /dev/null
+          fi

@@ -1,0 +1,74 @@
+# Publishes the mock site: the app plus the browser-hosted backend, so the seed
+# app can be looked at - and used - without a SAS licence, a server or a
+# checkout.
+#
+# One-time repository setting, which a workflow cannot make for itself:
+# Settings -> Pages -> Build and deployment -> Source: GitHub Actions. Until that
+# is set the deploy job is where it fails, naming this - the build job is
+# unaffected. Add a custom domain by putting a CNAME file in the published
+# folder (see sasjs/minimal-seed-app for the shape).
+name: Publish the mock site
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mock-site
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build the mock site
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run lint
+
+      - run: npm run check:data
+
+      # the frontend build, the compile of the services, and the site that
+      # wraps them in a service-worker host
+      - run: npm run mock:build
+
+      - run: npm run test:mock
+
+      - name: Add .nojekyll
+        run: touch sasjsbuild/mock/.nojekyll
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: sasjsbuild/mock
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v5
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

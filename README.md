@@ -30,6 +30,36 @@ These are the minimal steps to get up and running:
 
 If you are running locally you will also need to whitelist `localhost` on the server, or enable CORS in your browser as described [here](https://sasjs.io/cors)
 
+## Running without SAS (the mock build)
+
+The app also runs with no SAS at all. `npm run mock:build` builds the frontend,
+compiles the services, and wraps the result in a service-worker host that
+answers the SASjs API in the browser - the same @sasjs/api routes a SASjs Server
+answers - so every screen can be used, and every service called, without a
+licence, a server or a login:
+
+```bash
+npm run mock:build   # frontend + compile + mock site, in sasjsbuild/mock
+npm run mock:start   # serve it at http://localhost:3001
+```
+
+What makes that work:
+
+* the `mock` target in `sasjs/sasjsconfig.json` (`streamConfig.mockWeb`) points
+  the build at the frontend output (`build/`);
+* `sasjs/mocks` holds the JavaScript twin of each service, mirroring the service
+  folders, and `syncFolder` in the config puts them on the mock drive beside the
+  compiled `.sas` - a request for `services/common/getdata` finds `getdata.js`
+  and runs it in the browser;
+* `sasjs/mocks/services/common/springs.json` is generated from the `datalines4`
+  block in `sasjs/services/serviceinit.sas` by `node scripts/springs-data.js`, so
+  the mock's data and the SAS service's data cannot drift. `npm run check:data`
+  (what CI runs) fails when they have.
+
+`npm run test:mock` boots the built site's worker in node and calls appinit,
+getdata and upload, so a build that produces files but answers nothing fails in
+CI rather than in a visitor's browser.
+
 ## Backend Services
 
 The best way to deploy SAS services is using the [SASjs CLI](https://cli.sasjs.io). Simply [install](https://cli.sasjs.io/installation/), update the `defaultTarget` attribute in the [sasjsconfig.json](https://github.com/sasjs/react-seed-app/blob/main/sasjs/sasjsconfig.json) file, and run the following commands:
@@ -76,12 +106,19 @@ It will not work on SAS University edition.
 
 ## Backend Services in JavaScript
 
-If you are writing services in JS and your service depends on any third party library/package then you need to bundle that service before deploying it to sasjs server otherwise the service wouldn't work. You can choose any bundler for this process. One possible option could be `webpack`. And if you choose webpack then you can use it like:<br/>
-`npx webpack --mode none --target node --entry <path-of-file-to-bundle/build> --output-path <path-of-output-folder> --output-filename <name-of-output-file>`
-<br/>
+A service can be written in JavaScript instead of SAS - the browser mock build
+runs them, and a SASjs Server target can be deployed with them. They live in
+`sasjs/mocks`, mirroring the service tree (`sasjs/mocks/services/common/appinit.js`
+is the twin of `sasjs/services/common/appinit.sas`), and the CLI copies them into
+the build through the `syncFolder` setting in `sasjs/sasjsconfig.json`.
 
-In our case we have a mock service at path `sasjs/mocks/appinit.js` and we want to build and make it ready for deployment. So, we have to run following in terminal:<br/>
-`npx webpack --mode none --target node --entry ./sasjs/mocks/appinit.js --output-path sasjsbuild/mocks --output-filename appinit.js`
+A JavaScript service is called with the same inputs the SAS one receives: the
+uploaded tables as `_WEBIN_NAME<n>` / `_WEBIN_FILEREF<n>`, the request parameters
+as consts, and the `webout()` block to answer with (`webout('OPEN')`,
+`webout('OBJ', 'name', rows)`, `webout('CLOSE')`).
+
+If such a service requires a third-party package, bundle it before deploying to a
+SASjs Server target, which does not install dependencies for you.
 
 ### Code Style
 
