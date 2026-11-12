@@ -3,13 +3,13 @@ import React, { useMemo, useRef } from 'react'
 
 import {
   Accordion,
+  Box,
   AccordionDetails,
   AccordionSummary,
   Chip,
   Dialog,
   DialogContent,
   DialogTitle,
-  Grid,
   IconButton,
   List,
   ListItemButton,
@@ -223,7 +223,16 @@ const RequestModal: React.FC<RequestModalProps> = ({
   const cutAppLoc = (link: string) =>
     String(link || '').replace(`${sasjsConfig.appLoc}/`, '')
 
+  /* Compact, because the full form - "Thursday, November 12th 2026, 5:50:08 pm
+   * (a few seconds ago)" - is three times the width of the service name and is
+   * what wrapped each header onto a second line. The long form is still there on
+   * hover, where it costs no height. */
   const when = (timestamp: string) => {
+    const parsed = moment(timestamp)
+    return parsed.isValid() ? parsed.format('D MMM YYYY, HH:mm:ss') : timestamp
+  }
+
+  const whenInFull = (timestamp: string) => {
     const parsed = moment(timestamp)
     return parsed.isValid()
       ? `${parsed.format('dddd, MMMM Do YYYY, h:mm:ss a')} (${parsed.fromNow()})`
@@ -336,90 +345,84 @@ const RequestModal: React.FC<RequestModalProps> = ({
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls={`log-${index}-content`}
+                    // one row, and a tighter one than the default 48px: a
+                    // request is a line in a list, not a section heading
+                    sx={{
+                      minHeight: 44,
+                      // MUI raises the expanded summary to 64px on its own, which
+                      // is the row the eye is on: keep every row the same height
+                      '&.Mui-expanded': { minHeight: 44 },
+                      // and its content keeps 20px above and below when open,
+                      // which is the rest of the 70px: the collapsed margin wins
+                      '&.Mui-expanded .MuiAccordionSummary-content': {
+                        margin: '6px 0'
+                      },
+                      '& .MuiAccordionSummary-content': {
+                        alignItems: 'center',
+                        gap: 1,
+                        my: 0.75,
+                        flexWrap: 'wrap'
+                      }
+                    }}
                   >
-                    <Grid
-                      container
-                      spacing={2}
-                      style={{ alignItems: 'center' }}
+                    <Heading variant="subtitle1" sx={{ mr: 0.5 }}>
+                      {cutAppLoc(log.serviceLink)}
+                    </Heading>
+                    {log.errors.length > 0 && (
+                      <Chip
+                        size="small"
+                        color="error"
+                        icon={<ErrorIcon />}
+                        label={`${log.errors.length} error${
+                          log.errors.length === 1 ? '' : 's'
+                        }`}
+                      />
+                    )}
+                    {log.warnings.length > 0 && (
+                      <Chip
+                        size="small"
+                        color="warning"
+                        icon={<WarningIcon />}
+                        label={`${log.warnings.length} warning${
+                          log.warnings.length === 1 ? '' : 's'
+                        }`}
+                      />
+                    )}
+                    {log.notes.length > 0 && (
+                      <Chip
+                        size="small"
+                        icon={<InfoIcon />}
+                        label={`${log.notes.length} note${
+                          log.notes.length === 1 ? '' : 's'
+                        }`}
+                      />
+                    )}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1,
+                        ml: 'auto'
+                      }}
                     >
-                      <Grid size={{ xs: 12, sm: 6 }}>
-                        <Grid
-                          container
-                          spacing={1}
-                          style={{ alignItems: 'center' }}
-                        >
-                          <Grid size="auto">
-                            <Heading variant="h6">
-                              {cutAppLoc(log.serviceLink)}
-                            </Heading>
-                          </Grid>
-                          {log.errors.length > 0 && (
-                            <Grid size="auto">
-                              <Chip
-                                size="small"
-                                color="error"
-                                icon={<ErrorIcon />}
-                                label={`${log.errors.length} error${
-                                  log.errors.length === 1 ? '' : 's'
-                                }`}
-                              />
-                            </Grid>
-                          )}
-                          {log.warnings.length > 0 && (
-                            <Grid size="auto">
-                              <Chip
-                                size="small"
-                                color="warning"
-                                icon={<WarningIcon />}
-                                label={`${log.warnings.length} warning${
-                                  log.warnings.length === 1 ? '' : 's'
-                                }`}
-                              />
-                            </Grid>
-                          )}
-                          {log.notes.length > 0 && (
-                            <Grid size="auto">
-                              <Chip
-                                size="small"
-                                icon={<InfoIcon />}
-                                label={`${log.notes.length} note${
-                                  log.notes.length === 1 ? '' : 's'
-                                }`}
-                              />
-                            </Grid>
-                          )}
-                        </Grid>
-                      </Grid>
-                      <Grid size={{ xs: 12, sm: 6 }}>
-                        <Grid
-                          container
-                          spacing={1}
-                          style={{
-                            alignItems: 'center',
-                            justifyContent: 'flex-end'
+                      <Tooltip title={whenInFull(log.timestamp)}>
+                        <SecondaryHeading variant="body2">
+                          {when(log.timestamp)}
+                        </SecondaryHeading>
+                      </Tooltip>
+                      <Tooltip title="Download the log">
+                        <IconButton
+                          size="small"
+                          sx={{ color: 'primary.main' }}
+                          onClick={(event) => {
+                            event.stopPropagation()
+                            download(log.logFile || '', 'sas-log')
                           }}
                         >
-                          <Grid size="auto">
-                            <SecondaryHeading variant="body2">
-                              {when(log.timestamp)}
-                            </SecondaryHeading>
-                          </Grid>
-                          <Grid size="auto">
-                            <Tooltip title="Download the log">
-                              <IconButton
-                                style={{ color: 'blue' }}
-                                onClick={(event) => {
-                                  event.stopPropagation()
-                                  download(log.logFile || '', 'sas-log')
-                                }}
-                              >
-                                <GetAppIcon />
-                              </IconButton>
-                            </Tooltip>
-                          </Grid>
-                        </Grid>
-                      </Grid>
-                    </Grid>
+                          <GetAppIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
                   </AccordionSummary>
 
                   <AccordionDetails>
