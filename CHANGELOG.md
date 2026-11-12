@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/sasjs/react-seed-app/compare/v1.7.2...v1.8.0) (2026-11-12)
+
+
+### Features
+
+* **mock:** run the app against a browser-hosted backend, and check it in CI ([5526d05](https://github.com/sasjs/react-seed-app/commit/5526d05c76a91617892c42aebd226ee4dc96a13c))
+
 ## [1.7.2](https://github.com/sasjs/react-seed-app/compare/v1.7.1...v1.7.2) (2026-05-08)
 
 
