@@ -1,15 +1,18 @@
 import moment from 'moment'
-import React from 'react'
+import React, { useMemo, useRef } from 'react'
 
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Chip,
   Dialog,
   DialogContent,
   DialogTitle,
-  Accordion,
-  AccordionSummary,
   Grid,
   IconButton,
-  ListItem,
+  List,
+  ListItemButton,
   ListItemText,
   Tab,
   Tabs,
@@ -17,31 +20,27 @@ import {
   Typography
 } from '@mui/material'
 
-import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import CloseIcon from '@mui/icons-material/Close'
-import ErrorOutlinedIcon from '@mui/icons-material/ErrorOutlined'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import GetAppIcon from '@mui/icons-material/GetApp'
-import WarningIcon from '@mui/icons-material/Warning'
-
-import { SimpleTreeView, TreeItem } from '@mui/x-tree-view'
+import ErrorIcon from '@mui/icons-material/ErrorOutlined'
+import InfoIcon from '@mui/icons-material/InfoOutlined'
+import WarningIcon from '@mui/icons-material/WarningAmber'
 
 import { styled, useTheme, Theme } from '@mui/material/styles'
+
+import { LogIssue, parseLog } from '@sasjs/utils/logs'
 
 import Highlight from 'react-highlight'
 import './syntax-highlighting.css'
 
-import ResizableBox from './resizeableBox'
-
 // Define interfaces for props and state
 interface ProgramLog {
   logFile?: string
-  logErrors?: string[]
-  logWarnings?: string[]
-  serviceLink: string
-  timestamp: string
   sourceCode?: string
   generatedCode?: string
+  serviceLink: string
+  timestamp: string
   [key: string]: any // Allow additional properties
 }
 
@@ -58,33 +57,32 @@ interface RequestModalProps {
   open: boolean
 }
 
+/** A request with its log read once: the issues SAS wrote, and the log marked up. */
+interface AnalysedLog extends ProgramLog {
+  issues: LogIssue[]
+  errors: LogIssue[]
+  warnings: LogIssue[]
+  notes: LogIssue[]
+  /** The severity of each line that carries one, by zero-based line index. */
+  lineSeverity: Map<number, string>
+  /** ODS HTML logs arrive as markup; everything else is plain text. */
+  isHtml: boolean
+  logLines: number
+}
+
 // Styled components
-const AntTabs = styled(Tabs)(() => ({
-  '& .MuiTabs-root': {
-    borderBottom: '1px solid #e8e8e8'
-  },
+const SuggestionTabs = styled(Tabs)({
+  borderBottom: '1px solid #e8e8e8',
   '& .MuiTabs-indicator': {
     backgroundColor: '#1890ff'
   }
-}))
+})
 
-const AntTab = styled(Tab)(({ theme }: { theme: Theme }) => ({
+const SuggestionTab = styled(Tab)(({ theme }: { theme: Theme }) => ({
   textTransform: 'none',
   minWidth: 72,
   fontWeight: theme.typography.fontWeightRegular,
   marginRight: theme.spacing(4),
-  fontFamily: [
-    '-apple-system',
-    'BlinkMacSystemFont',
-    '"Segoe UI"',
-    'Roboto',
-    '"Helvetica Neue"',
-    'Arial',
-    'sans-serif',
-    '"Apple Color Emoji"',
-    '"Segoe UI Emoji"',
-    '"Segoe UI Symbol"'
-  ].join(','),
   '&:hover': {
     color: '#40a9ff',
     opacity: 1
@@ -103,46 +101,66 @@ const Root = styled('div')({
 })
 
 const Heading = styled(Typography)(({ theme }: { theme: Theme }) => ({
-  flexBasis: '33.33%',
-  flexShrink: 0,
-  [theme.breakpoints.down('sm')]: {
-    fontSize: theme.typography.pxToRem(12)
-  },
-  [theme.breakpoints.up('md')]: {
-    fontSize: theme.typography.pxToRem(16)
-  }
+  fontFamily: 'Monaco, Courier, monospace',
+  fontSize: theme.typography.pxToRem(15),
+  fontWeight: theme.typography.fontWeightMedium
 }))
 
 const SecondaryHeading = styled(Typography)(({ theme }: { theme: Theme }) => ({
   color: theme.palette.text.secondary,
-  [theme.breakpoints.down('sm')]: {
-    fontSize: theme.typography.pxToRem(12)
+  fontSize: theme.typography.pxToRem(13)
+}))
+
+/** The log itself: monospace, scrollable, one line per line of the log. */
+const LogPane = styled('div')(({ theme }: { theme: Theme }) => ({
+  backgroundColor: '#fbfbfb',
+  border: '1px solid #e2e2e2',
+  borderRadius: '3px',
+  padding: theme.spacing(1.5),
+  marginTop: theme.spacing(1),
+  maxHeight: '45vh',
+  overflow: 'auto',
+  whiteSpace: 'pre-wrap',
+  wordBreak: 'break-word',
+  fontFamily: 'Monaco, Courier, monospace',
+  fontSize: theme.typography.pxToRem(12),
+  lineHeight: 1.5,
+  '& .log-line-number': {
+    display: 'inline-block',
+    width: '4em',
+    marginRight: '1em',
+    color: '#9a9a9a',
+    textAlign: 'right',
+    userSelect: 'none'
   },
-  [theme.breakpoints.up('md')]: {
-    fontSize: theme.typography.pxToRem(16)
+  '& .error-line': {
+    backgroundColor: 'rgba(211, 47, 47, 0.12)',
+    display: 'block'
+  },
+  '& .warning-line': {
+    backgroundColor: 'rgba(237, 108, 2, 0.12)',
+    display: 'block'
+  },
+  '& .flashed': {
+    outline: `2px solid ${theme.palette.primary.main}`
   }
 }))
 
-const ExpansionDescription = styled(Typography)(
-  ({ theme }: { theme: Theme }) => ({
-    backgroundColor: '#fbfbfb',
-    border: '1px solid #e2e2e2',
-    borderRadius: '3px',
-    minHeight: '50px',
-    padding: '10px',
-    boxSizing: 'border-box',
-    whiteSpace: 'pre-wrap',
-    fontFamily: 'Monaco, Courier, monospace',
-    position: 'relative',
-    width: '100%',
-    [theme.breakpoints.down('sm')]: {
-      fontSize: theme.typography.pxToRem(12)
-    },
-    [theme.breakpoints.up('md')]: {
-      fontSize: theme.typography.pxToRem(16)
-    }
-  })
-)
+const IssueList = styled(List)({
+  paddingTop: 0
+})
+
+const IssueCode = styled('span')(({ theme }: { theme: Theme }) => ({
+  color: theme.palette.text.secondary,
+  fontFamily: 'Monaco, Courier, monospace',
+  marginRight: theme.spacing(1)
+}))
+
+const EmptyNote = styled(Typography)(({ theme }: { theme: Theme }) => ({
+  color: theme.palette.text.secondary,
+  fontStyle: 'italic',
+  padding: theme.spacing(1, 0)
+}))
 
 const CloseButton = styled(IconButton)(({ theme }: { theme: Theme }) => ({
   position: 'absolute',
@@ -150,62 +168,39 @@ const CloseButton = styled(IconButton)(({ theme }: { theme: Theme }) => ({
   top: theme.spacing(1)
 }))
 
-const ErrorLabel = styled(Typography)(({ theme }: { theme: Theme }) => ({
-  color: theme.palette.error.main
-}))
+/**
+ * Reads a request's log once and keeps what the modal renders: the issues SAS
+ * wrote, grouped by severity, and the log with those lines marked.
+ *
+ * `parseLog` is the parser Data Controller reads its SAS logs with, from
+ * `@sasjs/utils/logs` - so the two applications agree about what an ERROR is,
+ * which notes are notable, and where each one sits in the text. Errors and
+ * warnings are marked in the log; a notable note is not a defect, so it is not.
+ */
+const analyseLog = (request: ProgramLog): AnalysedLog => {
+  const log = typeof request.logFile === 'string' ? request.logFile : ''
+  const issues = parseLog(log)
+  const severityByLine = new Map<number, string>()
 
-const WarningLabel = styled(Typography)(({ theme }: { theme: Theme }) => ({
-  color: theme.palette.warning.main
-}))
-
-const parseErrorsAndWarnings = (req: ProgramLog): void => {
-  // Early return if req or req.logFile is undefined
-  if (!req || !req.logFile) return
-
-  // Early return if logErrors or logWarnings already exist
-  if (req.logErrors !== undefined || req.logWarnings !== undefined) return
-
-  const errorLines: string[] = []
-  const warningLines: string[] = []
-
-  const logLines: string[] = req.logFile.split('\n')
-
-  logLines.forEach((line: string, index: number) => {
-    // Check if content in element starts with ERROR
-    if (/<.*>ERROR/gm.test(line)) {
-      const errorLine: string = line.substring(
-        line.indexOf('E'),
-        line.length - 1
-      )
-      errorLines.push(errorLine)
-    }
-    // Check if line starts with ERROR
-    else if (/^ERROR/gm.test(line)) {
-      errorLines.push(line)
-      logLines[index] = `<font>${logLines[index]}</font>`
-    }
-    // Check if content in element starts with WARNING
-    else if (/<.*>WARNING/gm.test(line)) {
-      const warningLine: string = line.substring(
-        line.indexOf('W'),
-        line.length - 1
-      )
-      warningLines.push(warningLine)
-    }
-    // Check if line starts with WARNING
-    else if (/^WARNING/gm.test(line)) {
-      warningLines.push(line)
-      logLines[index] = `<font>${logLines[index]}</font>`
+  issues.forEach((issue) => {
+    if (issue.severity === 'note') return
+    for (let line = issue.line; line <= issue.endLine; line++) {
+      severityByLine.set(line, issue.severity)
     }
   })
 
-  // Update the request object
-  req.logFile = logLines.join('\n')
-  req.logErrors = errorLines
-  req.logWarnings = warningLines
+  return {
+    ...request,
+    issues,
+    errors: issues.filter((issue) => issue.severity === 'error'),
+    warnings: issues.filter((issue) => issue.severity === 'warning'),
+    notes: issues.filter((issue) => issue.severity === 'note'),
+    lineSeverity: severityByLine,
+    isHtml: /<(html|pre|font)\b/i.test(log),
+    logLines: log.split('\n').length
+  }
 }
 
-// Main component
 const RequestModal: React.FC<RequestModalProps> = ({
   programLogs,
   sasjsConfig,
@@ -214,72 +209,96 @@ const RequestModal: React.FC<RequestModalProps> = ({
   open
 }) => {
   const theme = useTheme()
+  const [expanded, setExpanded] = React.useState<number | false>(1)
+  const [tab, setTab] = React.useState(0)
+  const logRefs = useRef<Record<number, HTMLDivElement | null>>({})
 
-  const [expanded, setExpanded] = React.useState<number | false>(false)
-  const [currentTab, setTab] = React.useState<number>(0)
-
-  const decodeHtml = (encodedString: string): string => {
-    const tempElement = document.createElement('textarea')
-    tempElement.innerHTML = encodedString
-    return tempElement.value
-  }
+  const logs = useMemo(() => (programLogs || []).map(analyseLog), [programLogs])
 
   const handleChange =
     (panel: number) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : false)
     }
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    setTab(newValue)
+  const cutAppLoc = (link: string) =>
+    String(link || '').replace(`${sasjsConfig.appLoc}/`, '')
+
+  const when = (timestamp: string) => {
+    const parsed = moment(timestamp)
+    return parsed.isValid()
+      ? `${parsed.format('dddd, MMMM Do YYYY, h:mm:ss a')} (${parsed.fromNow()})`
+      : timestamp
   }
 
-  const goToLogLine = (linkingLine: string, requestIndex: number) => {
-    // Cast the result of querySelectorAll to NodeListOf<HTMLElement>
-    const allLines = document.querySelectorAll(
-      `#request_${requestIndex} font`
-    ) as NodeListOf<HTMLElement>
+  /**
+   * Scrolls the log to an issue, using the line number the parser reported
+   * rather than searching the rendered text - a log repeats its messages, so a
+   * search lands on the first of them every time.
+   */
+  const goToLogLine = (issue: LogIssue, index: number) => {
+    const wrapper = logRefs.current[index]
+    if (!wrapper) return
 
-    // Cast the result of querySelector to HTMLElement
-    const logWrapper = document.querySelector(
-      `#request_${requestIndex}`
-    ) as HTMLElement | null
-    const logContainer = document.querySelector(
-      `#log_container_${requestIndex}`
-    ) as HTMLElement | null
+    /* the parser's own line index addresses the rendered line, so nothing is
+     * searched for and nothing is estimated */
+    const line = wrapper.querySelector(`[data-line="${issue.line}"]`)
 
-    // Check if logWrapper and logContainer exist
-    if (logWrapper && logContainer) {
-      for (const line of allLines) {
-        if (line.textContent?.includes(linkingLine)) {
-          // Use HTMLElement properties
-          logWrapper.scrollTop =
-            line.offsetTop - logWrapper.offsetTop + logContainer.offsetTop
-          line.style.backgroundColor = '#f6e30599'
-
-          setTimeout(() => {
-            line.style.backgroundColor = ''
-          }, 3000)
-        }
-      }
+    if (line && line.scrollIntoView) {
+      line.scrollIntoView({ block: 'center' })
+      line.classList.add('flashed')
+      setTimeout(() => line.classList.remove('flashed'), 2000)
     }
   }
 
-  const downloadLogs = (event: React.MouseEvent, index: number) => {
-    event.stopPropagation()
-    const element = document.createElement('a')
-    const file = new Blob([programLogs[index].logFile || ''], {
-      type: 'text/plain'
-    })
-    element.href = URL.createObjectURL(file)
-    element.download = `${programLogs[index].serviceLink}_${programLogs[index].timestamp}`
-    document.body.appendChild(element)
-    element.click()
+  const download = (contents: string, name: string) => {
+    const stamp = new Date().valueOf()
+    const blob = new Blob([contents], { type: 'text/plain;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const anchor = document.createElement('a')
+    anchor.href = url
+    anchor.download = `${name}-${stamp}.log`
+    anchor.click()
+    URL.revokeObjectURL(url)
   }
 
-  // Parse errors and warnings for each program log
-  programLogs.forEach((programLog) => {
-    parseErrorsAndWarnings(programLog)
-  })
+  const issueListItem = (issue: LogIssue, index: number) => (
+    <ListItemButton
+      key={`${issue.severity}-${issue.line}-${index}`}
+      onClick={() => goToLogLine(issue, index)}
+      data-testid={`issue-${issue.severity}-${issue.line}`}
+    >
+      <ListItemText
+        primary={
+          <>
+            {issue.code ? <IssueCode>{issue.code}</IssueCode> : null}
+            {issue.message}
+          </>
+        }
+        secondary={`line ${issue.line + 1}`}
+      />
+    </ListItemButton>
+  )
+
+  const issueGroup = (
+    title: string,
+    issues: LogIssue[],
+    icon: React.ReactNode,
+    index: number
+  ) =>
+    issues.length ? (
+      <>
+        <Typography
+          variant="subtitle2"
+          sx={{ display: 'flex', alignItems: 'center', gap: 1, pt: 1 }}
+        >
+          {icon}
+          {`${title} (${issues.length})`}
+        </Typography>
+        <IssueList dense>
+          {issues.map((issue, at) => issueListItem(issue, index))}
+        </IssueList>
+      </>
+    ) : null
 
   return (
     <Root>
@@ -289,16 +308,11 @@ const RequestModal: React.FC<RequestModalProps> = ({
           maxWidth="lg"
           open={open}
           onClose={handleClose}
-          slotProps={{
-            paper: { style: { height: '100%' } }
-          }}
-          aria-labelledby="alert-dialog-slide-title"
-          aria-describedby="alert-dialog-slide-description"
+          slotProps={{ paper: { style: { height: '100%' } } }}
+          aria-labelledby="sas-logs-title"
         >
-          <DialogTitle id="alert-dialog-slide-title">
-            <Typography style={{ fontSize: '1.5rem' }}>
-              Request History
-            </Typography>
+          <DialogTitle id="sas-logs-title">
+            <Typography style={{ fontSize: '1.5rem' }}>SAS logs</Typography>
             {`App Location: ${sasjsConfig.appLoc}`}
             <CloseButton aria-label="close" onClick={handleClose}>
               <CloseIcon />
@@ -306,16 +320,22 @@ const RequestModal: React.FC<RequestModalProps> = ({
           </DialogTitle>
           <DialogContent>
             <Root>
-              {programLogs.map((programLog, index) => (
+              {logs.length === 0 ? (
+                <EmptyNote>
+                  No requests yet. Every service call is kept here while the app
+                  is open.
+                </EmptyNote>
+              ) : null}
+
+              {logs.map((log, index) => (
                 <Accordion
-                  key={index}
+                  key={`${log.serviceLink}-${index}`}
                   expanded={expanded === index + 1}
                   onChange={handleChange(index + 1)}
                 >
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1bh-content"
-                    id="panel1bh-header"
+                    aria-controls={`log-${index}-content`}
                   >
                     <Grid
                       container
@@ -325,59 +345,73 @@ const RequestModal: React.FC<RequestModalProps> = ({
                       <Grid size={{ xs: 12, sm: 6 }}>
                         <Grid
                           container
-                          spacing={2}
+                          spacing={1}
                           style={{ alignItems: 'center' }}
                         >
                           <Grid size="auto">
-                            <Heading variant="h5">
-                              {programLog.serviceLink.replace(
-                                sasjsConfig.appLoc,
-                                ''
-                              )}
+                            <Heading variant="h6">
+                              {cutAppLoc(log.serviceLink)}
                             </Heading>
                           </Grid>
-                          <Grid size="auto">
-                            {programLog.logWarnings &&
-                              programLog.logWarnings?.length > 0 && (
-                                <WarningIcon
-                                  sx={{ color: theme.palette.warning.main }}
-                                />
-                              )}
-                          </Grid>
-                          <Grid size="auto">
-                            {programLog.logErrors &&
-                              programLog.logErrors?.length > 0 && (
-                                <ErrorOutlinedIcon color="error" />
-                              )}
-                          </Grid>
+                          {log.errors.length > 0 && (
+                            <Grid size="auto">
+                              <Chip
+                                size="small"
+                                color="error"
+                                icon={<ErrorIcon />}
+                                label={`${log.errors.length} error${
+                                  log.errors.length === 1 ? '' : 's'
+                                }`}
+                              />
+                            </Grid>
+                          )}
+                          {log.warnings.length > 0 && (
+                            <Grid size="auto">
+                              <Chip
+                                size="small"
+                                color="warning"
+                                icon={<WarningIcon />}
+                                label={`${log.warnings.length} warning${
+                                  log.warnings.length === 1 ? '' : 's'
+                                }`}
+                              />
+                            </Grid>
+                          )}
+                          {log.notes.length > 0 && (
+                            <Grid size="auto">
+                              <Chip
+                                size="small"
+                                icon={<InfoIcon />}
+                                label={`${log.notes.length} note${
+                                  log.notes.length === 1 ? '' : 's'
+                                }`}
+                              />
+                            </Grid>
+                          )}
                         </Grid>
                       </Grid>
                       <Grid size={{ xs: 12, sm: 6 }}>
                         <Grid
                           container
-                          spacing={2}
+                          spacing={1}
                           style={{
                             alignItems: 'center',
                             justifyContent: 'flex-end'
                           }}
                         >
                           <Grid size="auto">
-                            <SecondaryHeading variant="h5">
-                              {moment(programLog.timestamp).format
-                                ? moment(programLog.timestamp).format(
-                                    'dddd, MMMM Do YYYY, h:mm:ss a'
-                                  )
-                                : programLog.timestamp}
-                              {moment(programLog.timestamp).fromNow
-                                ? ` (${moment(programLog.timestamp).fromNow()})`
-                                : ''}
+                            <SecondaryHeading variant="body2">
+                              {when(log.timestamp)}
                             </SecondaryHeading>
                           </Grid>
                           <Grid size="auto">
-                            <Tooltip title="Download Logs">
+                            <Tooltip title="Download the log">
                               <IconButton
                                 style={{ color: 'blue' }}
-                                onClick={(event) => downloadLogs(event, index)}
+                                onClick={(event) => {
+                                  event.stopPropagation()
+                                  download(log.logFile || '', 'sas-log')
+                                }}
                               >
                                 <GetAppIcon />
                               </IconButton>
@@ -387,108 +421,104 @@ const RequestModal: React.FC<RequestModalProps> = ({
                       </Grid>
                     </Grid>
                   </AccordionSummary>
-                  <AntTabs
-                    value={currentTab}
-                    onChange={handleTabChange}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    centered
-                  >
-                    <AntTab label="SAS Log" />
-                    <AntTab label="SAS Source Code" />
-                    <AntTab label="SAS Generated Code" />
-                  </AntTabs>
 
-                  {currentTab === 0 ? (
-                    <ResizableBox
-                      id={`request_${index}`}
-                      style={{ padding: '20px' }}
+                  <AccordionDetails>
+                    <SuggestionTabs
+                      value={tab}
+                      onChange={(_event, value) => setTab(value)}
+                      indicatorColor="primary"
+                      textColor="primary"
+                      centered
                     >
-                      <SimpleTreeView
-                        slots={{
-                          collapseIcon: ExpandMoreIcon,
-                          expandIcon: ChevronRightIcon
-                        }}
-                      >
-                        <TreeItem
-                          itemId="error"
-                          label={
-                            <ErrorLabel>
-                              {`Errors (${programLog.logErrors?.length || 0})`}
-                            </ErrorLabel>
-                          }
-                        >
-                          {programLog.logErrors &&
-                            programLog.logErrors.map((error, ind) => (
-                              <TreeItem
-                                key={`error_${ind}`}
-                                itemId={`error_${ind}`}
-                                label={
-                                  <ListItem
-                                    onClick={() => goToLogLine(error, index)}
-                                  >
-                                    <ListItemText primary={error} />
-                                  </ListItem>
-                                }
-                              />
-                            ))}
-                        </TreeItem>
-                        <TreeItem
-                          itemId="warnings"
-                          label={
-                            <WarningLabel>
-                              {`Warnings (${
-                                programLog.logWarnings?.length || 0
-                              })`}
-                            </WarningLabel>
-                          }
-                        >
-                          {programLog.logWarnings &&
-                            programLog.logWarnings.map((warning, ind) => (
-                              <TreeItem
-                                key={`warning_${ind}`}
-                                itemId={`warning_${ind}`}
-                                label={
-                                  <ListItem
-                                    onClick={() => goToLogLine(warning, index)}
-                                  >
-                                    <ListItemText primary={warning} />
-                                  </ListItem>
-                                }
-                              />
-                            ))}
-                        </TreeItem>
-                      </SimpleTreeView>
-                      <ExpansionDescription
-                        id={`log_container_${index}`}
-                        variant="h5"
-                      >
-                        <Highlight className={'html'} innerHTML={true}>
-                          {decodeHtml(programLog.logFile || '')}
-                        </Highlight>
-                      </ExpansionDescription>
-                    </ResizableBox>
-                  ) : null}
+                      <SuggestionTab label="SAS log" />
+                      <SuggestionTab label="Source code" />
+                      <SuggestionTab label="Generated code" />
+                    </SuggestionTabs>
 
-                  {currentTab === 1 ? (
-                    <ResizableBox style={{ padding: '20px' }}>
-                      <ExpansionDescription variant="h5">
-                        <Highlight className={'html'}>
-                          {decodeHtml(programLog.sourceCode || '')}
-                        </Highlight>
-                      </ExpansionDescription>
-                    </ResizableBox>
-                  ) : null}
+                    {tab === 0 && (
+                      <>
+                        {issueGroup(
+                          'Errors',
+                          log.errors,
+                          <ErrorIcon color="error" fontSize="small" />,
+                          index
+                        )}
+                        {issueGroup(
+                          'Warnings',
+                          log.warnings,
+                          <WarningIcon
+                            sx={{ color: theme.palette.warning.main }}
+                            fontSize="small"
+                          />,
+                          index
+                        )}
+                        {issueGroup(
+                          'Notable notes',
+                          log.notes,
+                          <InfoIcon color="info" fontSize="small" />,
+                          index
+                        )}
 
-                  {currentTab === 2 ? (
-                    <ResizableBox style={{ padding: '20px' }}>
-                      <ExpansionDescription variant="h5">
-                        <Highlight className={'SAS'}>
-                          {decodeHtml(programLog.generatedCode || '')}
-                        </Highlight>
-                      </ExpansionDescription>
-                    </ResizableBox>
-                  ) : null}
+                        {log.issues.length === 0 && log.logFile ? (
+                          <EmptyNote>
+                            No errors, warnings or notable notes in this log.
+                          </EmptyNote>
+                        ) : null}
+
+                        {!log.logFile ? (
+                          <EmptyNote>
+                            This request carried no log. Turn on Debug in the
+                            menu before running a service to capture one.
+                          </EmptyNote>
+                        ) : (
+                          <LogPane
+                            ref={(element) => {
+                              logRefs.current[index] = element
+                            }}
+                          >
+                            {log.isHtml ? (
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html: log.logFile || ''
+                                }}
+                              />
+                            ) : (
+                              (log.logFile || '')
+                                .split('\n')
+                                .map((text, at) => (
+                                  <div
+                                    key={at}
+                                    data-line={at}
+                                    className={
+                                      log.lineSeverity.get(at)
+                                        ? `${log.lineSeverity.get(at)}-line`
+                                        : undefined
+                                    }
+                                  >
+                                    <span className="log-line-number">
+                                      {at + 1}
+                                    </span>
+                                    {text || ' '}
+                                  </div>
+                                ))
+                            )}
+                          </LogPane>
+                        )}
+                      </>
+                    )}
+
+                    {tab === 1 && (
+                      <Highlight className={'SAS'}>
+                        {log.sourceCode || 'No source code captured.'}
+                      </Highlight>
+                    )}
+
+                    {tab === 2 && (
+                      <Highlight className={'SAS'}>
+                        {log.generatedCode || 'No generated code captured.'}
+                      </Highlight>
+                    )}
+                  </AccordionDetails>
                 </Accordion>
               ))}
             </Root>
