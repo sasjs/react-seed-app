@@ -19,12 +19,12 @@ import {
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import CloseIcon from '@mui/icons-material/Close'
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
+import ErrorOutlinedIcon from '@mui/icons-material/ErrorOutlined'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import GetAppIcon from '@mui/icons-material/GetApp'
 import WarningIcon from '@mui/icons-material/Warning'
 
-import { TreeItem, TreeView } from '@mui/x-tree-view'
+import { SimpleTreeView, TreeItem } from '@mui/x-tree-view'
 
 import { styled, useTheme, Theme } from '@mui/material/styles'
 
@@ -289,8 +289,8 @@ const RequestModal: React.FC<RequestModalProps> = ({
           maxWidth="lg"
           open={open}
           onClose={handleClose}
-          PaperProps={{
-            style: { height: '100%' }
+          slotProps={{
+            paper: { style: { height: '100%' } }
           }}
           aria-labelledby="alert-dialog-slide-title"
           aria-describedby="alert-dialog-slide-description"
@@ -322,13 +322,13 @@ const RequestModal: React.FC<RequestModalProps> = ({
                       spacing={2}
                       style={{ alignItems: 'center' }}
                     >
-                      <Grid item sm={6} xs={12}>
+                      <Grid size={{ xs: 12, sm: 6 }}>
                         <Grid
                           container
                           spacing={2}
                           style={{ alignItems: 'center' }}
                         >
-                          <Grid item>
+                          <Grid size="auto">
                             <Heading variant="h5">
                               {programLog.serviceLink.replace(
                                 sasjsConfig.appLoc,
@@ -336,7 +336,7 @@ const RequestModal: React.FC<RequestModalProps> = ({
                               )}
                             </Heading>
                           </Grid>
-                          <Grid item>
+                          <Grid size="auto">
                             {programLog.logWarnings &&
                               programLog.logWarnings?.length > 0 && (
                                 <WarningIcon
@@ -344,15 +344,15 @@ const RequestModal: React.FC<RequestModalProps> = ({
                                 />
                               )}
                           </Grid>
-                          <Grid item>
+                          <Grid size="auto">
                             {programLog.logErrors &&
                               programLog.logErrors?.length > 0 && (
-                                <ErrorOutlineIcon color="error" />
+                                <ErrorOutlinedIcon color="error" />
                               )}
                           </Grid>
                         </Grid>
                       </Grid>
-                      <Grid item sm={6} xs={12}>
+                      <Grid size={{ xs: 12, sm: 6 }}>
                         <Grid
                           container
                           spacing={2}
@@ -361,7 +361,7 @@ const RequestModal: React.FC<RequestModalProps> = ({
                             justifyContent: 'flex-end'
                           }}
                         >
-                          <Grid item>
+                          <Grid size="auto">
                             <SecondaryHeading variant="h5">
                               {moment(programLog.timestamp).format
                                 ? moment(programLog.timestamp).format(
@@ -373,7 +373,7 @@ const RequestModal: React.FC<RequestModalProps> = ({
                                 : ''}
                             </SecondaryHeading>
                           </Grid>
-                          <Grid item>
+                          <Grid size="auto">
                             <Tooltip title="Download Logs">
                               <IconButton
                                 style={{ color: 'blue' }}
@@ -404,12 +404,14 @@ const RequestModal: React.FC<RequestModalProps> = ({
                       id={`request_${index}`}
                       style={{ padding: '20px' }}
                     >
-                      <TreeView
-                        defaultCollapseIcon={<ExpandMoreIcon />}
-                        defaultExpandIcon={<ChevronRightIcon />}
+                      <SimpleTreeView
+                        slots={{
+                          collapseIcon: ExpandMoreIcon,
+                          expandIcon: ChevronRightIcon
+                        }}
                       >
                         <TreeItem
-                          nodeId="error"
+                          itemId="error"
                           label={
                             <ErrorLabel>
                               {`Errors (${programLog.logErrors?.length || 0})`}
@@ -420,7 +422,7 @@ const RequestModal: React.FC<RequestModalProps> = ({
                             programLog.logErrors.map((error, ind) => (
                               <TreeItem
                                 key={`error_${ind}`}
-                                nodeId={`error_${ind}`}
+                                itemId={`error_${ind}`}
                                 label={
                                   <ListItem
                                     onClick={() => goToLogLine(error, index)}
@@ -432,7 +434,7 @@ const RequestModal: React.FC<RequestModalProps> = ({
                             ))}
                         </TreeItem>
                         <TreeItem
-                          nodeId="warnings"
+                          itemId="warnings"
                           label={
                             <WarningLabel>
                               {`Warnings (${
@@ -445,7 +447,7 @@ const RequestModal: React.FC<RequestModalProps> = ({
                             programLog.logWarnings.map((warning, ind) => (
                               <TreeItem
                                 key={`warning_${ind}`}
-                                nodeId={`warning_${ind}`}
+                                itemId={`warning_${ind}`}
                                 label={
                                   <ListItem
                                     onClick={() => goToLogLine(warning, index)}
@@ -456,7 +458,7 @@ const RequestModal: React.FC<RequestModalProps> = ({
                               />
                             ))}
                         </TreeItem>
-                      </TreeView>
+                      </SimpleTreeView>
                       <ExpansionDescription
                         id={`log_container_${index}`}
                         variant="h5"

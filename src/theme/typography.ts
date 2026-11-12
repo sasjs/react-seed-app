@@ -1,7 +1,7 @@
-import { TypographyOptions } from '@mui/material/styles/createTypography'
+import { TypographyVariantsOptions } from '@mui/material/styles'
 import palette from './palette'
 
-const typography: TypographyOptions = {
+const typography: TypographyVariantsOptions = {
   h1: {
     color: palette.text.primary,
     fontWeight: 500,

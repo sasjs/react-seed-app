@@ -123,7 +123,7 @@ const LoginComponent: React.FC = () => {
           </SubmitButton>
         </LoginForm>
       </Wrapper>
-      <Box mt={8}></Box>
+      <Box sx={{ mt: 8 }} />
     </RootContainer>
   )
 }
