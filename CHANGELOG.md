@@ -1,3 +1,10 @@
+## [1.9.1](https://github.com/sasjs/react-seed-app/compare/v1.9.0...v1.9.1) (2026-11-12)
+
+
+### Bug Fixes
+
+* one line per log header, and the download arrow beside the timestamp ([ba627b1](https://github.com/sasjs/react-seed-app/commit/ba627b131767155c1b216c7dfd765710189e4f29))
+
 # [1.9.0](https://github.com/sasjs/react-seed-app/compare/v1.8.0...v1.9.0) (2026-11-12)
 
 
