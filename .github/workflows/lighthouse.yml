@@ -1,0 +1,63 @@
+# Measures the built mock site and posts the scores on the pull request, so a
+# performance regression is visible where the change is reviewed rather than in
+# a job log nobody opens.
+#
+# Lighthouse runs against the site as a visitor first receives it: static files,
+# no CDN, three runs per page, median reported. The mock host registers its
+# service worker and replays the page scripts on that first load, so the numbers
+# include the boot the app pays for.
+name: Lighthouse
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lighthouse-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lighthouse:
+    name: Lighthouse scores
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build the mock site
+        run: npm run mock:build
+
+      - name: Measure
+        run: node scripts/lighthouse-report.js sasjsbuild/mock / > lighthouse-summary.md
+
+      - name: Post the scores on the pull request
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          if [ ! -s lighthouse-summary.md ]; then
+            printf '<!-- lighthouse-scores -->\n## Lighthouse - no scores\n\nThe measurement produced no report; check the "Measure" step of this job for the reason.\n' > lighthouse-summary.md
+          fi
+
+          ID=$(gh api "repos/$REPO/issues/$PR/comments" \
+            --jq '[.[] | select(.body | startswith("<!-- lighthouse-scores -->")) | .id] | first // empty' \
+            || true)
+
+          if [ -n "$ID" ]; then
+            gh api -X PATCH "repos/$REPO/issues/comments/$ID" -F body=@lighthouse-summary.md > /dev/null
+          else
+            gh api -X POST "repos/$REPO/issues/$PR/comments" -F body=@lighthouse-summary.md > /dev/null
+          fi
