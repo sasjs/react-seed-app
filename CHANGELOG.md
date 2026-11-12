@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/sasjs/react-seed-app/compare/v1.8.0...v1.9.0) (2026-11-12)
+
+
+### Features
+
+* show SAS logs, parsed the way Data Controller parses them ([fd1fb0c](https://github.com/sasjs/react-seed-app/commit/fd1fb0c59974e874fee5087b481f0829402a3e40))
+
 # [1.8.0](https://github.com/sasjs/react-seed-app/compare/v1.7.2...v1.8.0) (2026-11-12)
 
 
