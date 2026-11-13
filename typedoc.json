@@ -1,7 +1,0 @@
-{
-  "entryPoints": [
-    "src/utils",
-    "src/components/abortModal.tsx"
-  ],
-  "out": "docs"
-}

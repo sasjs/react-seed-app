@@ -31,10 +31,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # public/docs is a submodule (the SASjs documentation site): without it
+          # the build copies an empty folder and the Documentation link is dead
+          submodules: true
 
       - uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: 24
           cache: npm
 
       - run: npm ci

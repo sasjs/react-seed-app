@@ -16,10 +16,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # public/docs is a submodule (the SASjs documentation site): without it
+          # the build copies an empty folder and the Documentation link is dead
+          submodules: true
 
       - uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: 24
           cache: npm
 
       - name: Install dependencies
@@ -33,6 +37,11 @@ jobs:
 
       - name: Check code style
         run: npm run lint
+
+      # the log summary, the abort payload and the timestamp formatting are pure
+      # functions, so their specs run in node with no browser
+      - name: Unit tests
+        run: npm test
 
       - name: Build the frontend
         run: npm run build

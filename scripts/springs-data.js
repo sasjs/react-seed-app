@@ -15,7 +15,13 @@
 const { readFileSync, writeFileSync, existsSync } = require('node:fs')
 const path = require('node:path')
 
-const SERVICE_INIT = path.join(__dirname, '..', 'sasjs', 'services', 'serviceinit.sas')
+const SERVICE_INIT = path.join(
+  __dirname,
+  '..',
+  'sasjs',
+  'services',
+  'serviceinit.sas'
+)
 const FIXTURE = path.join(
   __dirname,
   '..',
@@ -103,8 +109,12 @@ if (process.argv.includes('--check')) {
     )
     process.exit(1)
   }
-  console.log(`${rows.length} row(s) in springs.json, in step with serviceinit.sas`)
+  console.log(
+    `${rows.length} row(s) in springs.json, in step with serviceinit.sas`
+  )
 } else {
   writeFileSync(FIXTURE, json)
-  console.log(`wrote ${rows.length} row(s) to ${path.relative(process.cwd(), FIXTURE)}`)
+  console.log(
+    `wrote ${rows.length} row(s) to ${path.relative(process.cwd(), FIXTURE)}`
+  )
 }

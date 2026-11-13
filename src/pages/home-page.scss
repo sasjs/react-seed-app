@@ -1,0 +1,174 @@
+/* The home page: a short welcome, the repo links, and a tile per SASjs project.
+ * One accent colour (the page's orange), one card shape, one hover state. */
+
+.home-page {
+  margin: 0 auto;
+  max-width: 62rem;
+  padding: 3rem 1.5rem 4rem;
+}
+
+.hero {
+  text-align: center;
+
+  h1 {
+    font-size: 2rem;
+    line-height: 1.2;
+    margin: 0 auto;
+    max-width: 34rem;
+    /* keeps "Seed App" together instead of breaking mid-phrase */
+    text-wrap: balance;
+
+    .code {
+      border-radius: 6px;
+      padding: 2px 7px;
+    }
+  }
+
+  .lede {
+    color: var(--ink-2);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 1rem auto 0;
+    max-width: 36rem;
+
+    code {
+      background: var(--code-bg);
+      border-radius: 3px;
+      font-size: 0.9em;
+      padding: 1px 4px;
+    }
+  }
+
+  /* the same three columns as the tiles below, so the page has one grid rather
+   * than a centred block floating above a left-aligned one */
+  .links {
+    display: grid;
+    gap: 0.5rem 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    text-align: left;
+
+    li {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      /* the tiles' own padding: the labels line up with the tile titles */
+      padding-left: 1.2rem;
+    }
+
+    .label {
+      color: var(--muted-3);
+      font-size: 0.7rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    a {
+      color: var(--accent-ink);
+      font-family: ui-monospace, Monaco, Courier, monospace;
+      font-size: 0.8rem;
+      overflow-wrap: anywhere;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.stack {
+  margin-top: 3.5rem;
+
+  h2 {
+    font-size: 1.15rem;
+    margin: 0;
+  }
+
+  .section-note {
+    color: var(--muted-2);
+    font-size: 0.85rem;
+    margin: 0.35rem 0 1.5rem;
+  }
+}
+
+.tiles {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+
+.tile {
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.1rem 1.2rem 1.25rem;
+  position: relative;
+  text-decoration: none;
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    transform 120ms ease;
+
+  /* the accent lives on the top edge, so six tiles read as one set */
+  &::before {
+    background: var(--accent);
+    border-radius: 8px 8px 0 0;
+    content: '';
+    height: 3px;
+    left: -1px;
+    opacity: 0;
+    position: absolute;
+    right: -1px;
+    top: -1px;
+    transition: opacity 120ms ease;
+  }
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--accent);
+    box-shadow: 0 6px 18px var(--shadow-soft);
+    outline: none;
+    transform: translateY(-2px);
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  .tile-name {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .tile-role {
+    /* darker than the accent: 4.5:1 on white at this size, where var(--accent) is not */
+    color: var(--accent-ink);
+    font-size: 0.72rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .tile-description {
+    color: var(--ink-2);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-top: 0.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-page {
+    padding: 2rem 1rem 3rem;
+  }
+
+  .hero h1 {
+    font-size: 1.5rem;
+  }
+}

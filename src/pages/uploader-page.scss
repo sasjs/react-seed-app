@@ -1,0 +1,267 @@
+/* The upload page: a heading, one card of inputs, and whatever came back.
+ * Same shapes as the data page - one card, one accent button, quiet secondary
+ * text - so the two screens read as one app. */
+
+.uploader-page {
+  margin: 0 auto;
+  max-width: 46rem;
+  padding: 2.5rem 1.5rem 3rem;
+}
+
+.page-head {
+  margin-bottom: 1.5rem;
+
+  h1 {
+    font-size: 1.4rem;
+    margin: 0 0 0.4rem;
+  }
+
+  p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    margin: 0;
+    max-width: 40rem;
+  }
+}
+
+.page-head code,
+.upload-card code {
+  background: var(--code-bg);
+  border-radius: 3px;
+  font-size: 0.85em;
+  padding: 1px 4px;
+}
+
+.upload-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding: 1.25rem 1.35rem 1.5rem;
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+
+    > span {
+      color: var(--muted-2);
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    small {
+      color: var(--muted-3);
+      font-size: 0.75rem;
+    }
+  }
+
+  input[type='text'] {
+    border: 1px solid var(--input-line);
+    border-radius: 4px;
+    font: inherit;
+    padding: 0.5rem 0.65rem;
+  }
+
+  input[type='file'] {
+    border: 1px dashed var(--line);
+    border-radius: 6px;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.85rem;
+    padding: 0.7rem;
+
+    &::file-selector-button {
+      background: var(--surface-sunken);
+      border: 1px solid var(--input-line);
+      border-radius: 4px;
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.85rem;
+      margin-right: 0.75rem;
+      padding: 0.35rem 0.8rem;
+    }
+  }
+
+  button {
+    align-self: flex-start;
+    background: var(--accent);
+    border: 0;
+    border-radius: 4px;
+    color: var(--on-accent);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    min-height: 2.55rem;
+    padding: 0.55rem 1.6rem;
+
+    &:disabled {
+      cursor: default;
+      opacity: 0.5;
+    }
+  }
+}
+
+.outcome {
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--success);
+  border-radius: 8px;
+  margin-top: 1.5rem;
+  padding: 1.1rem 1.25rem 1.25rem;
+
+  h2 {
+    color: var(--success);
+    font-size: 0.95rem;
+    margin: 0 0 0.35rem;
+  }
+
+  p {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  .files {
+    border: 1px solid var(--line-soft);
+    border-radius: 6px;
+    font-family: ui-monospace, Monaco, Courier, monospace;
+    font-size: 0.78rem;
+    list-style: none;
+    margin: 0.85rem 0 0;
+    max-height: 14rem;
+    overflow: auto;
+    padding: 0;
+
+    li {
+      border-bottom: 1px solid var(--surface-sunken);
+      padding: 0.4rem 0.65rem;
+
+      &:last-child {
+        border-bottom: 0;
+      }
+    }
+  }
+}
+
+/* the abort dialog: same shape as the SAS Logs panel, but it is about one
+ * failure, so it is small and it says what happened first */
+.abort-backdrop {
+  background: var(--overlay);
+  inset: 0;
+  position: fixed;
+  z-index: 39;
+}
+
+.abort-modal {
+  background: var(--surface-raised);
+  border-left: 4px solid var(--danger);
+  border-radius: 8px;
+  box-shadow: 0 18px 60px var(--shadow-strong);
+  left: 50%;
+  max-width: 34rem;
+  padding: 1.25rem 1.4rem 1.25rem;
+  position: fixed;
+  top: 22vh;
+  transform: translateX(-50%);
+  width: min(34rem, 92vw);
+  z-index: 40;
+
+  header {
+    align-items: flex-start;
+    display: flex;
+    justify-content: space-between;
+
+    h2 {
+      color: var(--danger);
+      font-size: 1rem;
+      margin: 0;
+    }
+  }
+
+  .close {
+    background: none;
+    border: 0;
+    cursor: pointer;
+    font-size: 1.4rem;
+    line-height: 1;
+    padding: 0 0.25rem;
+  }
+
+  .message {
+    color: var(--ink);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    margin: 0.85rem 0 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .detail {
+    border-top: 1px solid var(--line-soft);
+    display: grid;
+    font-size: 0.78rem;
+    gap: 0.25rem 0.75rem;
+    grid-template-columns: auto 1fr;
+    margin: 1rem 0 0;
+    padding-top: 0.85rem;
+
+    dt {
+      color: var(--muted-3);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    dd {
+      color: var(--ink-2);
+      font-family: ui-monospace, Monaco, Courier, monospace;
+      margin: 0;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  footer {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: flex-end;
+    margin-top: 1.25rem;
+
+    button {
+      border-radius: 4px;
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.82rem;
+      padding: 0.5rem 1rem;
+    }
+
+    .primary {
+      background: var(--accent);
+      border: 0;
+      color: var(--on-accent);
+      font-weight: 600;
+    }
+
+    .secondary {
+      background: none;
+      border: 1px solid var(--input-line);
+    }
+  }
+}
+
+@media (max-width: 560px) {
+  .uploader-page {
+    padding: 1.75rem 1rem 2rem;
+  }
+
+  .upload-card button {
+    align-self: stretch;
+  }
+
+  .abort-modal {
+    top: 12vh;
+  }
+}

@@ -1,0 +1,194 @@
+/* The shell's own styles: a header and a sign-in form.
+ *
+ * Plain CSS on top of the tokens in src/styles.scss. There is no component
+ * library here, so the only thing this seed has to keep up to date with React
+ * is React. */
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--header-bg);
+  color: var(--header-ink);
+
+  .brand {
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--header-ink);
+    text-decoration: none;
+    white-space: nowrap;
+
+    span {
+      color: var(--accent);
+    }
+  }
+
+  nav {
+    display: flex;
+    gap: 1.25rem;
+
+    a {
+      color: var(--header-ink-dim);
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 0.25rem 0;
+
+      &:hover,
+      &.active {
+        color: var(--header-ink);
+        border-bottom: 2px solid var(--accent);
+      }
+    }
+  }
+
+  .tools {
+    align-items: center;
+    display: flex;
+    gap: 0.35rem;
+    margin-left: auto;
+  }
+
+  .icon {
+    align-items: center;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: var(--header-ink-dim);
+    cursor: pointer;
+    display: flex;
+    height: 2rem;
+    justify-content: center;
+    padding: 0;
+    text-decoration: none;
+    width: 2rem;
+
+    &:hover,
+    &:focus-visible {
+      border-color: var(--header-line);
+      color: var(--accent);
+      outline: none;
+    }
+  }
+
+  .session {
+    position: relative;
+  }
+
+  .user {
+    background: transparent;
+    border: 1px solid var(--header-line);
+    border-radius: 4px;
+    color: var(--header-ink);
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0.35rem 0.7rem;
+  }
+
+  .menu {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 0.4rem);
+    margin: 0;
+    padding: 0.3rem 0;
+    list-style: none;
+    background: var(--surface-raised);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    box-shadow: 0 6px 20px var(--shadow);
+    min-width: 11rem;
+    z-index: 20;
+
+    button {
+      background: none;
+      border: 0;
+      cursor: pointer;
+      display: block;
+      font: inherit;
+      font-size: 0.875rem;
+      padding: 0.5rem 1rem;
+      text-align: left;
+      width: 100%;
+      color: var(--ink);
+
+      &:hover {
+        background: var(--hover);
+      }
+    }
+
+    /* the debug switch lives among the session actions, so its label lines up
+     * with the items above and below it */
+    .setting {
+      align-items: center;
+      cursor: pointer;
+      display: flex;
+      font-size: 0.875rem;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+
+      &:hover {
+        background: var(--hover);
+      }
+
+      input {
+        accent-color: var(--accent);
+      }
+    }
+
+    .divider {
+      border-top: 1px solid var(--line-soft);
+      margin: 0.3rem 0;
+    }
+  }
+}
+
+.login {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 3rem auto;
+  max-width: 18rem;
+
+  h2 {
+    font-size: 1.15rem;
+    margin: 0 0 0.5rem;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.8rem;
+    gap: 0.25rem;
+  }
+
+  input {
+    background: var(--surface-raised);
+    border: 1px solid var(--input-line);
+    border-radius: 4px;
+    color: var(--ink);
+    font: inherit;
+    padding: 0.5rem 0.6rem;
+  }
+
+  button {
+    background: var(--accent);
+    border: 0;
+    border-radius: 4px;
+    color: var(--on-accent);
+    cursor: pointer;
+    font: inherit;
+    font-weight: 600;
+    padding: 0.6rem;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+  }
+
+  .error {
+    color: var(--danger);
+    font-size: 0.85rem;
+    margin: 0;
+  }
+}
