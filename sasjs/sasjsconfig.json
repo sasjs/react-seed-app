@@ -1,16 +1,9 @@
 {
   "$schema": "https://cli.sasjs.io/sasjsconfig-schema.json",
-  "syncFolder": "sasjs/mocks",
-  "docConfig": {
-    "enableLineage": true,
-    "doxyContent": {
-      "readMe": "../../README.md"
-    },
-    "outDirectory": "public/docs/static/sas"
-  },
   "macroFolders": [
     "sasjs/macros"
   ],
+  "syncFolder": "sasjs/mocks",
   "programFolders": [],
   "serviceConfig": {
     "serviceFolders": [
@@ -19,58 +12,38 @@
     ],
     "initProgram": "sasjs/services/serviceinit.sas"
   },
-  "streamConfig": {
-    "streamWeb": false,
-    "streamWebFolder": "webv",
-    "webSourcePath": "build"
-  },
   "defaultTarget": "viya",
   "targets": [
     {
       "name": "viya",
-      "serverUrl": "https://azureuse011059.my-trials.sas.com/",
+      "serverUrl": "",
       "serverType": "SASVIYA",
       "appLoc": "/Public/app/react-seed-app",
-      "contextName": "SAS Job Execution compute context",
-      "streamConfig": {
-        "streamWeb": true,
-        "streamWebFolder": "web",
-        "webSourcePath": "build",
-        "streamLogo": "logo512.png",
-        "streamServiceName": "React",
-        "assetPaths": []
-      }
+      "contextName": "SAS Job Execution compute context"
+    },
+    {
+      "name": "sas9",
+      "serverUrl": "",
+      "serverType": "SAS9",
+      "appLoc": "/Public/app/react-seed-app",
+      "serverName": "SASApp",
+      "repositoryName": "Foundation"
     },
     {
       "name": "server",
       "serverUrl": "",
       "serverType": "SASJS",
-      "httpsAgentOptions": {
-        "allowInsecureRequests": false
-      },
       "appLoc": "/Public/app/react-seed-app",
-      "deployConfig": {
-        "deployServicePack": true,
-        "deployScripts": []
-      },
-      "streamConfig": {
-        "streamWeb": true,
-        "streamWebFolder": "web",
-        "webSourcePath": "build",
-        "streamLogo": "logo512.png",
-        "streamServiceName": "React",
-        "assetPaths": []
-      }
-    },
-    {
-      "name": "sas9",
-      "serverType": "SAS9",
-      "appLoc": "/Shared Data/sasjs/react-seed-app",
       "deployConfig": {
         "deployServicePack": true
       },
-      "serverName": "SASApp",
-      "repositoryName": "Foundation"
+      "streamConfig": {
+        "streamLogo": "logo512.png",
+        "streamServiceName": "React",
+        "streamWeb": true,
+        "streamWebFolder": "web",
+        "webSourcePath": "build"
+      }
     },
     {
       "name": "electron",

@@ -11,14 +11,16 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [lts/*]
+        node-version: [24]
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+        with:
+          submodules: true
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -27,6 +29,9 @@ jobs:
           npm ci --ignore-scripts
         env:
           CI: true
+
+      - name: Check code style
+        run: npm run lint
 
       - name: Build Frontend
         run: npm run build

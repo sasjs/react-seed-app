@@ -1,0 +1,239 @@
+/* Design tokens. Every colour a component uses comes from here, so the light and
+ * dark themes are one set of values rather than two stylesheets - and the toggle
+ * in the header only has to set data-theme on <html>. */
+
+:root {
+  color-scheme: light;
+
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --surface-soft: #fafafa;
+  --surface-sunken: #f2f2f2;
+
+  --line: #e3e3e3;
+  --line-soft: #f0f0f0;
+  --input-line: #c8c8c8;
+
+  --ink: #1f1f1f;
+  --ink-2: #333333;
+  --muted: #555555;
+  --muted-2: #666666;
+  --muted-3: #777777;
+
+  --accent: #f79205;
+  --accent-ink: #8f5500;
+  --on-accent: #ffffff;
+  --hover: #f5f5f5;
+  --hover-accent: #f6f2ec;
+  --row-hover: #fffaf2;
+
+  --header-bg: #1b1b1b;
+  --header-ink: #ffffff;
+  --header-ink-dim: rgba(255, 255, 255, 0.75);
+  --header-line: rgba(255, 255, 255, 0.3);
+
+  --code-bg: #f4f1ee;
+  --code-chip-bg: #4a3f3f;
+
+  --danger: #b31f0e;
+  --danger-bg: #fdecea;
+  --danger-bg-soft: #fdf1ef;
+  --danger-bg-line: #fbe3e0;
+  --success: #2e7d32;
+  --warn: #8a5a00;
+  --warn-bg: #fff4e5;
+  --warn-bg-soft: #fff8ec;
+  --warn-bg-line: #fdefd5;
+  --note: #37506b;
+  --note-bg: #eef2f7;
+  --note-bg-soft: #f4f7fb;
+  --note-bg-line: #e9eff7;
+  --flash-bg: #ffe9c9;
+
+  --overlay: rgba(20, 20, 20, 0.45);
+  --shadow: rgba(0, 0, 0, 0.18);
+  --shadow-strong: rgba(0, 0, 0, 0.3);
+  --shadow-soft: rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --surface: #16181c;
+  --surface-raised: #1e2126;
+  --surface-soft: #22262c;
+  --surface-sunken: #2a2f36;
+
+  --line: #343a42;
+  --line-soft: #2b3037;
+  --input-line: #40474f;
+
+  --ink: #e8eaed;
+  --ink-2: #d3d7dc;
+  --muted: #a8b0b8;
+  --muted-2: #9aa3ab;
+  --muted-3: #8a939b;
+
+  --accent: #f79205;
+  --accent-ink: #f0a53a;
+  --on-accent: #1a1205;
+  --hover: #262b31;
+  --hover-accent: #2a2318;
+  --row-hover: #262019;
+
+  --header-bg: #0f1215;
+  --header-ink: #f2f4f6;
+  --header-ink-dim: rgba(255, 255, 255, 0.72);
+  --header-line: rgba(255, 255, 255, 0.22);
+
+  --code-bg: #262b31;
+  --code-chip-bg: #2b2118;
+
+  --danger: #ff8a7a;
+  --danger-bg: #33201d;
+  --danger-bg-soft: #2b1c1a;
+  --danger-bg-line: #3d2320;
+  --success: #6ad37a;
+  --warn: #e0b055;
+  --warn-bg: #33291c;
+  --warn-bg-soft: #2c2419;
+  --warn-bg-line: #3d3120;
+  --note: #9cc0e6;
+  --note-bg: #1f2a36;
+  --note-bg-soft: #212d3a;
+  --note-bg-line: #24313f;
+  --flash-bg: #4a3a1c;
+
+  --overlay: rgba(0, 0, 0, 0.6);
+  --shadow: rgba(0, 0, 0, 0.4);
+  --shadow-strong: rgba(0, 0, 0, 0.6);
+  --shadow-soft: rgba(0, 0, 0, 0.25);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    sans-serif;
+  font-size: 16px;
+  color: var(--ink);
+  background: var(--surface);
+  transition:
+    background-color 140ms ease,
+    color 140ms ease;
+}
+
+.code {
+  font-family: Monaco, Courier, monospace;
+  border: 1px solid var(--line);
+  padding: 5px;
+  border-radius: 3px;
+  background-color: var(--code-chip-bg);
+  color: var(--accent);
+}
+
+a {
+  color: var(--accent-ink);
+}
+
+h2 {
+  font-weight: 600;
+}
+
+/* buttons: one filled primary action per state */
+button.primary,
+.data-page button,
+.wrapper button {
+  background: var(--accent);
+  border: 0;
+  border-radius: 4px;
+  color: var(--on-accent);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  padding: 0.5rem 1.1rem;
+}
+
+button.primary:disabled,
+.data-page button:disabled,
+.wrapper button:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.loading {
+  color: var(--muted-2);
+  font-size: 0.875rem;
+  padding: 1rem 0;
+}
+
+/* form controls, plain */
+.form-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 1rem;
+}
+
+.control-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.input-wrapper input,
+.form-control input {
+  background: var(--surface-raised);
+  border: 1px solid var(--input-line);
+  border-radius: 4px;
+  color: var(--ink);
+  font: inherit;
+  padding: 0.45rem 0.6rem;
+  width: 100%;
+}
+
+.subtext {
+  color: var(--muted-3);
+  font-size: 0.75rem;
+}
+
+select {
+  background: var(--surface-raised);
+  border: 1px solid var(--input-line);
+  border-radius: 4px;
+  color: var(--ink);
+  font: inherit;
+  padding: 0.45rem 0.6rem;
+}
+
+table {
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  width: 100%;
+
+  th,
+  td {
+    border-bottom: 1px solid var(--line-soft);
+    padding: 0.4rem 0.6rem;
+    text-align: left;
+  }
+
+  th {
+    background: var(--surface-soft);
+    font-weight: 600;
+  }
+}

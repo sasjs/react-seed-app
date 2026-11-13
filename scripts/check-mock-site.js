@@ -20,7 +20,15 @@ const path = require('path')
 
 const SITE = path.resolve(process.argv[2] || 'sasjsbuild/mock')
 const APP = '/Public/app/react-seed-app/services'
-const FIXTURE = path.join(__dirname, '..', 'sasjs', 'mocks', 'services', 'common', 'springs.json')
+const FIXTURE = path.join(
+  __dirname,
+  '..',
+  'sasjs',
+  'mocks',
+  'services',
+  'common',
+  'springs.json'
+)
 
 const fail = (message) => {
   console.error(`FAILED: ${message}`)
@@ -29,6 +37,15 @@ const fail = (message) => {
 
 if (!fs.existsSync(path.join(SITE, 'sw.js'))) {
   fail(`${SITE} is not a mock build - run: npm run mock:build`)
+}
+
+/* the Documentation menu item opens docs/, which the build copies out of the
+ * submodule; an empty folder there is a dead link nobody notices until a
+ * visitor clicks it */
+if (!fs.existsSync(path.join(SITE, 'docs', 'index.html'))) {
+  fail(
+    `${SITE}/docs/index.html is missing - run: git submodule update --init public/docs`
+  )
 }
 
 /* The worker registers its fetch listener on `self`, and imports its runtime
@@ -176,16 +193,31 @@ const main = async () => {
 
   /* upload: the file lands in the folder named by `path`, and the answer is the
    * listing the uploader renders */
-  const folder = '/Public/uploads'
+  const folder = '/Public'
   const upload = await call(
     `${APP}/files/upload`,
-    [{ name: 'file', filename: 'check.txt', csv: 'written by check-mock-site' }],
+    [
+      { name: 'file', filename: 'check.txt', csv: 'written by check-mock-site' }
+    ],
     { path: folder }
   )
   const dirlist = upload.dirlist || []
 
   if (!dirlist.some((row) => row.FILEPATH === `${folder}/check.txt`)) {
     fail(`upload did not list ${folder}/check.txt: ${JSON.stringify(dirlist)}`)
+  }
+
+  /* a folder that is not there is the abort the SAS service performs - the
+   * uploader shows it as a dialog, so the twin has to answer like SAS */
+  const refused = await call(
+    `${APP}/files/upload`,
+    [{ name: 'file', filename: 'check.txt', csv: 'refused' }],
+    { path: '/no/such/folder' }
+  )
+  const abort = (refused.sasjsAbort || [])[0]
+
+  if (!abort || !/not a valid directory/.test(abort.MSG)) {
+    fail(`upload accepted a missing folder: ${JSON.stringify(refused)}`)
   }
 
   console.log(

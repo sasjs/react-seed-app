@@ -27,10 +27,14 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          # public/docs is a submodule (the SASjs documentation site): without it
+          # the build copies an empty folder and the Documentation link is dead
+          submodules: true
 
       - uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: 24
           cache: npm
 
       - run: npm ci
@@ -38,10 +42,13 @@ jobs:
       - name: Build the frontend
         run: npm run build
 
-      # the artefact a deployment serves, served here as static files
+      # the artefact a deployment serves, served here as static files - by the
+      # repo's own server, because the app makes a POST at start-up and python's
+      # http.server answers one with 501 without reading the body, which hangs
+      # Lighthouse at its full-page screenshot (see scripts/serve-build.js)
       - name: Serve the build
         run: |
-          python3 -m http.server 4173 --directory build &
+          node scripts/serve-build.js build 4173 &
           for i in $(seq 1 30); do
             curl -sf http://127.0.0.1:4173/ > /dev/null && exit 0
             sleep 1
@@ -55,7 +62,7 @@ jobs:
             echo "run $i"
             npx --yes lighthouse@12 http://127.0.0.1:4173/ --quiet \
               --only-categories=performance,accessibility,best-practices,seo \
-              --chrome-flags="--headless=new --no-sandbox --disable-gpu" \
+              --chrome-flags="--headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage" \
               --output=json --output-path="lighthouse-$i.json"
           done
 

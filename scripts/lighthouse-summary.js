@@ -16,7 +16,9 @@ const { readFileSync } = require('node:fs')
 const args = process.argv.slice(2)
 
 if (!args.length) {
-  console.error('usage: node scripts/lighthouse-summary.js <page>=<report.json> ...')
+  console.error(
+    'usage: node scripts/lighthouse-summary.js <page>=<report.json> ...'
+  )
   process.exit(2)
 }
 
@@ -50,7 +52,8 @@ for (const arg of args) {
   pages.set(page, runs)
 }
 
-const median = (values) => [...values].sort((a, b) => a - b)[Math.floor(values.length / 2)]
+const median = (values) =>
+  [...values].sort((a, b) => a - b)[Math.floor(values.length / 2)]
 
 console.log('<!-- lighthouse-scores -->')
 console.log(

@@ -43,6 +43,29 @@ springs.forEach((row) => {
 
 areas.sort((a, b) => (a.AREA < b.AREA ? -1 : a.AREA > b.AREA ? 1 : 0))
 
+/* A mocked run reports a log, because the SAS Logs panel is part of what this
+ * seed demonstrates and a JavaScript twin that wrote nothing leaves it empty.
+ * The text is a fixture shared by the three twins (mock-sas-log.json); a run
+ * reports the failure-shaped one half the time and a clean one the rest, so the
+ * panel shows a log with something in it as well as a log with nothing. */
+const reportMockLog = () => {
+  const file = path.join(
+    DRIVE_FILES,
+    APP_LOC,
+    'services',
+    'common',
+    'mock-sas-log.json'
+  )
+  const { noisy, clean } = JSON.parse(fs.readFileSync(file, 'utf-8'))
+  const lines = Math.random() < 0.5 ? noisy : clean
+
+  lines.forEach((line) =>
+    console.log(line.replaceAll('{{program}}', () => String(_program)))
+  )
+}
+
+reportMockLog()
+
 webout('OPEN')
 webout('OBJ', 'areas', areas)
 webout('CLOSE')
