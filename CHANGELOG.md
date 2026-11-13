@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/sasjs/react-seed-app/compare/v1.9.1...v1.10.0) (2026-11-13)
+
+
+### Features
+
+* match the Angular seed app's shell, theme and SAS logs panel ([addb993](https://github.com/sasjs/react-seed-app/commit/addb993cf2f73e6df1d08c03a4a84b849dfd468f))
+
 ## [1.9.1](https://github.com/sasjs/react-seed-app/compare/v1.9.0...v1.9.1) (2026-11-12)
 
 
