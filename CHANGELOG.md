@@ -1,3 +1,10 @@
+## [1.10.2](https://github.com/sasjs/react-seed-app/compare/v1.10.1...v1.10.2) (2026-11-14)
+
+
+### Bug Fixes
+
+* **docs:** bump the docs submodule past the retired service worker ([#429](https://github.com/sasjs/react-seed-app/issues/429)) ([a8d15b4](https://github.com/sasjs/react-seed-app/commit/a8d15b45edf5da05552755fb80976b88f331d1a6))
+
 ## [1.10.1](https://github.com/sasjs/react-seed-app/compare/v1.10.0...v1.10.1) (2026-11-14)
 
 
