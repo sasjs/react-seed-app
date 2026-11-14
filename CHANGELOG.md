@@ -1,3 +1,10 @@
+## [1.10.1](https://github.com/sasjs/react-seed-app/compare/v1.10.0...v1.10.1) (2026-11-14)
+
+
+### Bug Fixes
+
+* **docs:** bump the docs submodule for the docsify base-path fix ([#428](https://github.com/sasjs/react-seed-app/issues/428)) ([50c2513](https://github.com/sasjs/react-seed-app/commit/50c25135c57956ad01047eb052483b38cfe26e7a))
+
 # [1.10.0](https://github.com/sasjs/react-seed-app/compare/v1.9.1...v1.10.0) (2026-11-13)
 
 
