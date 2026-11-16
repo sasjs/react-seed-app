@@ -61,4 +61,4 @@ jobs:
       - name: Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx sasjs-release --host github --release
+        run: npx sasjs-release --release
