@@ -8,6 +8,9 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    # the release makes a tag and a release, and nothing is committed back
+    permissions:
+      contents: write
 
     strategy:
       matrix:
@@ -18,6 +21,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: true
+          # the version comes from the tags, and a depth-1 clone has none
+          fetch-depth: 0
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
@@ -36,22 +41,24 @@ jobs:
       - name: Build Frontend
         run: npm run build
 
-      - name: create SAS 9 EBI build and Add to Release
-        run: |
-          npx sasjs cb -t sas9
-          mkdir ./artefacts
-          cp ./sasjsbuild/sas9.sas ./artefacts/sas9.sas
+      # Each target builds into its own folder under sasjsbuild, the shape the mock
+      # target already uses: `sasjs cb` clears the folder it writes before it writes,
+      # so three builds into one would leave only the last. What a release publishes
+      # is the `release` block in sasjs/sasjsconfig.json, so nothing is copied here.
+      - name: Build the SAS 9 EBI deployment program
+        run: npx sasjs cb -t sas9
 
-      - name: create Viya build and Add to Release
-        run: |
-          npx sasjs cb -t viya
-          cp ./sasjsbuild/viya.sas ./artefacts/viya.sas
+      - name: Build the Viya deployment program
+        run: npx sasjs cb -t viya
 
-      - name: create SASjs build and Add to Release
-        run: |
-          npx sasjs cb -t server
-          cp ./sasjsbuild/server.json.zip ./artefacts/server.json.zip
+      - name: Build the SASjs deploy package
+        run: npx sasjs cb -t server
 
+      # @sasjs/release is a devDependency, so the version that runs is the one in
+      # package-lock.json. The artefacts were built above, in this job, so they exist
+      # when the release is cut - and the tool uploads them with it, refusing to tag
+      # or release if one is missing.
       - name: Release
-        run: |
-          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} npx semantic-release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx sasjs-release --host github --release
