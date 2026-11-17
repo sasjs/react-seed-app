@@ -25,7 +25,7 @@ const preludeModule = realModule
   : require('@sasjs/utils')
 const program = '/Public/app/demo/services/common/getdata'
 
-function runService(browser, csv, springs = seed) {
+function runService(browser, csv, springs = seed, service = source) {
   fs.mkdirSync(scratch, { recursive: true })
   const dir = fs.mkdtempSync(path.join(scratch, 'getdata-'))
   try {
@@ -95,7 +95,7 @@ function runService(browser, csv, springs = seed) {
       'globalThis',
       'console',
       '_sasjs_fetch_context',
-      `let _webout = '';\n${setup}\nconst webout = globalThis.webout;\n${source}`
+      `let _webout = '';\n${setup}\nconst webout = globalThis.webout;\n${service}`
     )
     const requireHost = browser
       ? (name) => {
@@ -118,7 +118,7 @@ for (const browser of [false, true]) {
     const second = seed.find((row) => row.AREA !== first).AREA
     const result = runService(
       browser,
-      `area:$char40.\r\n ${second} \r\n${first}`
+      `area:$char40.\r\n${second} \r\n${first}`
     )
     assert.deepEqual(
       result.springs,
@@ -139,6 +139,70 @@ for (const browser of [false, true]) {
     assert.deepEqual(
       runService(browser, 'other:$char40.\r\nanything', springs).springs,
       []
+    )
+  })
+  test(`${host}: numeric values are not coerced into character AREA`, () => {
+    const springs = [{ AREA: 'null' }, { AREA: '0' }]
+    assert.deepEqual(
+      runService(browser, 'area:best32.\r\n.\r\n0', springs).springs,
+      []
+    )
+  })
+  test(`${host}: character equality preserves leading and ignores trailing blanks`, () => {
+    const springs = [
+      { AREA: ' A', NAME: 'leading' },
+      { AREA: 'A  ', NAME: 'trailing' },
+      { AREA: '.A', NAME: 'literal special code' },
+      { AREA: '   ', NAME: 'missing character' },
+      { AREA: 'null', NAME: 'literal null' }
+    ]
+    for (const [value, expected] of [
+      [' A ', [springs[0]]],
+      ['A', [springs[1]]],
+      ['.A', [springs[2]]],
+      [' ', [springs[3]]],
+      ['null', [springs[4]]]
+    ]) {
+      assert.deepEqual(
+        runService(browser, `area:$char40.\r\n"${value}"`, springs).springs,
+        expected
+      )
+    }
+  })
+  test(`${host}: literal null text remains a valid AREA`, () => {
+    const springs = [{ AREA: 'null' }]
+    assert.deepEqual(
+      runService(browser, 'area:$char40.\r\nnull', springs).springs,
+      springs
+    )
+  })
+  test(`${host}: FETCH preserves distinct numeric missing codes and character text`, () => {
+    const codes = [
+      '.',
+      '._',
+      ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((letter) => `.${letter}`)
+    ]
+    const csv = `NUM:best32. TEXT:$char40.\r\n${codes.map((code) => `${code},${code}`).join('\r\n')}\r\n0,null`
+    const capture =
+      "const rows = webout('FETCH').areas; webout('OPEN'); webout('OBJ', 'rows', rows); webout('CLOSE');"
+    assert.deepEqual(runService(browser, csv, seed, capture).rows, [
+      ...codes.map((code, index) => ({
+        NUM: index === 0 ? null : code,
+        TEXT: code
+      })),
+      { NUM: 0, TEXT: 'null' }
+    ])
+  })
+  test(`${host}: rejects an unterminated quoted value`, () => {
+    assert.throws(
+      () => runService(browser, 'area:$char40.\r\n"unfinished'),
+      /unterminated quote in areas/
+    )
+  })
+  test(`${host}: rejects duplicate AREA columns`, () => {
+    assert.throws(
+      () => runService(browser, 'area:$char40. AREA:$char40.\r\na,b'),
+      /duplicate column AREA in areas/
     )
   })
   test(`${host}: area column names remain case insensitive`, () => {
