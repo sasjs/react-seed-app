@@ -47,6 +47,9 @@ jobs:
 
       - run: npm run check:data
 
+      - name: JS getdata service tests
+        run: npm run test:getdata
+
       # the frontend build, the compile of the services, and the site that
       # wraps them in a service-worker host
       - run: npm run mock:build

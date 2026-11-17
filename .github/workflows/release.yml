@@ -38,6 +38,9 @@ jobs:
       - name: Check code style
         run: npm run lint
 
+      - name: JS getdata service tests
+        run: npm run test:getdata
+
       - name: Build Frontend
         run: npm run build
 

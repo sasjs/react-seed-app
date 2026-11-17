@@ -46,6 +46,9 @@ jobs:
       - name: Build the frontend
         run: npm run build
 
+      - name: JS getdata service tests
+        run: npm run test:getdata
+
       # the mock's dataset is derived from serviceinit.sas; this fails when the
       # two have drifted apart
       - name: Check the mock dataset
