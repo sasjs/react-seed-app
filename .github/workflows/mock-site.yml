@@ -56,6 +56,8 @@ jobs:
 
       - run: npm run test:mock
 
+      - run: npm run test:mock:browser
+
       - name: Add .nojekyll
         run: touch sasjsbuild/mock/.nojekyll
 

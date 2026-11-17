@@ -24,6 +24,7 @@
     "mock:start": "npx http-server ./sasjsbuild/mock -p 3001",
     "check:data": "node scripts/springs-data.js --check",
     "test:mock": "node scripts/check-mock-site.js",
+    "test:mock:browser": "node scripts/check-mock-browser.js",
     "test:getdata": "node --test scripts/getdata-service-check.js",
     "release": "sasjs-release"
   },
