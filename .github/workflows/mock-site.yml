@@ -59,7 +59,16 @@ jobs:
 
       - run: npm run test:mock
 
+      # Pin the browser and installer so runner updates do not change the test.
+      - name: Install Chrome for Testing
+        id: chrome
+        uses: browser-actions/setup-chrome@48483d551c22a1fe6154c6a195ccc6d5773dc8c4 # v2
+        with:
+          chrome-version: 158.0.8127.36
+
       - run: npm run test:mock:browser
+        env:
+          CHROMIUM_PATH: ${{ steps.chrome.outputs.chrome-path }}
 
       - name: Add .nojekyll
         run: touch sasjsbuild/mock/.nojekyll
