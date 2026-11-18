@@ -35,6 +35,9 @@ jobs:
         env:
           CI: true
 
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=low
+
       - name: Check code style
         run: npm run lint
 

@@ -43,6 +43,9 @@ jobs:
 
       - run: npm ci
 
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=low
+
       - run: npm run lint
 
       - run: npm run check:data

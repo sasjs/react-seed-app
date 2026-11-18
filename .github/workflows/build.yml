@@ -33,7 +33,7 @@ jobs:
       # to a user, and gating on them makes the build fail for reasons the app
       # cannot fix
       - name: Audit production dependencies
-        run: npm audit --omit=dev --audit-level=high
+        run: npm audit --omit=dev --audit-level=low
 
       - name: Check code style
         run: npm run lint
