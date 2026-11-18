@@ -26,7 +26,7 @@ Three services come with it, in `sasjs/services`:
 
 ## Secret scanning before commits
 
-Install the [pre-commit framework](https://pre-commit.com/#installation). The pinned Gitleaks hook scans staged changes; npm does not install it automatically and it can be bypassed, so it does not replace CI secret scanning. This repository also ships a commit-message hook in `.git-hooks/commit-msg`. To keep both hooks, unset any `core.hooksPath` override, run `pre-commit install`, and copy `.git-hooks/commit-msg` to the default Git hooks directory as `commit-msg` (preserving any existing hook instead of overwriting it). Running `npm run prepare` later resets `core.hooksPath` to `.git-hooks` and disables the installed pre-commit hook until the override is unset again.
+Install the [pre-commit framework](https://pre-commit.com/#installation) and [Go](https://go.dev/doc/install); Go is needed to build the pinned Gitleaks hook on its first run. The hook scans staged changes; npm does not install it automatically, it can be bypassed, and this repository does not currently run a CI secret scan. This repository also ships a commit-message hook in `.git-hooks/commit-msg`. To keep both hooks, unset any `core.hooksPath` override, run `pre-commit install`, and copy `.git-hooks/commit-msg` to the default Git hooks directory as `commit-msg` (preserving any existing hook instead of overwriting it). Running `npm run prepare` later resets `core.hooksPath` to `.git-hooks` and disables the installed pre-commit hook until the override is unset again.
 
 ## Frontend Web
 

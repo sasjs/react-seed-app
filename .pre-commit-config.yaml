@@ -1,5 +1,6 @@
-# Install the pre-commit framework and run `pre-commit install` to enable this hook.
-# The pinned hook scans the staged git diff; it is not installed automatically.
+# Install the pre-commit framework and Go, then run `pre-commit install`.
+# Go is required to build the pinned Gitleaks hook on its first run.
+# The hook scans the staged git diff; it is not installed automatically.
 repos:
   - repo: https://github.com/gitleaks/gitleaks
     rev: v8.30.1
