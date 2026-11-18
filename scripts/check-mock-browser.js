@@ -29,9 +29,17 @@ const script = `window.addEventListener('load', () => {
   const run = async (debug) => {
     const sas = new SASjs.default({serverUrl: el.getAttribute('serverurl'), serverType: el.getAttribute('servertype'), appLoc: el.getAttribute('apploc'), debug});
     const request = (data) => sas.request('services/common/getdata', data);
-    return [await request({areas: [{AREA: ${JSON.stringify(area)}}], extra: [{X: 'force; file'}]}), await request({unrelated: [{AREA: ${JSON.stringify(area)}}]}), await request({areas: [{OTHER: 'undefined'}]})];
+    const bytes = new Uint8Array([239,187,191,65,0,255,254]);
+    const folder = '/Public';
+    const filename = debug ? 'debug.bin' : 'normal.bin';
+    const upload = await sas.uploadFile('services/files/upload', [{file: new File([bytes], filename), fileName: filename}], {path: folder});
+    const downloaded = await fetch('/SASjsApi/drive/file?_filePath=' + encodeURIComponent(folder + '/' + filename));
+    if (!downloaded.ok) throw Error('download failed: ' + downloaded.status);
+    const saved = Array.from(new Uint8Array(await downloaded.arrayBuffer()));
+    const responses = [await request({areas: [{AREA: ${JSON.stringify(area)}}], extra: [{X: 'force; file'}]}), await request({unrelated: [{AREA: ${JSON.stringify(area)}}]}), await request({areas: [{OTHER: 'undefined'}]})];
+    return {responses, upload, saved, folder, filename};
   };
-  window.result = Promise.all([run(false), run(true)]).catch(error => { throw Error(JSON.stringify(error)); });
+  window.result = Promise.all([run(false), run(true)]).catch(error => { throw Error(String(error && (error.stack || error.message || error))); });
 });`
 const server = http.createServer((req, res) => {
   const name = new URL(req.url, 'http://localhost').pathname
@@ -175,7 +183,12 @@ async function main() {
         `(async () => { const result = await Promise.race([window.result, new Promise((_, reject) => setTimeout(() => reject(Error('request timeout')), 20000))]); return {result, controlled: !!navigator.serviceWorker.controller}; })()`
       )
       assert.equal(result.controlled, true, `${visit}: service worker control`)
-      for (const [index, responses] of result.result.entries()) {
+      for (const [index, item] of result.result.entries()) {
+        const { responses, upload, saved, folder, filename } = item
+        assert.deepEqual(saved, [239, 187, 191, 65, 0, 255, 254])
+        assert.ok(
+          upload.dirlist.some((row) => row.FILEPATH === `${folder}/${filename}`)
+        )
         assert.deepEqual(
           responses[0].springs,
           expected,
@@ -201,7 +214,12 @@ async function main() {
       await closed
     }
     await new Promise((resolve) => server.close(resolve))
-    fs.rmSync(dir, { recursive: true, force: true })
+    fs.rmSync(dir, {
+      recursive: true,
+      force: true,
+      maxRetries: 10,
+      retryDelay: 100
+    })
   }
 }
 main().catch((error) => {

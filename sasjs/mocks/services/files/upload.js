@@ -5,11 +5,8 @@
  * directory is a folder in the browser's drive, which is the only filesystem a
  * mock build has.
  *
- * The file arrives the way the adapter sends it: one _WEBIN_ entry whose
- * filename is the client's file name and whose contents are the file's text.
- * A file the browser cannot decode as UTF-8 is not round-tripped byte for byte
- * - that is the one thing this twin cannot do, and the reason the SAS service
- * exists. `path` is a request parameter, so the host binds it as a const.
+ * The first _WEBIN_ entry names a staged file; read it without an encoding to
+ * preserve its bytes. `path` is a request parameter bound by the host.
  */
 
 const pathNode = require('path')
@@ -40,7 +37,7 @@ const filename =
   typeof _WEBIN_FILE_COUNT === 'undefined'
     ? ''
     : String(webin('_WEBIN_FILENAME'))
-const contents = filename ? String(webin('_WEBIN_FILEREF')) : ''
+const contents = filename ? fs.readFileSync(webin('_WEBIN_FILEREF')) : ''
 
 /* A mocked run reports a log, because the SAS Logs panel is part of what this
  * seed demonstrates and a JavaScript twin that wrote nothing leaves it empty.
