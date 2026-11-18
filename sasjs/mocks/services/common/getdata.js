@@ -25,7 +25,7 @@ const SPRINGS_FILE = path.join(
  * a numeric .A cannot be distinguished from the character value '.A'. Numeric
  * AREA is a SAS SQL type mismatch; this mock cannot reproduce that error. */
 const unpad = (value) => value.replace(/ +$/, '')
-const areas = webout('FETCH').areas || []
+const areas = (webout('FETCH') || {}).areas || []
 const wanted = new Set(
   areas.flatMap((row) => {
     const key = Object.keys(row).find((name) => name.toUpperCase() === 'AREA')

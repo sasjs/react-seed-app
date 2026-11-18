@@ -173,6 +173,20 @@ const main = async () => {
     )
   }
 
+  if (process.env.MOCK_REQUIRE_TRAILING_CRLF === '1') {
+    // Enable once the CLI embeds utils >= 4.13.1; the current host embeds 4.13.0.
+    const terminated = await call(`${APP}/common/getdata`, [
+      {
+        name: 'areas',
+        filename: 'areas.csv',
+        csv: `area:$char${area.length}. extra:$char1.\r\n${area},x\r\n`
+      }
+    ])
+    if (JSON.stringify(terminated.springs) !== JSON.stringify(springs)) {
+      fail('terminated multi-column table produced a different result')
+    }
+  }
+
   const columns = [
     'LATITUDE',
     'LONGITUDE',

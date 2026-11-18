@@ -37,7 +37,6 @@ const filename =
   typeof _WEBIN_FILE_COUNT === 'undefined'
     ? ''
     : String(webin('_WEBIN_FILENAME'))
-const contents = filename ? fs.readFileSync(webin('_WEBIN_FILEREF')) : ''
 
 /* A mocked run reports a log, because the SAS Logs panel is part of what this
  * seed demonstrates and a JavaScript twin that wrote nothing leaves it empty.
@@ -84,15 +83,34 @@ if (!isDirectory) {
   ])
   webout('CLOSE')
 } else {
-  if (filename) fs.writeFileSync(`${mounted}/${filename}`, contents)
-
-  /* mp_dirlist(..., outds=dirlist) - one row per entry, FILEPATH being the
-   * column the uploader renders */
-  const dirlist = fs
-    .readdirSync(mounted)
-    .map((name) => ({ FILEPATH: `${folder}/${name}` }))
-
+  let failure
+  let dirlist
+  if (filename) {
+    let contents
+    try {
+      contents = fs.readFileSync(webin('_WEBIN_FILEREF'))
+    } catch (error) {
+      failure = `Unable to read staged file: ${error.message}`
+    }
+    if (!failure) {
+      try {
+        fs.writeFileSync(`${mounted}/${filename}`, contents)
+      } catch (error) {
+        failure = `Unable to write uploaded file: ${error.message}`
+      }
+    }
+  }
+  if (!failure) {
+    try {
+      dirlist = fs
+        .readdirSync(mounted)
+        .map((name) => ({ FILEPATH: `${folder}/${name}` }))
+    } catch (error) {
+      failure = `Unable to list directory: ${error.message}`
+    }
+  }
   webout('OPEN')
-  webout('OBJ', 'dirlist', dirlist)
+  if (failure) webout('OBJ', 'sasjsAbort', [{ MSG: failure, MAC: _program }])
+  else webout('OBJ', 'dirlist', dirlist)
   webout('CLOSE')
 }

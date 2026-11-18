@@ -7,7 +7,13 @@ const vm = require('node:vm')
 
 const source = fs.readFileSync('sasjs/mocks/services/files/upload.js', 'utf8')
 
-function run(upload, exists = true) {
+function run(
+  upload,
+  exists = true,
+  missingStage = false,
+  writeBlocked = false,
+  listBlocked = false
+) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'seed-upload-'))
   try {
     const drive = path.join(root, 'drive/files')
@@ -20,11 +26,19 @@ function run(upload, exists = true) {
     const folder = '/uploads'
     const mounted = path.join(drive, folder)
     if (exists) fs.mkdirSync(mounted, { recursive: true })
+    if (writeBlocked) fs.mkdirSync(path.join(mounted, 'payload.bin'))
     const staged = path.join(root, 'staged.bin')
-    if (upload) fs.writeFileSync(staged, upload)
+    if (upload && !missingStage) fs.writeFileSync(staged, upload)
     const output = {}
     const context = {
-      fs,
+      fs: listBlocked
+        ? {
+            ...fs,
+            readdirSync: () => {
+              throw new Error('EACCES: directory listing denied')
+            }
+          }
+        : fs,
       require,
       console,
       weboutPath: path.join(root, 'sessions/id/webout'),
@@ -40,7 +54,12 @@ function run(upload, exists = true) {
     vm.runInNewContext(source, context)
     return {
       contents:
-        upload && exists && fs.readFileSync(path.join(mounted, 'payload.bin')),
+        upload &&
+        exists &&
+        !writeBlocked &&
+        fs.existsSync(path.join(mounted, 'payload.bin'))
+          ? fs.readFileSync(path.join(mounted, 'payload.bin'))
+          : undefined,
       paths:
         output.dirlist && Array.from(output.dirlist, (row) => row.FILEPATH),
       abort: output.sasjsAbort && output.sasjsAbort[0].MSG
@@ -63,6 +82,26 @@ test('lists the empty folder without an upload', () => {
 
 test('copies an empty uploaded file', () => {
   assert.deepEqual(run(Buffer.alloc(0)).contents, Buffer.alloc(0))
+})
+
+test('returns an abort when the staged file cannot be read', () => {
+  const result = run(Buffer.from('x'), true, true)
+  assert.match(result.abort, /staged file.*ENOENT/i)
+  assert.equal(result.paths, undefined)
+  assert.equal(result.contents, undefined)
+})
+
+test('returns an abort when the destination cannot be written', () => {
+  const result = run(Buffer.from('x'), true, false, true)
+  assert.match(result.abort, /write.*EISDIR/i)
+  assert.equal(result.paths, undefined)
+})
+
+test('returns an abort when listing the directory fails after a write', () => {
+  const result = run(Buffer.from('x'), true, false, false, true)
+  assert.match(result.abort, /list directory.*EACCES/i)
+  assert.equal(result.paths, undefined)
+  assert.deepEqual(result.contents, Buffer.from('x'))
 })
 
 test('preserves the abort response for a missing folder', () => {

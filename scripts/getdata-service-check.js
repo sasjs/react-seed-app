@@ -25,7 +25,13 @@ const preludeModule = realModule
   : require('@sasjs/utils')
 const program = '/Public/app/demo/services/common/getdata'
 
-function runService(browser, csv, springs = seed, service = source) {
+function runService(
+  browser,
+  csv,
+  springs = seed,
+  service = source,
+  noFetch = false
+) {
   fs.mkdirSync(scratch, { recursive: true })
   const dir = fs.mkdtempSync(path.join(scratch, 'getdata-'))
   try {
@@ -95,7 +101,7 @@ function runService(browser, csv, springs = seed, service = source) {
       'globalThis',
       'console',
       '_sasjs_fetch_context',
-      `let _webout = '';\n${setup}\nconst webout = globalThis.webout;\n${service}`
+      `let _webout = '';\n${setup}\nconst actualWebout = globalThis.webout;\nconst webout = ${noFetch ? "(...args) => args[0] === 'FETCH' ? undefined : actualWebout(...args)" : 'actualWebout'};\n${service}`
     )
     const requireHost = browser
       ? (name) => {
@@ -127,6 +133,12 @@ for (const browser of [false, true]) {
   })
   test(`${host}: missing areas returns no springs`, () => {
     assert.deepEqual(runService(browser, undefined).springs, [])
+  })
+  test(`${host}: a prelude without FETCH returns no springs`, () => {
+    assert.deepEqual(
+      runService(browser, undefined, seed, source, true).springs,
+      []
+    )
   })
   test(`${host}: unrelated table alone does not select springs`, () => {
     assert.deepEqual(

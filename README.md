@@ -26,7 +26,7 @@ Three services come with it, in `sasjs/services`:
 
 ## Secret scanning before commits
 
-Install the [pre-commit framework](https://pre-commit.com/#installation) and [Go](https://go.dev/doc/install); Go is needed to build the pinned Gitleaks hook on its first run. The hook scans staged changes; npm does not install it automatically, it can be bypassed, and this repository does not currently run a CI secret scan. This repository also ships a commit-message hook in `.git-hooks/commit-msg`. To keep both hooks, unset any `core.hooksPath` override, run `pre-commit install`, and copy `.git-hooks/commit-msg` to the default Git hooks directory as `commit-msg` (preserving any existing hook instead of overwriting it). Running `npm run prepare` later resets `core.hooksPath` to `.git-hooks` and disables the installed pre-commit hook until the override is unset again.
+Install the [pre-commit framework](https://pre-commit.com/#installation) and [Go](https://go.dev/doc/install); Go is needed to build the pinned Gitleaks hook on its first run. The hook scans staged changes; npm does not install it automatically and it can be bypassed. CI separately scans committed history on pull requests and pushes to main; make the secret-scan check required in branch protection to enforce it before merging. This repository also ships a commit-message hook in `.git-hooks/commit-msg`. To keep both hooks, unset any `core.hooksPath` override, run `pre-commit install`, and copy `.git-hooks/commit-msg` to the default Git hooks directory as `commit-msg` (preserving any existing hook instead of overwriting it). Running `npm run prepare` later resets `core.hooksPath` to `.git-hooks` and disables the installed pre-commit hook until the override is unset again.
 
 ## Frontend Web
 
@@ -158,7 +158,12 @@ the build through the `syncFolder` setting in `sasjs/sasjsconfig.json`.
 A JavaScript service is called with the same inputs the SAS one receives: the
 uploaded tables as `_WEBIN_NAME<n>` / `_WEBIN_FILEREF<n>`, the request parameters
 as consts, and the `webout()` block to answer with (`webout('OPEN')`,
-`webout('OBJ', 'name', rows)`, `webout('CLOSE')`).
+`webout('OBJ', 'name', rows)`, `webout('CLOSE')`). `webout('FETCH')` returns
+input tables, while `_WEBIN_FILEREF<n>` names the staged file: read its bytes with
+`fs.readFileSync`. These mocks use the host's shared prelude: build the browser
+site with CLI 8.0.0 or later, or deploy the JavaScript services to SASjs Server
+8.0.0 or later. The seed pins adapter 6.1.2 and utils 4.13.0; installing utils
+in the app alone does not update a deployed Server's runtime.
 
 If such a service requires a third-party package, bundle it before deploying to a
 SASjs Server target, which does not install dependencies for you.
