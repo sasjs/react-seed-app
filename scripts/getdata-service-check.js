@@ -134,11 +134,10 @@ for (const browser of [false, true]) {
   test(`${host}: missing areas returns no springs`, () => {
     assert.deepEqual(runService(browser, undefined).springs, [])
   })
-  test(`${host}: a prelude without FETCH returns no springs`, () => {
-    assert.deepEqual(
-      runService(browser, undefined, seed, source, true).springs,
-      []
-    )
+  test(`${host}: a prelude without FETCH returns a compatibility abort`, () => {
+    const result = runService(browser, undefined, seed, source, true)
+    assert.match(result.sasjsAbort[0].MSG, /FETCH.*CLI.*Server/i)
+    assert.equal(result.springs, undefined)
   })
   test(`${host}: unrelated table alone does not select springs`, () => {
     assert.deepEqual(

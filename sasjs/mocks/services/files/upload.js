@@ -26,7 +26,14 @@ const folder = String(path || '/').replace(/\/+$/, '') || '/'
 /* the request's `path` is a folder on the drive, and the drive's root here is
  * DRIVE_FILES - so the twin writes to the mounted folder and answers with the
  * path the caller asked about, as SAS does */
-const mounted = DRIVE_FILES + folder
+const mounted = pathNode.resolve(DRIVE_FILES, '.' + folder)
+const insideDrive = (value) =>
+  value === DRIVE_FILES || value.startsWith(DRIVE_FILES + pathNode.sep)
+const invalidPath =
+  !folder.startsWith('/') ||
+  /[\\\\\0]/.test(folder) ||
+  folder.split('/').some((part) => part === '..') ||
+  !insideDrive(mounted)
 
 /* the _WEBIN_ vars are module-scope consts of the generated program, not
  * properties of globalThis, so they are read by eval with the index inlined */
@@ -37,6 +44,26 @@ const filename =
   typeof _WEBIN_FILE_COUNT === 'undefined'
     ? ''
     : String(webin('_WEBIN_FILENAME'))
+const invalidFilename =
+  filename === '.' || filename === '..' || /[/\\\\\0]/.test(filename)
+
+/* The browser's in-memory drive has no links or lstatSync. On Node, refuse
+ * links in the drive root, each folder component, and the destination itself. */
+const hasSymlink = (target) => {
+  if (typeof fs.lstatSync !== 'function') return false
+  const relative = pathNode.relative(DRIVE_FILES, target)
+  let current = DRIVE_FILES
+  for (const part of ['', ...relative.split(pathNode.sep).filter(Boolean)]) {
+    if (part) current = pathNode.join(current, part)
+    try {
+      if (fs.lstatSync(current).isSymbolicLink()) return true
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error
+      break
+    }
+  }
+  return false
+}
 
 /* A mocked run reports a log, because the SAS Logs panel is part of what this
  * seed demonstrates and a JavaScript twin that wrote nothing leaves it empty.
@@ -66,14 +93,32 @@ reportMockLog()
  * payload the uploader renders as a dialog. The twin does the same, so the
  * refusal is demonstrable on a site with no SAS behind it. */
 let isDirectory = false
+let unsafeDestination = invalidPath || invalidFilename
 
 try {
-  isDirectory = fs.statSync(mounted).isDirectory()
+  if (!unsafeDestination) {
+    unsafeDestination =
+      hasSymlink(mounted) ||
+      (filename && hasSymlink(pathNode.join(mounted, filename)))
+  }
+  if (!unsafeDestination) {
+    try {
+      isDirectory = fs.statSync(mounted).isDirectory()
+    } catch (error) {
+      if (error.code !== 'ENOENT' && error.code !== 'ENOTDIR') throw error
+    }
+  }
 } catch (error) {
-  isDirectory = false
+  unsafeDestination = true
 }
 
-if (!isDirectory) {
+if (unsafeDestination) {
+  webout('OPEN')
+  webout('OBJ', 'sasjsAbort', [
+    { MSG: 'Invalid upload path or filename', MAC: _program }
+  ])
+  webout('CLOSE')
+} else if (!isDirectory) {
   webout('OPEN')
   webout('OBJ', 'sasjsAbort', [
     {

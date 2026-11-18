@@ -173,8 +173,7 @@ const main = async () => {
     )
   }
 
-  if (process.env.MOCK_REQUIRE_TRAILING_CRLF === '1') {
-    // Enable once the CLI embeds utils >= 4.13.1; the current host embeds 4.13.0.
+  {
     const terminated = await call(`${APP}/common/getdata`, [
       {
         name: 'areas',
@@ -232,6 +231,23 @@ const main = async () => {
 
   if (!abort || !/not a valid directory/.test(abort.MSG)) {
     fail(`upload accepted a missing folder: ${JSON.stringify(refused)}`)
+  }
+
+  const escapedFolder = await call(
+    `${APP}/files/upload`,
+    [{ name: 'file', filename: 'check.txt', csv: 'refused' }],
+    { path: '/../../outside' }
+  )
+  if (!(escapedFolder.sasjsAbort || [])[0]) {
+    fail(`upload accepted traversal folder: ${JSON.stringify(escapedFolder)}`)
+  }
+  const escapedName = await call(
+    `${APP}/files/upload`,
+    [{ name: 'file', filename: '../outside.txt', csv: 'refused' }],
+    { path: '/Public' }
+  )
+  if (!(escapedName.sasjsAbort || [])[0]) {
+    fail(`upload accepted traversal filename: ${JSON.stringify(escapedName)}`)
   }
 
   console.log(

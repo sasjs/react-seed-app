@@ -25,7 +25,8 @@ const SPRINGS_FILE = path.join(
  * a numeric .A cannot be distinguished from the character value '.A'. Numeric
  * AREA is a SAS SQL type mismatch; this mock cannot reproduce that error. */
 const unpad = (value) => value.replace(/ +$/, '')
-const areas = (webout('FETCH') || {}).areas || []
+const fetched = webout('FETCH')
+const areas = (fetched && fetched.areas) || []
 const wanted = new Set(
   areas.flatMap((row) => {
     const key = Object.keys(row).find((name) => name.toUpperCase() === 'AREA')
@@ -67,5 +68,14 @@ const reportMockLog = () => {
 reportMockLog()
 
 webout('OPEN')
-webout('OBJ', 'springs', rows)
+if (!fetched || typeof fetched !== 'object' || Array.isArray(fetched)) {
+  webout('OBJ', 'sasjsAbort', [
+    {
+      MSG: 'FETCH is unavailable: upgrade the CLI mock host or SASjs Server to a compatible version',
+      MAC: _program
+    }
+  ])
+} else {
+  webout('OBJ', 'springs', rows)
+}
 webout('CLOSE')
