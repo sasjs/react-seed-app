@@ -24,6 +24,10 @@ Three services come with it, in `sasjs/services`:
   answers with a directory listing, or aborts with the reason it could not
   write.
 
+## Secret scanning before commits
+
+Install the [pre-commit framework](https://pre-commit.com/#installation), then run `npm run prepare` to enable both `.git-hooks/pre-commit` and the existing commit-message hook. The repository's `.npmrc` sets `ignore-scripts=true`, so `npm ci` does **not** activate hooks automatically. The pre-commit wrapper runs the pinned Gitleaks configuration against staged changes and blocks commits if the framework is missing. First use needs network access and Go (pre-commit 3+ can bootstrap Go). Before enabling hooks, inspect `git config --get core.hooksPath` and preserve any existing custom hooks; `npm run prepare` changes that setting. Local hooks can be bypassed with `--no-verify`. CI separately scans committed history on pull requests and pushes to main; make that check required in branch protection to enforce it before merging.
+
 ## Frontend Web
 
 Clone the repo, `cd` into it, and `npm install`.
@@ -154,7 +158,16 @@ the build through the `syncFolder` setting in `sasjs/sasjsconfig.json`.
 A JavaScript service is called with the same inputs the SAS one receives: the
 uploaded tables as `_WEBIN_NAME<n>` / `_WEBIN_FILEREF<n>`, the request parameters
 as consts, and the `webout()` block to answer with (`webout('OPEN')`,
-`webout('OBJ', 'name', rows)`, `webout('CLOSE')`).
+`webout('OBJ', 'name', rows)`, `webout('CLOSE')`). `webout('FETCH')` returns
+input tables, while `_WEBIN_FILEREF<n>` names the staged file: read its bytes with
+`fs.readFileSync`. These mocks use the host's shared prelude: build the browser
+site with CLI 8.0.3 or later for the corrected trailing-CRLF and blank-record
+handling. Server 8.0.0 supports staged paths but still embeds utils 4.13.0 and
+lacks those FETCH fixes; a Server release containing utils 4.13.2 is required for
+parity. The seed pins adapter 6.1.2 and app utils 4.13.2; installing utils in the
+app alone does not update either host's runtime. The service harness exercises the
+installed utils prelude with both server- and browser-shaped inputs, but is not
+a substitute for running against a released Server host.
 
 If such a service requires a third-party package, bundle it before deploying to a
 SASjs Server target, which does not install dependencies for you.

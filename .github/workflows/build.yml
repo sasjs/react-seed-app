@@ -11,8 +11,14 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  secret-scan:
+    permissions:
+      contents: read
+    uses: ./.github/workflows/secret-scan.yml
+
   build:
     name: Build and test
+    needs: secret-scan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,11 +35,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # production dependencies only: the dev toolchain's advisories do not ship
-      # to a user, and gating on them makes the build fail for reasons the app
-      # cannot fix
+      # Production audit gates every severity. It does not cover advisories
+      # affecting development dependencies and the build environment.
       - name: Audit production dependencies
-        run: npm audit --omit=dev --audit-level=high
+        run: npm audit --omit=dev --audit-level=low
 
       - name: Check code style
         run: npm run lint
@@ -45,6 +50,9 @@ jobs:
 
       - name: Build the frontend
         run: npm run build
+
+      - name: JS getdata service tests
+        run: npm run test:getdata
 
       # the mock's dataset is derived from serviceinit.sas; this fails when the
       # two have drifted apart

@@ -24,11 +24,13 @@
     "mock:start": "npx http-server ./sasjsbuild/mock -p 3001",
     "check:data": "node scripts/springs-data.js --check",
     "test:mock": "node scripts/check-mock-site.js",
+    "test:mock:browser": "node scripts/check-mock-browser.js",
+    "test:getdata": "node --test scripts/getdata-service-check.js scripts/upload-service-check.js scripts/upload-security-check.js",
     "release": "sasjs-release"
   },
   "dependencies": {
-    "@sasjs/adapter": "^6.1.0",
-    "@sasjs/utils": "^4.11.0",
+    "@sasjs/adapter": "6.1.2",
+    "@sasjs/utils": "4.13.2",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-router-dom": "^7.18.5"
@@ -41,9 +43,9 @@
     "@babel/preset-env": "^7.29.14",
     "@babel/preset-react": "^7.29.7",
     "@babel/preset-typescript": "^7.29.7",
-    "@sasjs/cli": "^6.28.0",
-    "@sasjs/core": "^7.1.14",
-    "@sasjs/release": "0.11.1",
+    "@sasjs/cli": "8.0.3",
+    "@sasjs/core": "7.1.15",
+    "@sasjs/release": "0.13.2",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "babel-loader": "^10.1.1",

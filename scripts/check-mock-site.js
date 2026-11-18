@@ -173,6 +173,19 @@ const main = async () => {
     )
   }
 
+  {
+    const terminated = await call(`${APP}/common/getdata`, [
+      {
+        name: 'areas',
+        filename: 'areas.csv',
+        csv: `area:$char${area.length}. extra:$char1.\r\n\r\n${area},x\r\n\r\n`
+      }
+    ])
+    if (JSON.stringify(terminated.springs) !== JSON.stringify(springs)) {
+      fail('terminated multi-column table produced a different result')
+    }
+  }
+
   const columns = [
     'LATITUDE',
     'LONGITUDE',
@@ -218,6 +231,23 @@ const main = async () => {
 
   if (!abort || !/not a valid directory/.test(abort.MSG)) {
     fail(`upload accepted a missing folder: ${JSON.stringify(refused)}`)
+  }
+
+  const escapedFolder = await call(
+    `${APP}/files/upload`,
+    [{ name: 'file', filename: 'check.txt', csv: 'refused' }],
+    { path: '/../../outside' }
+  )
+  if (!(escapedFolder.sasjsAbort || [])[0]) {
+    fail(`upload accepted traversal folder: ${JSON.stringify(escapedFolder)}`)
+  }
+  const escapedName = await call(
+    `${APP}/files/upload`,
+    [{ name: 'file', filename: '../outside.txt', csv: 'refused' }],
+    { path: '/Public' }
+  )
+  if (!(escapedName.sasjsAbort || [])[0]) {
+    fail(`upload accepted traversal filename: ${JSON.stringify(escapedName)}`)
   }
 
   console.log(

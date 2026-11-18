@@ -1,0 +1,8 @@
+#!/bin/sh
+# Git uses this hook when core.hooksPath points at .git-hooks. The framework
+# runs the pinned configuration without installing its own hook into .git/hooks.
+if ! command -v pre-commit >/dev/null 2>&1; then
+  printf '%s\n' 'pre-commit is required for the staged secret scan; install https://pre-commit.com/#installation (or deliberately bypass with --no-verify).' >&2
+  exit 1
+fi
+exec pre-commit run --hook-stage pre-commit

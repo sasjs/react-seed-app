@@ -6,7 +6,13 @@ on:
       - main
 
 jobs:
+  secret-scan:
+    permissions:
+      contents: read
+    uses: ./.github/workflows/secret-scan.yml
+
   release:
+    needs: secret-scan
     runs-on: ubuntu-latest
     # the release makes a tag and a release, and nothing is committed back
     permissions:
@@ -35,8 +41,14 @@ jobs:
         env:
           CI: true
 
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=low
+
       - name: Check code style
         run: npm run lint
+
+      - name: JS getdata service tests
+        run: npm run test:getdata
 
       - name: Build Frontend
         run: npm run build
