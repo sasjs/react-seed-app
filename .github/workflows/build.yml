@@ -29,9 +29,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # production dependencies only: the dev toolchain's advisories do not ship
-      # to a user, and gating on them makes the build fail for reasons the app
-      # cannot fix
+      # Production audit gates every severity. It does not cover advisories
+      # affecting development dependencies and the build environment.
       - name: Audit production dependencies
         run: npm audit --omit=dev --audit-level=low
 
