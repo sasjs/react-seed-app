@@ -164,8 +164,10 @@ input tables, while `_WEBIN_FILEREF<n>` names the staged file: read its bytes wi
 site with CLI 8.0.3 or later for the corrected trailing-CRLF and blank-record
 handling. Server 8.0.0 supports staged paths but still embeds utils 4.13.0 and
 lacks those FETCH fixes; a Server release containing utils 4.13.2 is required for
-parity. The seed pins adapter 6.1.2 and app utils 4.13.0; installing utils in the
-app alone does not update either host's runtime.
+parity. The seed pins adapter 6.1.2 and app utils 4.13.2; installing utils in the
+app alone does not update either host's runtime. The service harness exercises the
+installed utils prelude with both server- and browser-shaped inputs, but is not
+a substitute for running against a released Server host.
 
 If such a service requires a third-party package, bundle it before deploying to a
 SASjs Server target, which does not install dependencies for you.

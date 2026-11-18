@@ -26,8 +26,12 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  secret-scan:
+    uses: ./.github/workflows/secret-scan.yml
+
   build:
     name: Build the mock site
+    needs: secret-scan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

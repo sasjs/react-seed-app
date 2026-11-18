@@ -131,6 +131,14 @@ for (const browser of [false, true]) {
       seed.filter((row) => row.AREA === first || row.AREA === second)
     )
   })
+  test(`${host}: FETCH handles CRLF-terminated multi-column tables with blank records`, () => {
+    const area = seed[0].AREA
+    const csv = `area:$char40. extra:$char4.\r\n\r\n${area},x\r\n\r\n`
+    assert.deepEqual(
+      runService(browser, csv).springs,
+      seed.filter((row) => row.AREA === area)
+    )
+  })
   test(`${host}: missing areas returns no springs`, () => {
     assert.deepEqual(runService(browser, undefined).springs, [])
   })
