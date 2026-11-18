@@ -161,9 +161,11 @@ as consts, and the `webout()` block to answer with (`webout('OPEN')`,
 `webout('OBJ', 'name', rows)`, `webout('CLOSE')`). `webout('FETCH')` returns
 input tables, while `_WEBIN_FILEREF<n>` names the staged file: read its bytes with
 `fs.readFileSync`. These mocks use the host's shared prelude: build the browser
-site with CLI 8.0.0 or later, or deploy the JavaScript services to SASjs Server
-8.0.0 or later. The seed pins adapter 6.1.2 and utils 4.13.0; installing utils
-in the app alone does not update a deployed Server's runtime.
+site with CLI 8.0.3 or later for the corrected trailing-CRLF and blank-record
+handling. Server 8.0.0 supports staged paths but still embeds utils 4.13.0 and
+lacks those FETCH fixes; a Server release containing utils 4.13.2 is required for
+parity. The seed pins adapter 6.1.2 and app utils 4.13.0; installing utils in the
+app alone does not update either host's runtime.
 
 If such a service requires a third-party package, bundle it before deploying to a
 SASjs Server target, which does not install dependencies for you.

@@ -178,7 +178,7 @@ const main = async () => {
       {
         name: 'areas',
         filename: 'areas.csv',
-        csv: `area:$char${area.length}. extra:$char1.\r\n${area},x\r\n`
+        csv: `area:$char${area.length}. extra:$char1.\r\n\r\n${area},x\r\n\r\n`
       }
     ])
     if (JSON.stringify(terminated.springs) !== JSON.stringify(springs)) {
